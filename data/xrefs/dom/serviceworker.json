@@ -1,0 +1,23 @@
+{
+  "definitions": {
+    "crossoriginresponse": "crossoriginresponse",
+    "dfn-serviceworker": "dfn-serviceworker",
+    "fetchevent": "fetchevent",
+    "header": "header",
+    "installevent": "installevent",
+    "installphaseevent": "installphaseevent",
+    "interface-serviceworker": "interface-serviceworker",
+    "mode": "mode",
+    "reloadpageevent": "reloadpageevent",
+    "request": "request",
+    "requestinit": "requestinit",
+    "requesttype": "requesttype",
+    "response": "response",
+    "sameoriginresponse": "sameoriginresponse",
+    "sameoriginresponseinit": "sameoriginresponseinit",
+    "serviceworkerglobalscope": "serviceworkerglobalscope",
+    "serviceworkerscopeoptions": "serviceworkerscopeoptions",
+    "user credentials": "user-credentials"
+  },
+  "url": "http://w3c.github.io/serviceworker/"
+}

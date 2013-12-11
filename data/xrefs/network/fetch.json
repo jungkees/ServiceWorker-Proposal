@@ -1,0 +1,6 @@
+{
+  "definitions": {
+    "fetch": "concept-fetch"
+  },
+  "url": "http://fetch.spec.whatwg.org/#"
+}

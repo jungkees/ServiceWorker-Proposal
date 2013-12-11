@@ -1,0 +1,6 @@
+{
+  "definitions": {
+    "workerglobalscope": "#the-workerglobalscope-common-interface"
+  },
+  "url": "http://dev.w3.org/html5/workers/"
+}
