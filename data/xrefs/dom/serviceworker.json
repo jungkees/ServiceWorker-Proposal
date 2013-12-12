@@ -3,6 +3,11 @@
     "crossoriginresponse": "crossoriginresponse",
     "dfn-serviceworker": "dfn-serviceworker",
     "fetchevent": "fetchevent",
+    "handler-serviceworker-onactivate": "handler-serviceworker-onactivate",
+    "handler-serviceworker-onbeforeevicted": "handler-serviceworker-onbeforeevicted",
+    "handler-serviceworker-onevicted": "handler-serviceworker-onevicted",
+    "handler-serviceworker-onfetch": "handler-serviceworker-onfetch",
+    "handler-serviceworker-oninstall": "handler-serviceworker-oninstall",
     "header": "header",
     "installevent": "installevent",
     "installphaseevent": "installphaseevent",
@@ -16,8 +21,7 @@
     "sameoriginresponse": "sameoriginresponse",
     "sameoriginresponseinit": "sameoriginresponseinit",
     "serviceworkerglobalscope": "serviceworkerglobalscope",
-    "serviceworkerscopeoptions": "serviceworkerscopeoptions",
-    "user credentials": "user-credentials"
+    "serviceworkerscopeoptions": "serviceworkerscopeoptions"
   },
   "url": "http://w3c.github.io/serviceworker/"
 }

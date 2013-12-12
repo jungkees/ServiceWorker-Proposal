@@ -142,7 +142,7 @@
     <p><em>This section is non-normative.</em></p>
 
     <h3 id="motivations">Offline-first web applications: the motivations</h3>
-    <p>Web applications are traditionally premised on the assumption that the network is reachable. This assumption pervades the platform. HTML documents are loaded over HTTP and traditionally <span data-anolis-spec=fetch title=fetch>fetch</span> all of their sub-resources via subsequent HTTP requests. This places web content at a disadvantage versus other technology stacks.<span data-anolis-ref>HTML</span>, <span data-anolis-ref>HTTP</span></p>
+    <p>Web applications are traditionally premised on the assumption that the network is reachable. This assumption pervades the platform. <span data-anolis-ref>HTML</span> documents are loaded over HTTP and traditionally <span data-anolis-spec=fetch title=fetch>fetch</span> all of their sub-resources via subsequent <span data-anolis-ref>HTTP</span> requests. This places web content at a disadvantage versus other technology stacks.</p>
 
     <h3>Lack of the controllability with the existing solution: AppCache</h3>
     <p>AppCache is declarative. Web developers give the browser a manifest and magic happens. This has well-known limitations that <span title=dfn-serviceworker>ServiceWorker</span>s work around by giving developers the lower-level primitives that AppCache is described in terms of.</p>
@@ -227,11 +227,7 @@ this.addEventListener("fetch", function(e) {
 
     <h2 id="terminology">Terminology</h2>
 
-    <p>The term <dfn>user credentials</dfn> for the purposes of this
-    specification means cookies, HTTP authentication, and client-side SSL
-    certificates. Specifically it does not refer to proxy authentication or
-    the <code title="http-origin">Origin</code> header.
-    <span data-anolis-ref>COOKIES</span> <!-- XXX ref? --></p>
+    <p>The <span data-anolis-spec=dom>Promise</span> interface provides asynchronous access to the result of an operation that is ongoing, has yet to start, or has completed, as defined in <span data-anolis-ref>DOM</span>.</p>
 
     <h2>Interfaces</h2>
     <p class='note'>This section normatively specifies the interfaces and the algorithms for the <a href="#dfn-serviceworker" class="internalDFN">ServiceWorker</a> infrastructure and lifecycle management. Relevant explainer is followed on the subsequent sections: Bootstrapping, Upgrade, <code>FetchEvent</code> and Caching.</p>
@@ -270,7 +266,60 @@ interface <dfn>ServiceWorkerGlobalScope</dfn> : <span data-anolis-spec=web-worke
           attribute <span data-anolis-spec=html>EventHandler</span> <span>onfetch</span>;
           attribute <span data-anolis-spec=html>EventHandler</span> <span>onbeforeevicted</span>;
           attribute <span data-anolis-spec=html>EventHandler</span> <span>onevicted</span>;
+  // close() method inherited from WorkerGlobalScope is not exposed.
 };</pre>
+
+    <p>The <code><span>ServiceWorkerGlobalScope</span></code> interface must only be <span data-anolis-spec=html>exposed to JavaScript</span> if the <span data-anolis-spec=html>JavaScript global environment</span> is a <span>service worker environment</span>.</p>
+
+    <p class="note">Todo: the definition of the <span>service worker environment</span> should be placed in the <span data-anolis-spec=html>processing model</span> section of HTML specification.</p>
+
+    <p>Service workers receive message ports through <code><span>install</span></code> events on their <code><span>ServiceWorkerGlobalScope</span></code> object for each registration.</p>
+
+    <dl class=domintro>
+      <dt><code>this.windows</code></dt>
+      <dd>Returns the array of the the <code><span data-anolis-spec=html>Window</span></code> object's <code><span data-anolis-spec=html>browsing context</span></code>'s <code><span data-anolis-spec=html>WindowProxy</span></code> object that the <span><code>ServiceWorkerGlobalScope</code></span> is bound to.</dd>
+      <dt><code>this.fetch()</code></dt>
+      <dd>Returns the <code>Promise</code> object that represents the <code>Response</code> object of the <span data-anolis-spec=fetch>fetch</span>ed resource.</dd>
+      <dt><code>this.caches</code></dt>
+      <dd>Returns the current <code>CacheList</code> object.</dd>
+      <dt><code>this.version</code></dt>
+      <dd>Returns the version that has been set by the worker. It is <span data-anolis-spec=html>structured clone</span>able.</dd>
+    </dl>
+
+    <p class="note">The <code>version</code> attribute is used to communicate to newer versions what they are replaceing (see the <code>previousVersion</code> attribute of the <code>InstallEvent</code> interface.)</p>
+
+    <p>The following are the <span data-anolis-spec=html>event handlers</span> (and their corresponding <span data-anolis-spec=html>event handler event type</span>s) that must be supported, as <span data-anolis-spec=html>event handler IDL attribute</span>s, by objects implementing the <code><span>ServiceWorkerGlobalScope</span></code> interface:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th><span data-anolis-spec=html title="event handlers">event handler</span></th>
+          <th><span data-anolis-spec=html>event handler event type</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><dfn title="handler-serviceworker-oninstall"><code>oninstall</code></dfn></td>
+          <td><code title="event-serviceworker-install">install</code></td>
+        </tr>
+        <tr>
+          <td><dfn title="handler-serviceworker-onactivate"><code>onactivate</code></dfn></td>
+          <td><code title="event-serviceworker-activate">activate</code></td>
+        </tr>
+        <tr>
+          <td><dfn title="handler-serviceworker-onfetch"><code>onfetch</code></dfn></td>
+          <td><code title="event-serviceworker-fetch">fetch</code></td>
+        </tr>
+        <tr>
+          <td><dfn title="handler-serviceworker-onbeforeevicted"><code>onbeforeevicted</code></dfn></td>
+          <td><code title="event-serviceworker-beforeevicted">beforeevicted</code></td>
+        </tr>
+        <tr>
+          <td><dfn title="handler-serviceworker-onevicted"><code>onevicted</code></dfn></td>
+          <td><code title="event-serviceworker-evicted">evicted</code></td>
+        </tr>
+      </tbody>
+    </table>
 
     <h3>The <code>InstallEvent</code> interface</h3>
     <pre class="idl">
@@ -440,7 +489,7 @@ this.addEventListener("fetch", function(e) {
     Once the <code>ctrl.js</code> in the example is successfully installed, the "success!"" message will be sent to the console and, crucially, the next time the user visits <code>index.html</code> or any other page located at <code>http://videos.example.com/</code>, <code>ctrl.js</code> will be consulted about what to do and what content to load even if the device has no Internet connection. On pages that are <em>controlled</em> in this way, other resources (like images in the document body) are also requested first from <code>ctrl.js</code> before the normal browser cache is consulted for them.</p>
 
     <h3>The member <em><code>serviceworker</code></em> of the manifest</h3>
-    <p class='note'>Issue: this section remains unspecified as neither the architecture has been clarified nor has it been aligned with the standards track <a class='external' href='http://w3c.github.io/manifest/'>manifest</a> specification.</p>
+    <p class='critical'>This section remains unspecified as neither the architecture has been clarified nor has it been aligned with the standards track <a class='external' href='http://w3c.github.io/manifest/'>manifest</a> specification.</p>
 
     <h3><em>Controlled</em> and <em>uncontrolled</em> documents</h3>
     <p>The first time <code>http://videos.example.com/index.html</code> is loaded, all the resources it requests will come from the network. That means that even if the browser runs the install snippet for <code>ctrl.js</code>, <span data-anolis-spec=fetch>fetch</span>es it, and finishes installing it before it begins <span data-anolis-spec=fetch>fetch</span>ing logo.png, the new <span>ServiceWorker</span> script would not be consulted about loading logo.png. This is down to the following rule of <span>ServiceWorker</span>s:</p>
@@ -695,25 +744,31 @@ this.addEventListener("install", function(e) {
   e.waitUntil(shellResources.ready());
 });</pre>
     </div>
-    <p class='note' title='Further woker needed'>
-    Issue: is it better to bake the Cache related interfaces separate from this draft? Further woker needed.</p>
-
     <h2>Future extension</h2>
-    <p class='note'>Issue: need to address the requirements from SysApps WG use cases and more. Currently, TaskScheduler and notification would be the scope of this work. Security sensitive features will be considered as V2.</p>
+    <p class='critical'>Need to address the requirements from SysApps WG use cases and more. Currently, TaskScheduler and notification would be the scope of this work. Security sensitive features will be considered as V2.</p>
 
     <h2 class=no-num>References</h2>
     <div id=anolis-references></div>
 
     <h2 class="no-num" id="acknowledgments">Acknowledgments</h2>
 
-    <p>The editor would like to thank
-    alecf,
-    Jake Archibald,
-    Dominique Hazael-Massieux,
-    Anne Van Kesteren,
+    <p>The editors would like to thank
+    Jake ("B.J.") Archibald,
+    David Barrett-Kahn,
+    Andrew Betts,
+    Greg Billock,
+    Aaron Boodman,
+    Darin Fisher,
+    Alec Flett,
+    Anne van Kesteren,
     Anssi Kostiainen,
+    Dominique Hazael-Massieux,
+    Dave Herman,
+    Michael Nordman,
+    Soledad Penadés,
     Michael Sanford,
-    sole,
+    Jonas Sicking,
+    Chris Wilson,
     Ivan Žužak
     for their contributions to this specification.</p>
 

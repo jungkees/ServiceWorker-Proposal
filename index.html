@@ -141,7 +141,7 @@
     <p><em>This section is non-normative.</em></p>
 
     <h3 id="motivations"><span class="secno">1.1 </span>Offline-first web applications: the motivations</h3>
-    <p>Web applications are traditionally premised on the assumption that the network is reachable. This assumption pervades the platform. HTML documents are loaded over HTTP and traditionally <a class="external" href="http://fetch.spec.whatwg.org/#concept-fetch" title="fetch">fetch</a> all of their sub-resources via subsequent HTTP requests. This places web content at a disadvantage versus other technology stacks.<a href="#refsHTML">[HTML]</a>, <a href="#refsHTTP">[HTTP]</a></p>
+    <p>Web applications are traditionally premised on the assumption that the network is reachable. This assumption pervades the platform. <a href="#refsHTML">[HTML]</a> documents are loaded over HTTP and traditionally <a class="external" href="http://fetch.spec.whatwg.org/#concept-fetch" title="fetch">fetch</a> all of their sub-resources via subsequent <a href="#refsHTTP">[HTTP]</a> requests. This places web content at a disadvantage versus other technology stacks.</p>
 
     <h3 id="lack-of-the-controllability-with-the-existing-solution:-appcache"><span class="secno">1.2 </span>Lack of the controllability with the existing solution: AppCache</h3>
     <p>AppCache is declarative. Web developers give the browser a manifest and magic happens. This has well-known limitations that <a href="#dfn-serviceworker" title="dfn-serviceworker">ServiceWorker</a>s work around by giving developers the lower-level primitives that AppCache is described in terms of.</p>
@@ -226,11 +226,7 @@ this.addEventListener("fetch", function(e) {
 
     <h2 id="terminology"><span class="secno">3 </span>Terminology</h2>
 
-    <p>The term <dfn id="user-credentials">user credentials</dfn> for the purposes of this
-    specification means cookies, HTTP authentication, and client-side SSL
-    certificates. Specifically it does not refer to proxy authentication or
-    the <code title="http-origin">Origin</code> header.
-    <a href="#refsCOOKIES">[COOKIES]</a> <!-- XXX ref? --></p>
+    <p>The <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> interface provides asynchronous access to the result of an operation that is ongoing, has yet to start, or has completed, as defined in <a href="#refsDOM">[DOM]</a>.</p>
 
     <h2 id="interfaces"><span class="secno">4 </span>Interfaces</h2>
     <p class="note">This section normatively specifies the interfaces and the algorithms for the <a class="internalDFN" href="#dfn-serviceworker">ServiceWorker</a> infrastructure and lifecycle management. Relevant explainer is followed on the subsequent sections: Bootstrapping, Upgrade, <code><a href="#fetchevent">FetchEvent</a></code> and Caching.</p>
@@ -267,7 +263,60 @@ interface <dfn id="serviceworkerglobalscope">ServiceWorkerGlobalScope</dfn> : <a
           attribute <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <span>onfetch</span>;
           attribute <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <span>onbeforeevicted</span>;
           attribute <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <span>onevicted</span>;
+  // close() method inherited from WorkerGlobalScope is not exposed.
 };</pre>
+
+    <p>The <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> interface must only be <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#exposed-to-javascript">exposed to JavaScript</a> if the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#javascript-global-environment">JavaScript global environment</a> is a <span>service worker environment</span>.</p>
+
+    <p class="note">Todo: the definition of the <span>service worker environment</span> should be placed in the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#processing-model-3">processing model</a> section of HTML specification.</p>
+
+    <p>Service workers receive message ports through <code><span>install</span></code> events on their <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object for each registration.</p>
+
+    <dl class="domintro">
+      <dt><code>this.windows</code></dt>
+      <dd>Returns the array of the the <code><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#window">Window</a></code> object's <code><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#browsing-context">browsing context</a></code>'s <code><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#windowproxy">WindowProxy</a></code> object that the <a href="#serviceworkerglobalscope"><code>ServiceWorkerGlobalScope</code></a> is bound to.</dd>
+      <dt><code>this.fetch()</code></dt>
+      <dd>Returns the <code>Promise</code> object that represents the <code><a href="#response">Response</a></code> object of the <a class="external" href="http://fetch.spec.whatwg.org/#concept-fetch">fetch</a>ed resource.</dd>
+      <dt><code>this.caches</code></dt>
+      <dd>Returns the current <code>CacheList</code> object.</dd>
+      <dt><code>this.version</code></dt>
+      <dd>Returns the version that has been set by the worker. It is <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#structured-clone">structured clone</a>able.</dd>
+    </dl>
+
+    <p class="note">The <code>version</code> attribute is used to communicate to newer versions what they are replaceing (see the <code>previousVersion</code> attribute of the <code><a href="#installevent">InstallEvent</a></code> interface.)</p>
+
+    <p>The following are the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handlers">event handlers</a> (and their corresponding <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-event-type">event handler event type</a>s) that must be supported, as <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-idl-attribute">event handler IDL attribute</a>s, by objects implementing the <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> interface:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handlers" title="event handlers">event handler</a></th>
+          <th><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-event-type">event handler event type</a></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><dfn id="handler-serviceworker-oninstall" title="handler-serviceworker-oninstall"><code>oninstall</code></dfn></td>
+          <td><code title="event-serviceworker-install">install</code></td>
+        </tr>
+        <tr>
+          <td><dfn id="handler-serviceworker-onactivate" title="handler-serviceworker-onactivate"><code>onactivate</code></dfn></td>
+          <td><code title="event-serviceworker-activate">activate</code></td>
+        </tr>
+        <tr>
+          <td><dfn id="handler-serviceworker-onfetch" title="handler-serviceworker-onfetch"><code>onfetch</code></dfn></td>
+          <td><code title="event-serviceworker-fetch">fetch</code></td>
+        </tr>
+        <tr>
+          <td><dfn id="handler-serviceworker-onbeforeevicted" title="handler-serviceworker-onbeforeevicted"><code>onbeforeevicted</code></dfn></td>
+          <td><code title="event-serviceworker-beforeevicted">beforeevicted</code></td>
+        </tr>
+        <tr>
+          <td><dfn id="handler-serviceworker-onevicted" title="handler-serviceworker-onevicted"><code>onevicted</code></dfn></td>
+          <td><code title="event-serviceworker-evicted">evicted</code></td>
+        </tr>
+      </tbody>
+    </table>
 
     <h3 id="the-installevent-interface"><span class="secno">4.4 </span>The <code><a href="#installevent">InstallEvent</a></code> interface</h3>
     <pre class="idl">interface <dfn id="installevent">InstallEvent</dfn> : <a href="#installphaseevent">InstallPhaseEvent</a> {
@@ -430,7 +479,7 @@ this.addEventListener("fetch", function(e) {
     Once the <code>ctrl.js</code> in the example is successfully installed, the "success!"" message will be sent to the console and, crucially, the next time the user visits <code>index.html</code> or any other page located at <code>http://videos.example.com/</code>, <code>ctrl.js</code> will be consulted about what to do and what content to load even if the device has no Internet connection. On pages that are <em>controlled</em> in this way, other resources (like images in the document body) are also requested first from <code>ctrl.js</code> before the normal browser cache is consulted for them.</p>
 
     <h3 id="the-member-serviceworker-of-the-manifest"><span class="secno">5.2 </span>The member <em><code>serviceworker</code></em> of the manifest</h3>
-    <p class="note">Issue: this section remains unspecified as neither the architecture has been clarified nor has it been aligned with the standards track <a class="external" href="http://w3c.github.io/manifest/">manifest</a> specification.</p>
+    <p class="critical">This section remains unspecified as neither the architecture has been clarified nor has it been aligned with the standards track <a class="external" href="http://w3c.github.io/manifest/">manifest</a> specification.</p>
 
     <h3 id="controlled-and-uncontrolled-documents"><span class="secno">5.3 </span><em>Controlled</em> and <em>uncontrolled</em> documents</h3>
     <p>The first time <code>http://videos.example.com/index.html</code> is loaded, all the resources it requests will come from the network. That means that even if the browser runs the install snippet for <code>ctrl.js</code>, <a class="external" href="http://fetch.spec.whatwg.org/#concept-fetch">fetch</a>es it, and finishes installing it before it begins <a class="external" href="http://fetch.spec.whatwg.org/#concept-fetch">fetch</a>ing logo.png, the new <span>ServiceWorker</span> script would not be consulted about loading logo.png. This is down to the following rule of <span>ServiceWorker</span>s:</p>
@@ -680,24 +729,18 @@ this.addEventListener("install", function(e) {
   e.waitUntil(shellResources.ready());
 });</pre>
     </div>
-    <p class="note" title="Further woker needed">
-    Issue: is it better to bake the Cache related interfaces separate from this draft? Further woker needed.</p>
-
     <h2 id="future-extension"><span class="secno">10 </span>Future extension</h2>
-    <p class="note">Issue: need to address the requirements from SysApps WG use cases and more. Currently, TaskScheduler and notification would be the scope of this work. Security sensitive features will be considered as V2.</p>
+    <p class="critical">Need to address the requirements from SysApps WG use cases and more. Currently, TaskScheduler and notification would be the scope of this work. Security sensitive features will be considered as V2.</p>
 
     <h2 class="no-num" id="references">References</h2>
-    <div id="anolis-references"><dl><dt id="refsCOOKIES">[COOKIES]
-<dd><cite><a href="http://tools.ietf.org/html/rfc6265">HTTP State Management Mechanism</a></cite>, Adam Barth. IETF.
-
-<dt id="refsDOM">[DOM]
-<dd><cite><a href="http://www.w3.org/TR/dom/">DOM</a></cite>, Anne van Kesteren, Aryeh Gregor and Ms2ger. W3C.
+    <div id="anolis-references"><dl><dt id="refsDOM">[DOM]
+<dd><cite><a href="http://w3c.github.io/dom/">DOM</a></cite>, Anne van Kesteren, Aryeh Gregor, Ms2ger et al.. W3C.
 
 <dt id="refsECMASCRIPT">[ECMASCRIPT]
 <dd><cite><a href="http://www.ecma-international.org/publications/standards/Ecma-262.htm">ECMAScript Language Specification</a></cite>. ECMA.
 
 <dt id="refsHTML">[HTML]
-<dd><cite><a href="http://www.w3.org/TR/html5/">HTML</a></cite>, Robin Berjon, Travis Leithead, Erika Doyle Navara et al.. W3C.
+<dd><cite><a href="http://www.w3.org/html/wg/drafts/html/master/">HTML</a></cite>, Robin Berjon, Steve Faulkner, Travis Leithead et al.. W3C.
 
 <dt id="refsHTTP">[HTTP]
 <dd><cite><a href="http://tools.ietf.org/html/rfc2616">Hypertext Transfer Protocol -- HTTP/1.1</a></cite>, Roy Fielding, James Gettys, Jeffrey Mogul et al.. IETF.
@@ -715,14 +758,23 @@ this.addEventListener("install", function(e) {
 
     <h2 class="no-num" id="acknowledgments">Acknowledgments</h2>
 
-    <p>The editor would like to thank
-    alecf,
-    Jake Archibald,
-    Dominique Hazael-Massieux,
-    Anne Van Kesteren,
+    <p>The editors would like to thank
+    Jake ("B.J.") Archibald,
+    David Barrett-Kahn,
+    Andrew Betts,
+    Greg Billock,
+    Aaron Boodman,
+    Darin Fisher,
+    Alec Flett,
+    Anne van Kesteren,
     Anssi Kostiainen,
+    Dominique Hazael-Massieux,
+    Dave Herman,
+    Michael Nordman,
+    Soledad Penadés,
     Michael Sanford,
-    sole,
+    Jonas Sicking,
+    Chris Wilson,
     Ivan Žužak
     for their contributions to this specification.</p>
 

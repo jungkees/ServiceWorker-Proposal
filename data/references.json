@@ -114,10 +114,10 @@
   },
   "DOM" :
   {
-    "href" : "http://www.w3.org/TR/dom/",
+    "href" : "http://w3c.github.io/dom/",
     "oldhref" : "http://www.w3.org/TR/domcore/",
     "title" : "DOM",
-    "authors" : ["Anne van Kesteren", "Aryeh Gregor", "Ms2ger"],
+    "authors" : ["Anne van Kesteren", "Aryeh Gregor", "Ms2ger", "Alex Russell", "Robin Berjon"],
     "publisher" : "W3C"
   },
   "DOMPS" :
@@ -167,9 +167,9 @@
   },
   "HTML" :
   {
-    "href" : "http://www.w3.org/TR/html5/",
+    "href" : "http://www.w3.org/html/wg/drafts/html/master/",
     "title" : "HTML",
-    "authors" : ["Robin Berjon", "Travis Leithead", "Erika Doyle Navara", "Edward O'Connor", "Silvia Pfeiffer", "Ian Hickson"],
+    "authors" : ["Robin Berjon", "Steve Faulkner", "Travis Leithead", "Erika Doyle Navara", "Edward O'Connor", "Silvia Pfeiffer", "Ian Hickson"],
     "publisher" : "W3C"
   },
   "HTML4" : {
