@@ -1,6 +1,14 @@
 {
   "definitions": {
-    "workerglobalscope": "#the-workerglobalscope-common-interface"
+    "abstractworker": "#abstractworker",
+    "add-a-document-to-the-worker-s-documents": "#add-a-document-to-the-worker-s-documents",
+    "closing": "#dom-workerglobalscope-closing",
+    "workerglobalscope": "#workerglobalscope",
+    "list of relevant document objects to add": "#list-of-relevant-document-objects-to-add",
+    "location": "#dom-workerglobalscope-location",
+    "run a worker": "#run-a-worker",
+    "set up a worker script settings object": "#set-up-a-worker-script-settings-object",
+    "the-worker-s-workers": "#the-worker-s-workers"
   },
   "url": "http://dev.w3.org/html5/workers/"
 }

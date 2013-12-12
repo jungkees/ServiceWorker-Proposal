@@ -1,6 +1,13 @@
 {
   "definitions": {
-    "messageport": "#messageport"
+    "data": "#dom-messageevent-data",
+    "dom-messageport-postmessage": "#dom-messageport-postmessage",
+    "entangle": "#entangle",
+    "messageevent": "#messageevent",
+    "messageport": "#messageport",
+    "owner": "#concept-port-owner",
+    "ports": "#dom-messageevent-ports",
+    "source": "#dom-messageevent-source"
   },
   "url": "http://dev.w3.org/html5/postmsg/"
 }

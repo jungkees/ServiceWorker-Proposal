@@ -8,6 +8,7 @@
     "handler-serviceworker-onevicted": "handler-serviceworker-onevicted",
     "handler-serviceworker-onfetch": "handler-serviceworker-onfetch",
     "handler-serviceworker-oninstall": "handler-serviceworker-oninstall",
+    "handler-serviceworker-onmessage": "handler-serviceworker-onmessage",
     "header": "header",
     "installevent": "installevent",
     "installphaseevent": "installphaseevent",
