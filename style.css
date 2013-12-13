@@ -12,6 +12,7 @@ p + * > li, p + div.status + * > li, dd li { margin: 1em 0; }
 .toc dfn, h1 dfn, h2 dfn, h3 dfn, h4 dfn, h5 dfn, h6 dfn { font: inherit; }
 img.extra, p.overview { float: right; }
 hr.bookmark { border: dashed 2em black; background: yellow; }
+dfn { font-weight: bold; }
 pre {
     white-space:    pre-wrap;
 }
