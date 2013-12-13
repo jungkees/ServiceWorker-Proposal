@@ -145,10 +145,10 @@
     <p>Web applications are traditionally premised on the assumption that the network is reachable. This assumption pervades the platform. <span data-anolis-ref>HTML</span> documents are loaded over HTTP and traditionally <span data-anolis-spec=fetch title=fetch>fetch</span> all of their sub-resources via subsequent <span data-anolis-ref>HTTP</span> requests. This places web content at a disadvantage versus other technology stacks.</p>
 
     <h3>Lack of the controllability with the existing solution: AppCache</h3>
-    <p>AppCache is declarative. Web developers give the browser a manifest and magic happens. This has well-known limitations that <span title=dfn-serviceworker>ServiceWorker</span>s work around by giving developers the lower-level primitives that AppCache is described in terms of.</p>
+    <p>AppCache is declarative. Web developers give the browser a manifest and magic happens. This has well-known limitations that the <span title=concept-serviceworker>service worker</span>s work around by giving developers the lower-level primitives that AppCache is described in terms of.</p>
 
-    <h3>The ServiceWorker</h3>
-    <p><dfn title=dfn-serviceworker>ServiceWorker</dfn>s are a new feature for the web platform that lets a script persistently cache resources and handle all resource requests for an application even when the network is not available. <span title=dfn-serviceworker>ServiceWorker</span>s are bit of scripts that can listen for network events (such as resource requests), manage content caches, and thus decide what content to display when a URL is requested. <span data-anolis-ref>URL</span> Putting it all together, <span title=dfn-serviceworker>ServiceWorker</span>s give you a way to build applications that work offline.</p>
+    <h3>Service workers</h3>
+    <p><dfn title=concept-serviceworker>Service worker</dfn>s are a new feature for the web platform that lets a script persistently cache resources and handle all resource requests for an application even when the network is not available. <span title=concept-serviceworker>Service worker</span>s are bit of scripts that can listen for network events (such as resource requests), manage content caches, and thus decide what content to display when a URL is requested. <span data-anolis-ref>URL</span> Putting it all together, <span title=concept-serviceworker>service worker</span>s give you a way to build applications that work offline.</p>
 
     <div class="example">
       <p>Some simple code to install a service worker and control the document from within the worker script:</p>
@@ -164,7 +164,7 @@ navigator.registerServiceWorker("/assets/v1/serviceworker.js", { scope: "/*" }).
   });</pre>
 
       <p>Listen to fetch event and cache necessary resources from the script:</p>
-      <pre title="ServiceWorker script">// ServiceWorker script hosted at: http://videos.example.com/assets/v1/serviceworker.js
+      <pre title="ServiceWorker script">// Service worker script hosted at: http://videos.example.com/assets/v1/serviceworker.js
 this.addEventListener("install", function(e) {
   // Tell the system that this service worker can handle fetch events.
   e.services = ["fetch"];
@@ -174,7 +174,7 @@ this.addEventListener("fetch", function(e) {
   // DIY either offline! or online as fallback.
 
   // Create a cache of resources. Begins the process of fetching them.
-  // URLs are relative to the ServiceWorker
+  // URLs are relative to the service worker
   var shellResources = new Cache(
     base + "/assets/v1/base.css",
     base + "/assets/v1/app.js",
@@ -230,11 +230,11 @@ this.addEventListener("fetch", function(e) {
     <p>The <span data-anolis-spec=dom>Promise</span> interface provides asynchronous access to the result of an operation that is ongoing, has yet to start, or has completed, as defined in <span data-anolis-ref>DOM</span>.</p>
 
     <h2>Interfaces</h2>
-    <p class='note'>This section normatively specifies the interfaces and the algorithms for the <a href="#dfn-serviceworker" class="internalDFN">ServiceWorker</a> infrastructure and lifecycle management. Relevant explainer is followed on the subsequent sections: Bootstrapping, Upgrade, <code>FetchEvent</code> and Caching.</p>
+    <p class='note'>This section normatively specifies the interfaces and the algorithms for the <span title=concept-serviceworker>service worker</span> infrastructure and lifecycle management. Relevant explainer is followed on the subsequent sections: Bootstrapping, Upgrade, <code>FetchEvent</code> and Caching.</p>
 
     <h3>Extensions to the <code>Navigator</code> object</h3>
     <pre class="idl">partial interface <span data-anolis-spec=html>Navigator</span> {
-  <span data-anolis-spec=dom>Promise</span> <span title="">registerServiceWorker</span>(DOMString <var>scriptURL</var>, optional <span>ServiceWorkerScopeOptions</span> <var>options</var>);
+  <span data-anolis-spec=dom>Promise</span> <span title=serviceworker-navigator-registerserviceworker>registerServiceWorker</span>(DOMString <var>scriptURL</var>, optional <span>ServiceWorkerScopeOptions</span> <var>options</var>);
   <span data-anolis-spec=dom>Promise</span> <span title="">unregisterServiceWorker</span>(<span>ServiceWorker</span> <var>serviceWorker</var>);
           attribute <span data-anolis-spec=html>EventHandler</span> <span>onserviceworkerinstall</span>;
           attribute <span data-anolis-spec=html>EventHandler</span> <span>onserviceworkerreplaced</span>;
@@ -245,7 +245,7 @@ dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> 
   DOMString <span title="">scope</span> = "/*";
 };</pre>
 
-    <p>When the <code>registerServiceWorker(scriptURL, options)</code> method is invoked, the user agent must run the following steps:</p>
+    <p>When the <dfn title=serviceworker-navigator-registerserviceworker><code>registerServiceWorker(scriptURL, options)</code></dfn> method is invoked, the user agent must run the following steps:</p>
 
     <ol>
       <li><p>Let <var>promise</var> be a newly-created <code><span data-anolis-spec=dom>Promise</span></code> object.</p></li>
@@ -282,7 +282,7 @@ dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> 
             <ol>
               <li><p>If <var>options</var> is not null and the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute is not exactly equal to <var>scope</var> of <var>options</var>, set the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute to <var>scope</var> of <var>options</var>.</p></li>
               <li><p>If <var>options</var> is null and the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute is not the default scope, "<code>/*</code>", set the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute to "<code>/*</code>".</p></li>
-              <li><p>Let <var>worker global scope</var> be that <code><span>ServiceWorkerGlobalScope object</span></code>.</p></li>
+              <li><p>Let <var>worker global scope</var> be that <code><span>ServiceWorkerGlobalScope</span></code> object.</p></li>
             </ol>
           </li>
           <li><p>If <var>worker global scope</var> is not null, but the user agent has been configured to disallow communication between the worker represented by the <var>worker global scope</var> and the <span data-anolis-spec=html title=script-0>scripts</span> whose <span data-anolis-spec=html>settings object</span>s are the <span data-anolis-spec=html>incumbent settings object</span>, then set <var>worker global scope</var> to null.</p></li>
@@ -329,7 +329,7 @@ dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> 
     <h3>The <code>ServiceWorker</code> interface</h3>
     <pre class="idl">
 [NoInterfaceObject]
-interface <dfn title=interface-ServiceWorker>ServiceWorker</dfn> : <span data-anolis-spec=dom>EventTarget</span> {
+interface <dfn>ServiceWorker</dfn> : <span data-anolis-spec=dom>EventTarget</span> {
   void <span title="">postMessage</span>(any <var>message</var>, optional sequence&lt;Transferable&gt; <var>transfer</var>);
           attribute <span data-anolis-spec=html>EventHandler</span> <span>onmessage</span>;
 };
@@ -546,11 +546,11 @@ interface <dfn>CrossOriginResponse</dfn> : <span>Response</span> {
     <p class='note' title='About the cache interfaces'>
     <code>Cache</code>, <code>CacheList</code> and <code>AsyncMap</code> interfaces will be added.</p>
 
-    <h2>Bootstrap with a ServiceWorker</h2>
-    <p>A <span>ServiceWorker</span> MUST be installed either by invoking the <code>navigator.registerServiceWorker()</code> method within web pages or by setting the member <em>serviceworker</em> of the manifest to be the URL of the <span>ServiceWorker</span>.</p>
+    <h2>Bootstrap with a service worker</h2>
+    <p>A <span title=concept-serviceworker>service worker</span> MUST be installed either by invoking the <span title=serviceworker-navigator-registerserviceworker><code>registerServiceWorker()</code></span> method within web pages or by setting the member <em>serviceworker</em> of the manifest to be the URL of the <span title=concept-serviceworker>service worker</span>.</p>
 
-    <h3>The <code>registerServiceWorker()</code> method</h3>
-    <p><span>ServiceWorker</span>s MAY be installed by web pages. A user MUST visit a web page or web application for the process to start.</p>
+    <h3>The <span title=serviceworker-navigator-registerserviceworker><code>registerServiceWorker()</code></span> method</h3>
+    <p><span title=concept-serviceworker>Service worker</span>s MAY be installed by web pages. A user MUST visit a web page or web application for the process to start.</p>
     <div class="example">
       <pre title="Installation">
 // Document hosted at: http://videos.example.com/index.html
@@ -565,10 +565,10 @@ navigator.registerServiceWorker("/assets/v1/ctrl.js", { scope: "/*"}).then(
   });</pre>
     </div>
 
-    <p>The example shows the <span>ServiceWorker</span> hosted at <code>/assets/v1/ctrl.js</code> is installed by the web page hosted at <code>http://videos.example.com/index.html</code>.</p>
+    <p>The example shows the <span title=concept-serviceworker>service worker</span> hosted at <code>/assets/v1/ctrl.js</code> is installed by the web page hosted at <code>http://videos.example.com/index.html</code>.</p>
     <div class="example">
       <pre title="ServiceWorker script serving onfetch event">
-// ServiceWorker script hosted at: /assets/v1/ctrl.js
+// Service worker script hosted at: /assets/v1/ctrl.js
 this.version = 1;
 
 var base = "http://videos.example.com";
@@ -600,11 +600,11 @@ this.addEventListener("fetch", function(e) {
     <p class='critical'>This section remains unspecified as neither the architecture has been clarified nor has it been aligned with the standards track <a class='external' href='http://w3c.github.io/manifest/'>manifest</a> specification.</p>
 
     <h3><em>Controlled</em> and <em>uncontrolled</em> documents</h3>
-    <p>The first time <code>http://videos.example.com/index.html</code> is loaded, all the resources it requests will come from the network. That means that even if the browser runs the install snippet for <code>ctrl.js</code>, <span data-anolis-spec=fetch>fetch</span>es it, and finishes installing it before it begins <span data-anolis-spec=fetch>fetch</span>ing logo.png, the new <span>ServiceWorker</span> script would not be consulted about loading logo.png. This is down to the following rule of <span>ServiceWorker</span>s:</p>
+    <p>The first time <code>http://videos.example.com/index.html</code> is loaded, all the resources it requests will come from the network. That means that even if the browser runs the install snippet for <code>ctrl.js</code>, <span data-anolis-spec=fetch>fetch</span>es it, and finishes installing it before it begins <span data-anolis-spec=fetch>fetch</span>ing logo.png, the new <span title=concept-serviceworker>service worker</span> script would not be consulted about loading logo.png. This is down to the following rule of <span title=concept-serviceworker>service worker</span>s:</p>
     <ul>
-      <li>Documents live out their whole lives using the ServiceWorker they start with.</li>
+      <li>Documents live out their whole lives using the service worker they start with.</li>
     </ul>
-    <p>This means that if a document starts life without a <span>ServiceWorker</span>, even if one is installed for a matching bit of URL space, it would not suddenly get a <span>ServiceWorker</span> later in life. Same goes for documents that are loaded with a <span>ServiceWorker</span> which might later call <code>navigator.unregisterServiceWorker()</code>. Put another way, <code>registerServiceWorker()</code> and <code>unregisterServiceWorker()</code> only affect the next document(s).</p>
+    <p>This means that if a document starts life without a <span title=concept-serviceworker>service worker</span>, even if one is installed for a matching bit of URL space, it would not suddenly get a <span title=concept-serviceworker>service worker</span> later in life. Same goes for documents that are loaded with a <span title=concept-serviceworker>service worker</span> which might later call <code>unregisterServiceWorker()</code>. Put another way, <span title=serviceworker-navigator-registerserviceworker><code>registerServiceWorker()</code></span> and <code>unregisterServiceWorker()</code> only affect the next document(s).</p>
 
 
     <h3>Longest-prefix matching</h3>
@@ -630,7 +630,7 @@ this.addEventListener("fetch", function(e) {
   &lt;/head&gt;
 &lt;/html&gt;</pre>
     </div>
-    <p>To break what might otherwise be ties when matching URLs, navigations are mapped to <span>ServiceWorker</span>s by longest-prefix-match. Note that the <code>*</code> can only occur at the end of a matching rule, so attempts to register <code>/foo/*/bar</code> or <code>*bar</code> will <span data-anolis-spec=webidl>throw</span> exceptions. Similarly, registering a scope that includes a <code>"?"</code> or <code>"#"</code> will also <span data-anolis-spec=webidl>throw</span>s exceptions.</p>
+    <p>To break what might otherwise be ties when matching URLs, navigations are mapped to <span title=concept-serviceworker>service worker</span>s by longest-prefix-match. Note that the <code>*</code> can only occur at the end of a matching rule, so attempts to register <code>/foo/*/bar</code> or <code>*bar</code> will <span data-anolis-spec=webidl>throw</span> exceptions. Similarly, registering a scope that includes a <code>"?"</code> or <code>"#"</code> will also <span data-anolis-spec=webidl>throw</span>s exceptions.</p>
     <p>In the above example with registrations for <code>/foo*</code> and <code>/foo/bar*</code>, the following matches would be made when navigating to the following URLs under <code>http://www.example.com</code>:</p>
     <table border="1">
       <tr>
@@ -692,43 +692,43 @@ this.addEventListener("fetch", function(e) {
     <h3><dfn>Last-registration wins</dfn></h3>
     <p>The registration system is also last-registration-wins. That means if two pages on <code>www.example.com</code> set a registration to control <code>/*</code>, the one a user visits second (assuming the first does not interfere) will be installed and over-write the previous registration.</p>
 
-    <p>This makes sense because registration is the same as replacement. That is to say, if you have content that wants to replace the existing <span>ServiceWorker</span> with one at a different URL (perhaps a heavy-handed form of "new version"), registering the new URL is the way that you indicate that the old registration is no longer the preferred one.</p>
+    <p>This makes sense because registration is the same as replacement. That is to say, if you have content that wants to replace the existing <span title=concept-serviceworker>service worker</span> with one at a different URL (perhaps a heavy-handed form of "new version"), registering the new URL is the way that you indicate that the old registration is no longer the preferred one.</p>
 
     <h3>Cross-origin limitation</h3>
-    <p>One of the concerns that major applications hit is "how do I host things from a CDN?" By definition, these are servers in other places, often on other domains, that your content references. Can <span>ServiceWorker</span>s be hosted on CDNs? No, this is not allowed since <span>ServiceWorker</span>s can create the possibility of an XSS vulnerability, etc.</p>
+    <p>One of the concerns that major applications hit is "how do I host things from a CDN?" By definition, these are servers in other places, often on other domains, that your content references. Can <span title=concept-serviceworker>service worker</span>s be hosted on CDNs? No, this is not allowed since <span title=concept-serviceworker>service worker</span>s can create the possibility of an XSS vulnerability, etc.</p>
 
     <p>But they can include resources (via <code>importScripts()</code>) that are.</p>
 
-    <h2>Lifecycle of a ServiceWorker</h2>
-    <p>The browser might unceremoniously kill your <span>ServiceWorker</span> if it is idle, or even stop it mid-work and re-issue the request to a different instance of the worker. There are no guarantees about how long a <span>ServiceWorker</span> will run. <span>ServiceWorker</span>s should be written to avoid holding global state. This cannot be stressed enough: write your workers as though they will die after every request.</p>
-    <p>Also remember that <span>ServiceWorker</span>s are shared resources. A single worker might be servicing requests from multiple tabs or documents. Never assume that only one document is talking to a given <span>ServiceWorker</span>. If you care about where a request is coming from or going to, use the <code>.window</code> property of the <code>onfetch</code> event; but do not create state that you care about without serializing it somewhere like IndexedDB.</p>
+    <h2>Lifecycle of a service worker</h2>
+    <p>The browser might unceremoniously kill your <span title=concept-serviceworker>service worker</span> if it is idle, or even stop it mid-work and re-issue the request to a different instance of the worker. There are no guarantees about how long a <span title=concept-serviceworker>service worker</span> will run. <span title=concept-serviceworker>service worker</span>s should be written to avoid holding global state. This cannot be stressed enough: write your workers as though they will die after every request.</p>
+    <p>Also remember that <span title=concept-serviceworker>service worker</span>s are shared resources. A single worker might be servicing requests from multiple tabs or documents. Never assume that only one document is talking to a given <span title=concept-serviceworker>service worker</span>. If you care about where a request is coming from or going to, use the <code>.window</code> property of the <code>onfetch</code> event; but do not create state that you care about without serializing it somewhere like IndexedDB.</p>
 
 
     <h2>Upgrade with a new version</h2>
 
     <h3>Wait-for-restart</h3>
-    <p>The default policy is that this new tab will be controlled by v1. This is done to prevent the crazy-town scenario of multiple <span>ServiceWorker</span> versions running at the same time, possibly creating conflicts for IndexedDB schemas, content caches, and the like. Yes, there is a small window during <code>oninstall</code> when v2 will be running at the same time as v1, but they would not both be serving content. The advice then is: do not do irreversible things during oninstall. It is a good place to get a jump on populating caches (with unique names if the new content is reliant on the new <span>ServiceWorker</span>), but a bad place to do things like schema and model upgrades for your application.</p>
+    <p>The default policy is that this new tab will be controlled by v1. This is done to prevent the crazy-town scenario of multiple <span title=concept-serviceworker>service worker</span> versions running at the same time, possibly creating conflicts for IndexedDB schemas, content caches, and the like. Yes, there is a small window during <code>oninstall</code> when v2 will be running at the same time as v1, but they would not both be serving content. The advice then is: do not do irreversible things during oninstall. It is a good place to get a jump on populating caches (with unique names if the new content is reliant on the new <span title=concept-serviceworker>service worker</span>), but a bad place to do things like schema and model upgrades for your application.</p>
 
-    <p>The alternative scenario is one in which the new version of your <span>ServiceWorker</span> is discovered and installed and no documents are running against v1. This could happen because:</p>
+    <p>The alternative scenario is one in which the new version of your <span title=concept-serviceworker>service worker</span> is discovered and installed and no documents are running against v1. This could happen because:</p>
 
     <ul>
-      <li>v1 was installed by a page that was loaded "naked", but which was never reloaded so as to start under the <span>ServiceWorker</span>.</li>
+      <li>v1 was installed by a page that was loaded "naked", but which was never reloaded so as to start under the <span title=concept-serviceworker>service worker</span>.</li>
       <li>The browser fetched an update of it is own volition. It is allowed to do that!</li>
-      <li>Between the time <code>oninstall</code> started for the v2 <span>ServiceWorker</span> and when <code>waitUntil()</code> was finally satisfied, all of the application's windows were closed.</li>
+      <li>Between the time <code>oninstall</code> started for the v2 <span title=concept-serviceworker>service worker</span> and when <code>waitUntil()</code> was finally satisfied, all of the application's windows were closed.</li>
     </ul>
 
-    <p>When this happens, v2 instantly becomes the active <span>ServiceWorker</span>, so the next time you navigate to a URL controlled by the registration, v2 would get first crack at it.</p>
+    <p>When this happens, v2 instantly becomes the active <span title=concept-serviceworker>service worker</span>, so the next time you navigate to a URL controlled by the registration, v2 would get first crack at it.</p>
 
-    <p>Indeed, v2 will become the active <span>ServiceWorker</span> just as soon as all v1 documents are closed.</p>
+    <p>Indeed, v2 will become the active <span title=concept-serviceworker>service worker</span> just as soon as all v1 documents are closed.</p>
 
-    <p>When v2 does become the active <span>ServiceWorker</span>, another event - <code>onactivate</code> - is sent to v2. This happens before any fetches are dispatched. This is the ideal time to upgrade database schemas and the like, but be careful not to do too much work. Applications will be blocked from loading while <code>onactivate</code> is being serviced (including any extensions asked for via <code>e.waitUntil()</code>, which is also available to <code>onactivate</code> handlers). Treat <code>onactivate</code> as a time to stake your claim as the new version but beware doing more than that lest you make your app unavailable!</p>
+    <p>When v2 does become the active <span title=concept-serviceworker>service worker</span>, another event - <code>onactivate</code> - is sent to v2. This happens before any fetches are dispatched. This is the ideal time to upgrade database schemas and the like, but be careful not to do too much work. Applications will be blocked from loading while <code>onactivate</code> is being serviced (including any extensions asked for via <code>e.waitUntil()</code>, which is also available to <code>onactivate</code> handlers). Treat <code>onactivate</code> as a time to stake your claim as the new version but beware doing more than that lest you make your app unavailable!</p>
 
     <h3>Replacement</h3>
-    <p>An alternative policy is available for the daring: a new <span>ServiceWorker</span> can choose to cut-in and replace an existing one. And before you ask, yes, this does break the first rule. But not much.</p>
+    <p>An alternative policy is available for the daring: a new <span title=concept-serviceworker>service worker</span> can choose to cut-in and replace an existing one. And before you ask, yes, this does break the first rule. But not much.</p>
 
-    <p>To replace an existing <span>ServiceWorker</span>, use the <code>.replace()</code> method of the <code>oninstall</code> event during the event dispatch. In fact, you can even call <code>.replace()</code> on the very first install of a <span>ServiceWorker</span>, which will now make your <span>ServiceWorker</span> the proud owner of all windows/tabs whose URLs match the registration origin and scope including the page that registered it.</p>
+    <p>To replace an existing <span title=concept-serviceworker>service worker</span>, use the <code>.replace()</code> method of the <code>oninstall</code> event during the event dispatch. In fact, you can even call <code>.replace()</code> on the very first install of a <span title=concept-serviceworker>service worker</span>, which will now make your <span title=concept-serviceworker>service worker</span> the proud owner of all windows/tabs whose URLs match the registration origin and scope including the page that registered it.</p>
 
-    <p>Here is an example: we'll compare the versions to ensure that they are not so far apart that stepping in would break things; leaving the old <span>ServiceWorker</span> in place if the version skew is too great and taking over if it is a difference our new version is confident it can handle. Consider v1.3 vs. v1.0:</p>
+    <p>Here is an example: we'll compare the versions to ensure that they are not so far apart that stepping in would break things; leaving the old <span title=concept-serviceworker>service worker</span> in place if the version skew is too great and taking over if it is a difference our new version is confident it can handle. Consider v1.3 vs. v1.0:</p>
 
     <div class="example">
       <pre title="Replacement">
@@ -772,21 +772,21 @@ this.addEventListener("install", function(e) {
 
 // ...onfetch, etc...</pre>
     </div>
-    <p>The <code>previousVersion</code> field of the event is filled in using a structured clone of the global version property set by the last execution of the previous <span>ServiceWorker</span>. It is a good idea both to always set a version and, sort of obviously, not to make it something that can't be cloned or which varies.</p>
+    <p>The <code>previousVersion</code> field of the event is filled in using a structured clone of the global version property set by the last execution of the previous <span title=concept-serviceworker>service worker</span>. It is a good idea both to always set a version and, sort of obviously, not to make it something that can't be cloned or which varies.</p>
 
-    <p>What of the old <span>ServiceWorker</span>? What happens to it?</p>
+    <p>What of the old <span title=concept-serviceworker>service worker</span>? What happens to it?</p>
 
-    <p>The replacing <span>ServiceWorker</span> can send a message to the old <span>ServiceWorker</span> in <code>oninstalled</code> using <code>e.previous.postMessage()</code>. This can blossom into a bi-directional discussion if both sides have registered <code>onmessage</code> handlers, but that is out of the scope of this document for now.</p>
+    <p>The replacing <span title=concept-serviceworker>service worker</span> can send a message to the old <span title=concept-serviceworker>service worker</span> in <code>oninstalled</code> using <code>e.previous.postMessage()</code>. This can blossom into a bi-directional discussion if both sides have registered <code>onmessage</code> handlers, but that is out of the scope of this document for now.</p>
 
     <h2>Offline-first resource handling</h2>
 
     <h3><code>FetchEvent</code> handling</h3>
-    <p><span>ServiceWorker</span>s, once installed, can choose to handle resource loading. Before going to the network to <span data-anolis-spec=fetch>fetch</span> a document that matches the ServiceWorker's scope, the worker is consulted, including when <span data-anolis-spec=fetch>fetch</span>ing the document payload itself.
+    <p><span title=concept-serviceworker>service worker</span>s, once installed, can choose to handle resource loading. Before going to the network to <span data-anolis-spec=fetch>fetch</span> a document that matches the service worker's scope, the worker is consulted, including when <span data-anolis-spec=fetch>fetch</span>ing the document payload itself.
 
-    Here is an example of a <span>ServiceWorker</span> that only handles a single resource (<code>/services/inventory/data.json</code>) but which logs out requests for all resources it is consulted for:</p>
+    Here is an example of a <span title=concept-serviceworker>service worker</span> that only handles a single resource (<code>/services/inventory/data.json</code>) but which logs out requests for all resources it is consulted for:</p>
 
     <div class="example">
-      <pre title="onfetch handling in a ServiceWorker">
+      <pre title="onfetch handling in a service worker">
 // hosted at: /assets/v1/ctrl.js
 this.version = 1;
 
@@ -811,8 +811,8 @@ this.addEventListener("fetch", function(e) {
   }
 });</pre>
     </div>
-    <p>The contents of all but the inventory will be handled by the normal browser resource fetching system because the onfetch event handler did not call <code>respondWith</code> when invoked with their requests. The first time the app is loaded (before the <span>ServiceWorker</span> is installed), <code>data.json</code> will also be fetched from the network. Thereafter it will be computed by the <span>ServiceWorker</span> instead. The important thing to remember here is that normal resource loading is the fallback behavior for fetch events.</p>
-    <p>When combined with access to IndexedDB and a new form of <code>Cache</code>, the ability to respond with arbitrary content is incredibly powerful. Since installed <span>ServiceWorker</span>s are invoked even when offline, <span>ServiceWorker</span>s enable apps that are "offline by default" once installed.</p>
+    <p>The contents of all but the inventory will be handled by the normal browser resource fetching system because the onfetch event handler did not call <code>respondWith</code> when invoked with their requests. The first time the app is loaded (before the <span title=concept-serviceworker>service worker</span> is installed), <code>data.json</code> will also be fetched from the network. Thereafter it will be computed by the <span title=concept-serviceworker>service worker</span> instead. The important thing to remember here is that normal resource loading is the fallback behavior for fetch events.</p>
+    <p>When combined with access to IndexedDB and a new form of <code>Cache</code>, the ability to respond with arbitrary content is incredibly powerful. Since installed <span title=concept-serviceworker>service worker</span>s are invoked even when offline, <span title=concept-serviceworker>service worker</span>s enable apps that are "offline by default" once installed.</p>
 
     <h3>Navigation vs Fetch</h3>
     <p>Description</p>
@@ -828,8 +828,8 @@ this.addEventListener("fetch", function(e) {
 
     <h2>Caching</h2>
     <div class="example">
-      <pre title="Cache control in ServiceWorker script">
-// ServiceWorker script hosted at: /assets/v1/caching.js
+      <pre title="Cache control in service worker script">
+// Service worker script hosted at: /assets/v1/caching.js
 this.version = 1;
 
 var base = "http://videos.example.com";
@@ -837,7 +837,7 @@ this.addEventListener("install", function(e) {
   e.services = ["fetch"];
 
   // Create a cache of resources. Begins the process of fetching them.
-  // URLs are relative to the ServiceWorker
+  // URLs are relative to the service worker
   var shellResources = new Cache(
     base + "/assets/v1/base.css",
     base + "/assets/v1/app.js",

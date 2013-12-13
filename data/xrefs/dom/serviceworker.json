@@ -1,7 +1,7 @@
 {
   "definitions": {
+    "concept-serviceworker": "concept-serviceworker",
     "crossoriginresponse": "crossoriginresponse",
-    "dfn-serviceworker": "dfn-serviceworker",
     "fetchevent": "fetchevent",
     "handler-serviceworker-onactivate": "handler-serviceworker-onactivate",
     "handler-serviceworker-onbeforeevicted": "handler-serviceworker-onbeforeevicted",
@@ -12,7 +12,6 @@
     "header": "header",
     "installevent": "installevent",
     "installphaseevent": "installphaseevent",
-    "interface-serviceworker": "interface-serviceworker",
     "last-registration wins": "last-registration-wins",
     "mode": "mode",
     "reloadpageevent": "reloadpageevent",
@@ -22,6 +21,8 @@
     "response": "response",
     "sameoriginresponse": "sameoriginresponse",
     "sameoriginresponseinit": "sameoriginresponseinit",
+    "serviceworker": "serviceworker-0",
+    "serviceworker-navigator-registerserviceworker": "serviceworker-navigator-registerserviceworker",
     "serviceworkerglobalscope": "serviceworkerglobalscope",
     "serviceworkerscopeoptions": "serviceworkerscopeoptions"
   },
