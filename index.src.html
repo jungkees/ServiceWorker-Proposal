@@ -248,19 +248,19 @@ dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> 
     <p>When the <code>registerServiceWorker(scriptURL, options)</code> method is invoked, the user agent must run the following steps:</p>
 
     <ol>
-      <li><p>Let <var>promise</var> be a new <code><span data-anolis-spec=dom>Promise</span></code> object and <var>resolver</var> its associated resolver.</p></li>
+      <li><p>Let <var>promise</var> be a newly-created <code><span data-anolis-spec=dom>Promise</span></code> object.</p></li>
       <li><p>Return <var>promise</var> and run the remaining steps asynchronously.</p></li>
       <li><p>If the request violates a policy decision (e.g. if the user agent is configured to not allow the page to start service workers), run these substeps and abort these steps:</p>
         <ol>
           <li><p>Let <var>error</var> be a new <span data-anolis-spec=html>DOMException</span> object whose type is "<span data-anolis-spec=html>SecurityError</span>".</p></li>
-          <li><p>Run <var>resolver</var>'s internal <code>reject</code> algorithm with <var>error</var> as <code>value</code>.</p></li>
+          <li><p>Reject <var>promise</var> with <var>error</var>.</p></li>
         </ol>
       </li>
       <li><p><span data-anolis-spec=html title="resolve a url">Resolve</span> the <var>scriptURL</var> argument.</p></li>
       <li><p>If this fails, run these substeps and abort these steps:</p>
         <ol>
           <li><p>Let <var>error</var> be a new <span data-anolis-spec=html>DOMException</span> object whose type is "<span data-anolis-spec=html>SyntaxError</span>".</p></li>
-          <li><p>Run <var>resolver</var>'s internal <code>reject</code> algorithm with <var>error</var> as <code>value</code>.</p></li>
+          <li><p>Reject <var>promise</var> with <var>error</var>.</p></li>
         </ol>
       </li>
       <li><p>Let <var>scriptURL</var> be the resulting <span data-anolis-spec=html>absolute URL</span> and <var>parsed scriptURL</var> be the resulting <span data-anolis-spec=html>parsed URL</span>.</p></li>
@@ -268,7 +268,7 @@ dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> 
       <li><p>If the <span data-anolis-spec=html>scheme</span> component of <var>parsed scriptURL</var> is not "<code>data</code>", and the <span data-anolis-spec=html>origin</span> of <var>scriptURL</var> is not the <span data-anolis-spec=html title="same origin">same</span> as the <span data-anolis-spec=html>origin</span> specified by the <span data-anolis-spec=html>incumbent settings object</span>, run these substeps and abort these steps:</p>
         <ol>
           <li><p>Let <var>error</var> be a new <span data-anolis-spec=html>DOMException</span> object whose type is "<span data-anolis-spec=html>SecurityError</span>".</p></li>
-          <li><p>Run <var>resolver</var>'s internal <code>reject</code> algorithm with <var>error</var> as <code>value</code>.</p></li>
+          <li><p>Reject <var>promise</var> with <var>error</var>.</p></li>
         </ol>
       <p class=note>Thus, scripts must either be external files with the same scheme, host, and port as the original page, or <span data-anolis-spec=html title="data protocol"><code>data:</code> URLs</span>. For example, and an <code>https:</code> page couldn't start workers using scripts with http: URLs.</p></li>
       <li><p>Let <var>docs</var> be the <span data-anolis-spec=web-workers title="list of relevant document objects to add">list of relevant <code>Document</code> objects to add</span> given the <span data-anolis-spec=html>incumbent settings object</span>.</p></li>
@@ -278,8 +278,12 @@ dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> 
           <li><p>Create a new <span data-anolis-spec=html-postmsg>MessagePort</span> object whose owner is the <span data-anolis-spec=html>incumbent settings object</span>. Let this be the <var>outside port</var>.</p></li>
           <li><p>Associate the <var>outside port</var> with worker.</p></li>
           <li><p>Let <var>worker global scope</var> be null.</p></li>
-          <li><p>If <var>options</var> is not null and there exists a <code><span>ServiceWorkerGlobalScope</span></code> object whose <span data-anolis-spec=web-workers>closing</span> flag is false, whose <code>options</code> attribute is exactly equal to <var>options</var>, and that is the <span data-anolis-spec=html>global object</span> specified by a <span data-anolis-spec=html>script settings object</span> that specifies as its <span data-anolis-spec=html>origin</span> the <span data-anolis-spec=html>same origin</span> as the <span data-anolis-spec=html>origin</span> of <var>scriptURL</var>, then let <var>worker global scope</var> be that <code><span>ServiceWorkerGlobalScope</span></code> object.</p>
-          <p>Otherwise, if <var>options</var> is null and there exists a <code><span>ServiceWorkerGlobalScope</span></code> object whose <span data-anolis-spec=web-workers>closing</span> flag is false, whose <code>options</code> attribute is the empty string, and whose <code><span data-anolis-spec=web-workers>location</span></code> attribute represents an <span data-anolis-spec=html>absolute URL</span> that is exactly equal to <var>scriptURL</var>, then let <var>worker global scope</var> be that <code><span>ServiceWorkerGlobalScope</span></code> object.</p>
+          <li><p>If there exists a <code><span>ServiceWorkerGlobalScope</span></code> object whose <span data-anolis-spec=web-workers>closing</span> flag is false, whose <code><span>location</span></code> attribute represents an <span data-anolis-spec=html>absolute URL</span> that is exactly equal to <var>scriptURL</var>, run these substeps:</p>
+            <ol>
+              <li><p>If <var>options</var> is not null and the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute is not exactly equal to <var>scope</var> of <var>options</var>, set the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute to <var>scope</var> of <var>options</var>.</p></li>
+              <li><p>If <var>options</var> is null and the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute is not the default scope, "<code>/*</code>", set the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute to "<code>/*</code>".</p></li>
+              <li><p>Let <var>worker global scope</var> be that <code><span>ServiceWorkerGlobalScope object</span></code>.</p></li>
+            </ol>
           </li>
           <li><p>If <var>worker global scope</var> is not null, but the user agent has been configured to disallow communication between the worker represented by the <var>worker global scope</var> and the <span data-anolis-spec=html title=script-0>scripts</span> whose <span data-anolis-spec=html>settings object</span>s are the <span data-anolis-spec=html>incumbent settings object</span>, then set <var>worker global scope</var> to null.</p></li>
           <li><p>If <var>worker global scope</var> is not null, then run these steps:</p>
@@ -287,7 +291,7 @@ dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> 
               <li><p>If <var>worker global scope</var>'s <code><span data-anolis-spec=web-workers>location</span></code> attribute represents an <span data-anolis-spec=html>absolute URL</span> that is not exactly equal to <var>scriptURL</var>, run these substeps and abort these steps:</p>
                 <ol>
                   <li><p>Let <var>error</var> be a new <span data-anolis-spec=html>DOMException</span> object whose type is "<span data-anolis-spec=html>URLMismatchError</span>".</p></li>
-                  <li><p>Run <var>resolver</var>'s internal <code>reject</code> algorithm with <var>error</var> as <code>value</code>.</p></li>
+                  <li><p>Reject <var>promise</var> with <var>error</var>.</p></li>
                 </ol>
               </li>
               <li><p>Associate <var>worker</var> with <var>worker global scope</var>.</p></li>
@@ -300,9 +304,15 @@ dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> 
               <li><p>Return <var>worker</var> and abort all these steps.</p></li>
             </ol>
           </li>
-          <li><p>Create a new <code><span>ServiceWorkerGlobalScope</span></code> object. Let <var>worker global scope</var> be this new object.</p></li>
+          <li><p>Create a new <code><span>ServiceWorkerGlobalScope</span></code> object. Let <var>worker global scope</var> be this new object.</p>
+            <p class=critical>When there exists aother active service worker which covers the exactly same <code><span>scope</span></code> with different <code><span>scriptURL</span></code>, a new service worker is to be created by this algorithm. As the newly created worker would be effective from the next page load, that currently effective worker should not be terminated right away. An algorithm to sweep the unbound service workers should be added. Sweeping must not be conducted unless otherwise the list of <span data-anolis-spec=web-workers title=the-worker-s-documents>the worker's <code><span>Document</span></code>s</span> is empty. (See <span>Last-registration wins</span>.)</p>
+          </li>
           <li><p><span data-anolis-spec=web-workers>Set up a worker script settings object</span> with <var>worker global scope</var> and <var>scriptURL</var>, and let <var>settings object</var> be the result.</p></li>
           <li><p>Associate <var>worker</var> with <var>worker global scope</var>.</p></li>
+
+
+
+          <li><p>If <var>options</var> is not null, set the <code><span>scope</span></code> attribute of <var>worker global scope</var> to <var>scope</var> of <var>options</var>; Otherwise, set the <code><span>scope</span></code> attribute of <var>worker global scope</var> to the default scope, "<code>/*</code>".</p></li>
           <li><p>Create a new <code><span data-anolis-spec=html-postmsg>MessagePort</span></code> object whose <span data-anolis-spec=html-postmsg>owner</span> is <var>settings object</var>. Let <var>inside port</var> be this new object.</p></li>
           <li><p><span data-anolis-spec=html-postmsg>Entangle</span> <var>outside port</var> and <var>inside port</var>.</p></li>
         </ol>
@@ -313,7 +323,7 @@ dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> 
       <li><p>If the <span data-anolis-spec=html>global object</span> specified by the <span data-anolis-spec=html>incumbent settings object</span> is a <code><span data-anolis-spec=web-workers>WorkerGlobalScope</span></code> object, add <var>worker global scope</var> to the list of <span data-anolis-spec=web-workers title=the-worker-s-workers>the worker's workers</span> of the <code><span data-anolis-spec=web-workers>WorkerGlobalScope</span></code> object that is the <span data-anolis-spec=html>global object</span> specified by the <span data-anolis-spec=html>incumbent settings object</span> .</p></li>
       <li><p><span data-anolis-spec=web-workers>Run a worker</span> for the script with <span data-anolis-spec=url>URL</span> <var>scriptURL</var> and the <span data-anolis-spec=html>script settings object</span> <var>settings object</var>.</p></li>
       <li><p>Let <var>serviceWorker</var> be <var>worker</var>.</p></li>
-      <li><p>Run <var>resolver</var>'s intenal <code><span>resolve</span></code> algorithm with <var>serviceWorker</var> as <code><span>value</span></code>.</p></li>
+      <li><p>Resolve <var>promise</var> with <var>serviceWorker</var>.</p></li>
     </ol>
     <p>The <span data-anolis-spec=html>task source</span> for the tasks mentioned above is the <span data-anolis-spec=html title=dom-manipulation-task-source>DOM manipulation task source</span>.</p>
 
@@ -326,7 +336,7 @@ interface <dfn title=interface-ServiceWorker>ServiceWorker</dfn> : <span data-an
 };
 <span>ServiceWorker</span> implements <span data-anolis-spec=web-workers title=abstractworker>AbstractWorker</span>;</pre>
 
-    <p><code><span>ServiceWorker</span></code> objects act as if they had an implicit <span data-anolis-spec=html-postmsg>MessagePort</span> associated with them. This port is part of a channel that is set up when the worker is created, but it is not exposed. It represents the <span data-anolis-spec=html-postmsg>MessagePort</span> for communicating with the service worker. This object must never be garbage collected before the <code><span>ServiceWorker</span></code> object.</p>
+    <p><code><span>ServiceWorker</span></code> objects act as if they had an implicit <span data-anolis-spec=html-postmsg>MessagePort</span> associated with them. This port is part of a channel that is set up when the worker is registered, but it is not exposed. It represents the <span data-anolis-spec=html-postmsg>MessagePort</span> for communicating with the service worker. This object must never be garbage collected before the <code><span>ServiceWorker</span></code> object.</p>
 
     <p>All messages received by that port must immediately be retargeted at the <code><span>ServiceWorker</span></code> object.</p>
 
@@ -355,6 +365,7 @@ interface <dfn title=interface-ServiceWorker>ServiceWorker</dfn> : <span data-an
 interface <dfn>ServiceWorkerGlobalScope</dfn> : <span data-anolis-spec=web-workers>WorkerGlobalScope</span> {
   getter <span data-anolis-spec=html>WindowProxy</span>[] windows();
   <span data-anolis-spec=dom>Promise</span> <span title="">fetch</span>((<span>Request</span> or <span data-anolis-spec=url>URL</span> or DOMString or any) <var>request</var>);
+  [Unforgeable] readonly attribute DOMString scope;
           attribute <span>CacheList</span> caches;
           attribute any version;
           attribute <span data-anolis-spec=html>EventHandler</span> <span>oninstall</span>;
@@ -376,6 +387,8 @@ interface <dfn>ServiceWorkerGlobalScope</dfn> : <span data-anolis-spec=web-worke
       <dd>Returns the array of the the <code><span data-anolis-spec=html>Window</span></code> object's <code><span data-anolis-spec=html>browsing context</span></code>'s <code><span data-anolis-spec=html>WindowProxy</span></code> object that the <span><code>ServiceWorkerGlobalScope</code></span> is bound to.</dd>
       <dt><code>this.fetch()</code></dt>
       <dd>Returns the <code>Promise</code> object that represents the <code>Response</code> object of the <span data-anolis-spec=fetch>fetch</span>ed resource.</dd>
+      <dt><code>this.scope</code></dt>
+      <dd>Returns the <code>scope</code> string that the worker listens to.</dd>
       <dt><code>this.caches</code></dt>
       <dd>Returns the current <code>CacheList</code> object.</dd>
       <dt><code>this.version</code></dt>
@@ -677,7 +690,7 @@ this.addEventListener("fetch", function(e) {
     <p><code>&lt;fallback to native&gt;</code> is the browser's built-in behavior for fetching resources - the thing the Fetch Service defers to when it does not handle a fetch with <code>e.respondWith()</code>.</p>
     <p class='note'>If <code>e.respondWith()</code> is not called when handling a connection in <code>/foo/barServiceWorker.js</code>, it does not cascade to <code>/fooServiceWorker.js</code>, it falls back to the browser's built-in network behavior.</p>
 
-    <h3>Last-registration wins</h3>
+    <h3><dfn>Last-registration wins</dfn></h3>
     <p>The registration system is also last-registration-wins. That means if two pages on <code>www.example.com</code> set a registration to control <code>/*</code>, the one a user visits second (assuming the first does not interfere) will be installed and over-write the previous registration.</p>
 
     <p>This makes sense because registration is the same as replacement. That is to say, if you have content that wants to replace the existing <span>ServiceWorker</span> with one at a different URL (perhaps a heavy-handed form of "new version"), registering the new URL is the way that you indicate that the old registration is no longer the preferred one.</p>

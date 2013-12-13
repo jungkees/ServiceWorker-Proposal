@@ -13,6 +13,7 @@
     "installevent": "installevent",
     "installphaseevent": "installphaseevent",
     "interface-serviceworker": "interface-serviceworker",
+    "last-registration wins": "last-registration-wins",
     "mode": "mode",
     "reloadpageevent": "reloadpageevent",
     "request": "request",

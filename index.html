@@ -6,11 +6,11 @@
   </head>
   <body>
     <div class="head">
-      <p><a href="http://www.w3.org/"><img height="48" alt="W3C" src="https://www.w3.org/Icons/w3c_home" width="72"></a></p>
+      <p><a href="http://www.w3.org/"><img alt="W3C" height="48" src="https://www.w3.org/Icons/w3c_home" width="72"></a></p>
 
-      <h1 id="serviceworker" class="head">Service Workers</h1>
+      <h1 class="head" id="serviceworker">Service Workers</h1>
       <h2 class="dontpublish no-num no-toc" id="subtitle">Soon-to-be-shipped draft</h2>
-      <h2 class="no-num no-toc" id="w3c-doctype">Editor's Draft 12 December 2013</h2>
+      <h2 class="no-num no-toc" id="w3c-doctype">Editor's Draft 13 December 2013</h2>
 
       <dl>
         <dt>This Version:</dt>
@@ -66,7 +66,7 @@
       with <samp>[ServiceWorker]</samp> at the start of the subject line.</p>
 
       <p>The W3C <a href="http://www.w3.org/2008/webapps/">Web Applications Working
-      Group</a> is the W3C working group responsible for this specification's progress along the W3C Recommendation track. This specification is the 12 December 2013 Editor's Draft.</p>
+      Group</a> is the W3C working group responsible for this specification's progress along the W3C Recommendation track. This specification is the 13 December 2013 Editor's Draft.</p>
 
       <p>Publication as an Editor's Draft does not imply endorsement by the W3C
       Membership. This is a draft document and may be updated, replaced or
@@ -133,21 +133,21 @@
    <li><a href="#cross-origin-resources"><span class="secno">8.5 </span>Cross-origin resources</a></ol></li>
  <li><a href="#caching"><span class="secno">9 </span>Caching</a></li>
  <li><a href="#future-extension"><span class="secno">10 </span>Future extension</a></li>
- <li><a href="#references" class="no-num">References</a></li>
- <li><a href="#acknowledgments" class="no-num">Acknowledgments</a></ol>
+ <li><a class="no-num" href="#references">References</a></li>
+ <li><a class="no-num" href="#acknowledgments">Acknowledgments</a></ol>
 <!--end-toc-->
 
     <h2 id="introduction"><span class="secno">1 </span>Introduction</h2>
     <p><em>This section is non-normative.</em></p>
 
     <h3 id="motivations"><span class="secno">1.1 </span>Offline-first web applications: the motivations</h3>
-    <p>Web applications are traditionally premised on the assumption that the network is reachable. This assumption pervades the platform. <a href="#refsHTML">[HTML]</a> documents are loaded over HTTP and traditionally <a title="fetch" href="http://fetch.spec.whatwg.org/#concept-fetch" class="external">fetch</a> all of their sub-resources via subsequent <a href="#refsHTTP">[HTTP]</a> requests. This places web content at a disadvantage versus other technology stacks.</p>
+    <p>Web applications are traditionally premised on the assumption that the network is reachable. This assumption pervades the platform. <a href="#refsHTML">[HTML]</a> documents are loaded over HTTP and traditionally <a class="external" href="http://fetch.spec.whatwg.org/#concept-fetch" title="fetch">fetch</a> all of their sub-resources via subsequent <a href="#refsHTTP">[HTTP]</a> requests. This places web content at a disadvantage versus other technology stacks.</p>
 
     <h3 id="lack-of-the-controllability-with-the-existing-solution:-appcache"><span class="secno">1.2 </span>Lack of the controllability with the existing solution: AppCache</h3>
-    <p>AppCache is declarative. Web developers give the browser a manifest and magic happens. This has well-known limitations that <a title="dfn-serviceworker" href="#dfn-serviceworker">ServiceWorker</a>s work around by giving developers the lower-level primitives that AppCache is described in terms of.</p>
+    <p>AppCache is declarative. Web developers give the browser a manifest and magic happens. This has well-known limitations that <a href="#dfn-serviceworker" title="dfn-serviceworker">ServiceWorker</a>s work around by giving developers the lower-level primitives that AppCache is described in terms of.</p>
 
     <h3 id="the-serviceworker"><span class="secno">1.3 </span>The ServiceWorker</h3>
-    <p><dfn title="dfn-serviceworker" id="dfn-serviceworker">ServiceWorker</dfn>s are a new feature for the web platform that lets a script persistently cache resources and handle all resource requests for an application even when the network is not available. <a title="dfn-serviceworker" href="#dfn-serviceworker">ServiceWorker</a>s are bit of scripts that can listen for network events (such as resource requests), manage content caches, and thus decide what content to display when a URL is requested. <a href="#refsURL">[URL]</a> Putting it all together, <a title="dfn-serviceworker" href="#dfn-serviceworker">ServiceWorker</a>s give you a way to build applications that work offline.</p>
+    <p><dfn id="dfn-serviceworker" title="dfn-serviceworker">ServiceWorker</dfn>s are a new feature for the web platform that lets a script persistently cache resources and handle all resource requests for an application even when the network is not available. <a href="#dfn-serviceworker" title="dfn-serviceworker">ServiceWorker</a>s are bit of scripts that can listen for network events (such as resource requests), manage content caches, and thus decide what content to display when a URL is requested. <a href="#refsURL">[URL]</a> Putting it all together, <a href="#dfn-serviceworker" title="dfn-serviceworker">ServiceWorker</a>s give you a way to build applications that work offline.</p>
 
     <div class="example">
       <p>Some simple code to install a service worker and control the document from within the worker script:</p>
@@ -226,122 +226,132 @@ this.addEventListener("fetch", function(e) {
 
     <h2 id="terminology"><span class="secno">3 </span>Terminology</h2>
 
-    <p>The <a href="http://w3c.github.io/dom/#promises" class="external">Promise</a> interface provides asynchronous access to the result of an operation that is ongoing, has yet to start, or has completed, as defined in <a href="#refsDOM">[DOM]</a>.</p>
+    <p>The <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> interface provides asynchronous access to the result of an operation that is ongoing, has yet to start, or has completed, as defined in <a href="#refsDOM">[DOM]</a>.</p>
 
     <h2 id="interfaces"><span class="secno">4 </span>Interfaces</h2>
-    <p class="note">This section normatively specifies the interfaces and the algorithms for the <a href="#dfn-serviceworker" class="internalDFN">ServiceWorker</a> infrastructure and lifecycle management. Relevant explainer is followed on the subsequent sections: Bootstrapping, Upgrade, <code><a href="#fetchevent">FetchEvent</a></code> and Caching.</p>
+    <p class="note">This section normatively specifies the interfaces and the algorithms for the <a class="internalDFN" href="#dfn-serviceworker">ServiceWorker</a> infrastructure and lifecycle management. Relevant explainer is followed on the subsequent sections: Bootstrapping, Upgrade, <code><a href="#fetchevent">FetchEvent</a></code> and Caching.</p>
 
     <h3 id="extensions-to-the-navigator-object"><span class="secno">4.1 </span>Extensions to the <code>Navigator</code> object</h3>
-    <pre class="idl">partial interface <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#navigator-0" class="external">Navigator</a> {
-  <a href="http://w3c.github.io/dom/#promises" class="external">Promise</a> <span title="">registerServiceWorker</span>(DOMString <var>scriptURL</var>, optional <a href="#serviceworkerscopeoptions">ServiceWorkerScopeOptions</a> <var>options</var>);
-  <a href="http://w3c.github.io/dom/#promises" class="external">Promise</a> <span title="">unregisterServiceWorker</span>(<span>ServiceWorker</span> <var>serviceWorker</var>);
-          attribute <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler" class="external">EventHandler</a> <span>onserviceworkerinstall</span>;
-          attribute <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler" class="external">EventHandler</a> <span>onserviceworkerreplaced</span>;
-          attribute <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler" class="external">EventHandler</a> <span>onserviceworkerreloadpage</span>;
+    <pre class="idl">partial interface <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#navigator-0">Navigator</a> {
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> <span title="">registerServiceWorker</span>(DOMString <var>scriptURL</var>, optional <a href="#serviceworkerscopeoptions">ServiceWorkerScopeOptions</a> <var>options</var>);
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> <span title="">unregisterServiceWorker</span>(<span>ServiceWorker</span> <var>serviceWorker</var>);
+          attribute <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <span>onserviceworkerinstall</span>;
+          attribute <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <span>onserviceworkerreplaced</span>;
+          attribute <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <span>onserviceworkerreloadpage</span>;
 };
 
-dictionary <dfn title="ServiceWorkerScopeOptions" id="serviceworkerscopeoptions">ServiceWorkerScopeOptions</dfn> {
+dictionary <dfn id="serviceworkerscopeoptions" title="ServiceWorkerScopeOptions">ServiceWorkerScopeOptions</dfn> {
   DOMString <span title="">scope</span> = "/*";
 };</pre>
 
     <p>When the <code>registerServiceWorker(scriptURL, options)</code> method is invoked, the user agent must run the following steps:</p>
 
     <ol>
-      <li><p>Let <var>promise</var> be a new <code><a href="http://w3c.github.io/dom/#promises" class="external">Promise</a></code> object and <var>resolver</var> its associated resolver.</li>
+      <li><p>Let <var>promise</var> be a newly-created <code><a class="external" href="http://w3c.github.io/dom/#promises">Promise</a></code> object.</li>
       <li><p>Return <var>promise</var> and run the remaining steps asynchronously.</li>
       <li><p>If the request violates a policy decision (e.g. if the user agent is configured to not allow the page to start service workers), run these substeps and abort these steps:</p>
         <ol>
-          <li><p>Let <var>error</var> be a new <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#domexception" class="external">DOMException</a> object whose type is "<a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#securityerror" class="external">SecurityError</a>".</li>
-          <li><p>Run <var>resolver</var>'s internal <code>reject</code> algorithm with <var>error</var> as <code>value</code>.</li>
+          <li><p>Let <var>error</var> be a new <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#domexception">DOMException</a> object whose type is "<a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#securityerror">SecurityError</a>".</li>
+          <li><p>Reject <var>promise</var> with <var>error</var>.</li>
         </ol>
       </li>
-      <li><p><a title="resolve a url" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#resolve-a-url" class="external">Resolve</a> the <var>scriptURL</var> argument.</li>
+      <li><p><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#resolve-a-url" title="resolve a url">Resolve</a> the <var>scriptURL</var> argument.</li>
       <li><p>If this fails, run these substeps and abort these steps:</p>
         <ol>
-          <li><p>Let <var>error</var> be a new <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#domexception" class="external">DOMException</a> object whose type is "<a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#syntaxerror" class="external">SyntaxError</a>".</li>
-          <li><p>Run <var>resolver</var>'s internal <code>reject</code> algorithm with <var>error</var> as <code>value</code>.</li>
+          <li><p>Let <var>error</var> be a new <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#domexception">DOMException</a> object whose type is "<a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#syntaxerror">SyntaxError</a>".</li>
+          <li><p>Reject <var>promise</var> with <var>error</var>.</li>
         </ol>
       </li>
-      <li><p>Let <var>scriptURL</var> be the resulting <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#absolute-url" class="external">absolute URL</a> and <var>parsed scriptURL</var> be the resulting <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#parsed-url" class="external">parsed URL</a>.</li>
+      <li><p>Let <var>scriptURL</var> be the resulting <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#absolute-url">absolute URL</a> and <var>parsed scriptURL</var> be the resulting <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#parsed-url">parsed URL</a>.</li>
       <li><p>Let <var>options</var> be the value of the second argument, or null if the second argument was omitted.</li>
-      <li><p>If the <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#scheme" class="external">scheme</a> component of <var>parsed scriptURL</var> is not "<code>data</code>", and the <a href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#origin" class="external">origin</a> of <var>scriptURL</var> is not the <a title="same origin" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#same-origin" class="external">same</a> as the <a href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#origin" class="external">origin</a> specified by the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object" class="external">incumbent settings object</a>, run these substeps and abort these steps:</p>
+      <li><p>If the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#scheme">scheme</a> component of <var>parsed scriptURL</var> is not "<code>data</code>", and the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#origin">origin</a> of <var>scriptURL</var> is not the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#same-origin" title="same origin">same</a> as the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#origin">origin</a> specified by the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object">incumbent settings object</a>, run these substeps and abort these steps:</p>
         <ol>
-          <li><p>Let <var>error</var> be a new <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#domexception" class="external">DOMException</a> object whose type is "<a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#securityerror" class="external">SecurityError</a>".</li>
-          <li><p>Run <var>resolver</var>'s internal <code>reject</code> algorithm with <var>error</var> as <code>value</code>.</li>
+          <li><p>Let <var>error</var> be a new <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#domexception">DOMException</a> object whose type is "<a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#securityerror">SecurityError</a>".</li>
+          <li><p>Reject <var>promise</var> with <var>error</var>.</li>
         </ol>
-      <p class="note">Thus, scripts must either be external files with the same scheme, host, and port as the original page, or <a title="data protocol" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#data:-url" class="external"><code>data:</code> URLs</a>. For example, and an <code>https:</code> page couldn't start workers using scripts with http: URLs.</li>
-      <li><p>Let <var>docs</var> be the <a title="list of relevant document objects to add" href="http://dev.w3.org/html5/workers/#list-of-relevant-document-objects-to-add" class="external">list of relevant <code>Document</code> objects to add</a> given the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object" class="external">incumbent settings object</a>.</li>
+      <p class="note">Thus, scripts must either be external files with the same scheme, host, and port as the original page, or <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#data:-url" title="data protocol"><code>data:</code> URLs</a>. For example, and an <code>https:</code> page couldn't start workers using scripts with http: URLs.</li>
+      <li><p>Let <var>docs</var> be the <a class="external" href="http://dev.w3.org/html5/workers/#list-of-relevant-document-objects-to-add" title="list of relevant document objects to add">list of relevant <code>Document</code> objects to add</a> given the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object">incumbent settings object</a>.</li>
       <li><p>Execute the following substeps atomically:</p>
         <ol>
           <li><p>Create a new <span>ServiceWorker</span> object, which will shortly be associated with a <a href="#serviceworkerglobalscope">ServiceWorkerGlobalScope</a> object. Let this <span>ServiceWorker</span> object be <var>worker</var>.</li>
-          <li><p>Create a new <a href="http://dev.w3.org/html5/postmsg/#messageport" class="external">MessagePort</a> object whose owner is the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object" class="external">incumbent settings object</a>. Let this be the <var>outside port</var>.</li>
+          <li><p>Create a new <a class="external" href="http://dev.w3.org/html5/postmsg/#messageport">MessagePort</a> object whose owner is the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object">incumbent settings object</a>. Let this be the <var>outside port</var>.</li>
           <li><p>Associate the <var>outside port</var> with worker.</li>
           <li><p>Let <var>worker global scope</var> be null.</li>
-          <li><p>If <var>options</var> is not null and there exists a <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object whose <a href="http://dev.w3.org/html5/workers/#dom-workerglobalscope-closing" class="external">closing</a> flag is false, whose <code>options</code> attribute is exactly equal to <var>options</var>, and that is the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object" class="external">global object</a> specified by a <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#script-settings-object" class="external">script settings object</a> that specifies as its <a href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#origin" class="external">origin</a> the <a href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#same-origin" class="external">same origin</a> as the <a href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#origin" class="external">origin</a> of <var>scriptURL</var>, then let <var>worker global scope</var> be that <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object.</p>
-          <p>Otherwise, if <var>options</var> is null and there exists a <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object whose <a href="http://dev.w3.org/html5/workers/#dom-workerglobalscope-closing" class="external">closing</a> flag is false, whose <code>options</code> attribute is the empty string, and whose <code><a href="http://dev.w3.org/html5/workers/#dom-workerglobalscope-location" class="external">location</a></code> attribute represents an <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#absolute-url" class="external">absolute URL</a> that is exactly equal to <var>scriptURL</var>, then let <var>worker global scope</var> be that <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object.</p>
+          <li><p>If there exists a <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object whose <a class="external" href="http://dev.w3.org/html5/workers/#dom-workerglobalscope-closing">closing</a> flag is false, whose <code><span>location</span></code> attribute represents an <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#absolute-url">absolute URL</a> that is exactly equal to <var>scriptURL</var>, run these substeps:</p>
+            <ol>
+              <li><p>If <var>options</var> is not null and the <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object's <code><span>scope</span></code> attribute is not exactly equal to <var>scope</var> of <var>options</var>, set the <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object's <code><span>scope</span></code> attribute to <var>scope</var> of <var>options</var>.</li>
+              <li><p>If <var>options</var> is null and the <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object's <code><span>scope</span></code> attribute is not the default scope, "<code>/*</code>", set the <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object's <code><span>scope</span></code> attribute to "<code>/*</code>".</li>
+              <li><p>Let <var>worker global scope</var> be that <code><span>ServiceWorkerGlobalScope object</span></code>.</li>
+            </ol>
           </li>
-          <li><p>If <var>worker global scope</var> is not null, but the user agent has been configured to disallow communication between the worker represented by the <var>worker global scope</var> and the <a title="script-0" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#script-0" class="external">scripts</a> whose <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#settings-object" class="external">settings object</a>s are the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object" class="external">incumbent settings object</a>, then set <var>worker global scope</var> to null.</li>
+          <li><p>If <var>worker global scope</var> is not null, but the user agent has been configured to disallow communication between the worker represented by the <var>worker global scope</var> and the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#script-0" title="script-0">scripts</a> whose <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#settings-object">settings object</a>s are the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object">incumbent settings object</a>, then set <var>worker global scope</var> to null.</li>
           <li><p>If <var>worker global scope</var> is not null, then run these steps:</p>
             <ol>
-              <li><p>If <var>worker global scope</var>'s <code><a href="http://dev.w3.org/html5/workers/#dom-workerglobalscope-location" class="external">location</a></code> attribute represents an <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#absolute-url" class="external">absolute URL</a> that is not exactly equal to <var>scriptURL</var>, run these substeps and abort these steps:</p>
+              <li><p>If <var>worker global scope</var>'s <code><a class="external" href="http://dev.w3.org/html5/workers/#dom-workerglobalscope-location">location</a></code> attribute represents an <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#absolute-url">absolute URL</a> that is not exactly equal to <var>scriptURL</var>, run these substeps and abort these steps:</p>
                 <ol>
-                  <li><p>Let <var>error</var> be a new <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#domexception" class="external">DOMException</a> object whose type is "<a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#urlmismatcherror" class="external">URLMismatchError</a>".</li>
-                  <li><p>Run <var>resolver</var>'s internal <code>reject</code> algorithm with <var>error</var> as <code>value</code>.</li>
+                  <li><p>Let <var>error</var> be a new <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#domexception">DOMException</a> object whose type is "<a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#urlmismatcherror">URLMismatchError</a>".</li>
+                  <li><p>Reject <var>promise</var> with <var>error</var>.</li>
                 </ol>
               </li>
               <li><p>Associate <var>worker</var> with <var>worker global scope</var>.</li>
-              <li><p>Let <var>settings object</var> be the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#script-settings-object" class="external">script settings object</a> whose <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object" class="external">global object</a> is <var>worker global scope</var>.</li>
-              <li><p>Create a new <a href="http://dev.w3.org/html5/postmsg/#messageport" class="external">MessagePort</a> object whose owner is <var>settings object</var>. Let this be <var>inside port</var>.</li>
-              <li><p><a href="http://dev.w3.org/html5/postmsg/#entangle" class="external">Entangle</a> <var>outside port</var> and <var>inside port</var>.</li>
-              <li><p>Create a <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#trusted-event" class="external">trusted event</a> that uses the <code><a href="http://dev.w3.org/html5/postmsg/#messageevent" class="external">MessageEvent</a></code> interface, with the name <code>install</code>, which does not bubble, is not cancelable, has no default action, has a <code><span>services</span></code> attribute whose value is initialized to an empty array, has a <code><a href="http://dev.w3.org/html5/postmsg/#dom-messageevent-data" class="external">data</a></code> attribute whose value is initialized to the empty string, has a <code><a href="http://dev.w3.org/html5/postmsg/#dom-messageevent-ports" class="external">ports</a></code> attribute whose value is initialized to a <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#read-only" class="external">read only</a> array containing only the newly created port, and has a <code><a href="http://dev.w3.org/html5/postmsg/#dom-messageevent-source" class="external">source</a></code> attribute whose value is initialized to the newly created port, and <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#queue-a-task" class="external">queue a task</a> to <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#dispatching" class="external">dispatch</a> the event at <var>worker global scope</var>.</li>
-              <li><p><a title="add-a-document-to-the-worker-s-documents" href="http://dev.w3.org/html5/workers/#add-a-document-to-the-worker-s-documents" class="external">Add to <var>worker global scope</var>'s list of the worker's <code>Document</code>s</a> the <code><a href="http://www.w3.org/html/wg/drafts/html/master/dom.html#document" class="external">Document</a></code> objects in <var>docs</var>.</li>
-              <li><p>If the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object" class="external">global object</a> specified by the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object" class="external">incumbent settings object</a> is a <code><a href="http://dev.w3.org/html5/workers/#workerglobalscope" class="external">WorkerGlobalScope</a></code> object, add <var>worker global scope</var> to the list of <a title="the-worker-s-workers" href="http://dev.w3.org/html5/workers/#the-worker-s-workers" class="external">the worker's workers</a> of the <code><a href="http://dev.w3.org/html5/workers/#workerglobalscope" class="external">WorkerGlobalScope</a></code> object that is the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object" class="external">global object</a> specified by the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object" class="external">incumbent settings object</a> .</li>
+              <li><p>Let <var>settings object</var> be the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#script-settings-object">script settings object</a> whose <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object">global object</a> is <var>worker global scope</var>.</li>
+              <li><p>Create a new <a class="external" href="http://dev.w3.org/html5/postmsg/#messageport">MessagePort</a> object whose owner is <var>settings object</var>. Let this be <var>inside port</var>.</li>
+              <li><p><a class="external" href="http://dev.w3.org/html5/postmsg/#entangle">Entangle</a> <var>outside port</var> and <var>inside port</var>.</li>
+              <li><p>Create a <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#trusted-event">trusted event</a> that uses the <code><a class="external" href="http://dev.w3.org/html5/postmsg/#messageevent">MessageEvent</a></code> interface, with the name <code>install</code>, which does not bubble, is not cancelable, has no default action, has a <code><span>services</span></code> attribute whose value is initialized to an empty array, has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-data">data</a></code> attribute whose value is initialized to the empty string, has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-ports">ports</a></code> attribute whose value is initialized to a <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#read-only">read only</a> array containing only the newly created port, and has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-source">source</a></code> attribute whose value is initialized to the newly created port, and <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#queue-a-task">queue a task</a> to <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#dispatching">dispatch</a> the event at <var>worker global scope</var>.</li>
+              <li><p><a class="external" href="http://dev.w3.org/html5/workers/#add-a-document-to-the-worker-s-documents" title="add-a-document-to-the-worker-s-documents">Add to <var>worker global scope</var>'s list of the worker's <code>Document</code>s</a> the <code><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/dom.html#document">Document</a></code> objects in <var>docs</var>.</li>
+              <li><p>If the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object">global object</a> specified by the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object">incumbent settings object</a> is a <code><a class="external" href="http://dev.w3.org/html5/workers/#workerglobalscope">WorkerGlobalScope</a></code> object, add <var>worker global scope</var> to the list of <a class="external" href="http://dev.w3.org/html5/workers/#the-worker-s-workers" title="the-worker-s-workers">the worker's workers</a> of the <code><a class="external" href="http://dev.w3.org/html5/workers/#workerglobalscope">WorkerGlobalScope</a></code> object that is the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object">global object</a> specified by the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object">incumbent settings object</a> .</li>
               <li><p>Return <var>worker</var> and abort all these steps.</li>
             </ol>
           </li>
-          <li><p>Create a new <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object. Let <var>worker global scope</var> be this new object.</li>
-          <li><p><a href="http://dev.w3.org/html5/workers/#set-up-a-worker-script-settings-object" class="external">Set up a worker script settings object</a> with <var>worker global scope</var> and <var>scriptURL</var>, and let <var>settings object</var> be the result.</li>
+          <li><p>Create a new <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object. Let <var>worker global scope</var> be this new object.</p>
+            <p class="critical">When there exists aother active service worker which covers the exactly same <code><span>scope</span></code> with different <code><span>scriptURL</span></code>, a new service worker is to be created by this algorithm. As the newly created worker would be effective from the next page load, that currently effective worker should not be terminated right away. An algorithm to sweep the unbound service workers should be added. Sweeping must not be conducted unless otherwise the list of <a class="external" href="http://dev.w3.org/html5/workers/#the-worker-s-documents" title="the-worker-s-documents">the worker's <code><span>Document</span></code>s</a> is empty. (See <a href="#last-registration-wins">Last-registration wins</a>.)</p>
+          </li>
+          <li><p><a class="external" href="http://dev.w3.org/html5/workers/#set-up-a-worker-script-settings-object">Set up a worker script settings object</a> with <var>worker global scope</var> and <var>scriptURL</var>, and let <var>settings object</var> be the result.</li>
           <li><p>Associate <var>worker</var> with <var>worker global scope</var>.</li>
-          <li><p>Create a new <code><a href="http://dev.w3.org/html5/postmsg/#messageport" class="external">MessagePort</a></code> object whose <a href="http://dev.w3.org/html5/postmsg/#concept-port-owner" class="external">owner</a> is <var>settings object</var>. Let <var>inside port</var> be this new object.</li>
-          <li><p><a href="http://dev.w3.org/html5/postmsg/#entangle" class="external">Entangle</a> <var>outside port</var> and <var>inside port</var>.</li>
+
+
+
+          <li><p>If <var>options</var> is not null, set the <code><span>scope</span></code> attribute of <var>worker global scope</var> to <var>scope</var> of <var>options</var>; Otherwise, set the <code><span>scope</span></code> attribute of <var>worker global scope</var> to the default scope, "<code>/*</code>".</li>
+          <li><p>Create a new <code><a class="external" href="http://dev.w3.org/html5/postmsg/#messageport">MessagePort</a></code> object whose <a class="external" href="http://dev.w3.org/html5/postmsg/#concept-port-owner">owner</a> is <var>settings object</var>. Let <var>inside port</var> be this new object.</li>
+          <li><p><a class="external" href="http://dev.w3.org/html5/postmsg/#entangle">Entangle</a> <var>outside port</var> and <var>inside port</var>.</li>
         </ol>
       </li>
       <li><p>Return <var>worker</var> and perform the remaining steps asynchronously.</li>
-      <li><p>Create a <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#trusted-event" class="external">trusted event</a> that uses the <code><a href="http://dev.w3.org/html5/postmsg/#messageevent" class="external">MessageEvent</a></code> interface, with the name <code>install</code>, which does not bubble, is not cancelable, has no default action, has a <code><span>services</span></code> attribute whose value is initialized to an empty array, has a <code><a href="http://dev.w3.org/html5/postmsg/#dom-messageevent-data" class="external">data</a></code> attribute whose value is initialized to the empty string, has a <code><a href="http://dev.w3.org/html5/postmsg/#dom-messageevent-ports" class="external">ports</a></code> attribute whose value is initialized to a <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#read-only" class="external">read only</a> array containing only the newly created port, and has a <code><a href="http://dev.w3.org/html5/postmsg/#dom-messageevent-source" class="external">source</a></code> attribute whose value is initialized to the newly created port, and <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#queue-a-task" class="external">queue a task</a> to <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#dispatching" class="external">dispatch</a> the event at <var>worker global scope</var>.</li>
-      <li><p><a title="add-a-document-to-the-worker-s-documents" href="http://dev.w3.org/html5/workers/#add-a-document-to-the-worker-s-documents" class="external">Add to <var>worker global scope</var>'s list of the worker's <code>Document</code>s</a> the <code><a href="http://www.w3.org/html/wg/drafts/html/master/dom.html#document" class="external">Document</a></code> objects in <var>docs</var>.</li>
-      <li><p>If the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object" class="external">global object</a> specified by the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object" class="external">incumbent settings object</a> is a <code><a href="http://dev.w3.org/html5/workers/#workerglobalscope" class="external">WorkerGlobalScope</a></code> object, add <var>worker global scope</var> to the list of <a title="the-worker-s-workers" href="http://dev.w3.org/html5/workers/#the-worker-s-workers" class="external">the worker's workers</a> of the <code><a href="http://dev.w3.org/html5/workers/#workerglobalscope" class="external">WorkerGlobalScope</a></code> object that is the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object" class="external">global object</a> specified by the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object" class="external">incumbent settings object</a> .</li>
-      <li><p><a href="http://dev.w3.org/html5/workers/#run-a-worker" class="external">Run a worker</a> for the script with <a href="http://url.spec.whatwg.org/#url" class="external">URL</a> <var>scriptURL</var> and the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#script-settings-object" class="external">script settings object</a> <var>settings object</var>.</li>
+      <li><p>Create a <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#trusted-event">trusted event</a> that uses the <code><a class="external" href="http://dev.w3.org/html5/postmsg/#messageevent">MessageEvent</a></code> interface, with the name <code>install</code>, which does not bubble, is not cancelable, has no default action, has a <code><span>services</span></code> attribute whose value is initialized to an empty array, has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-data">data</a></code> attribute whose value is initialized to the empty string, has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-ports">ports</a></code> attribute whose value is initialized to a <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#read-only">read only</a> array containing only the newly created port, and has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-source">source</a></code> attribute whose value is initialized to the newly created port, and <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#queue-a-task">queue a task</a> to <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#dispatching">dispatch</a> the event at <var>worker global scope</var>.</li>
+      <li><p><a class="external" href="http://dev.w3.org/html5/workers/#add-a-document-to-the-worker-s-documents" title="add-a-document-to-the-worker-s-documents">Add to <var>worker global scope</var>'s list of the worker's <code>Document</code>s</a> the <code><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/dom.html#document">Document</a></code> objects in <var>docs</var>.</li>
+      <li><p>If the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object">global object</a> specified by the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object">incumbent settings object</a> is a <code><a class="external" href="http://dev.w3.org/html5/workers/#workerglobalscope">WorkerGlobalScope</a></code> object, add <var>worker global scope</var> to the list of <a class="external" href="http://dev.w3.org/html5/workers/#the-worker-s-workers" title="the-worker-s-workers">the worker's workers</a> of the <code><a class="external" href="http://dev.w3.org/html5/workers/#workerglobalscope">WorkerGlobalScope</a></code> object that is the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object">global object</a> specified by the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object">incumbent settings object</a> .</li>
+      <li><p><a class="external" href="http://dev.w3.org/html5/workers/#run-a-worker">Run a worker</a> for the script with <a class="external" href="http://url.spec.whatwg.org/#url">URL</a> <var>scriptURL</var> and the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#script-settings-object">script settings object</a> <var>settings object</var>.</li>
       <li><p>Let <var>serviceWorker</var> be <var>worker</var>.</li>
-      <li><p>Run <var>resolver</var>'s intenal <code><span>resolve</span></code> algorithm with <var>serviceWorker</var> as <code><span>value</span></code>.</li>
+      <li><p>Resolve <var>promise</var> with <var>serviceWorker</var>.</li>
     </ol>
-    <p>The <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#task-source" class="external">task source</a> for the tasks mentioned above is the <a title="dom-manipulation-task-source" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#dom-manipulation-task-source" class="external">DOM manipulation task source</a>.</p>
+    <p>The <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#task-source">task source</a> for the tasks mentioned above is the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#dom-manipulation-task-source" title="dom-manipulation-task-source">DOM manipulation task source</a>.</p>
 
     <h3 id="the-serviceworker-interface"><span class="secno">4.2 </span>The <code>ServiceWorker</code> interface</h3>
     <pre class="idl">[NoInterfaceObject]
-interface <dfn title="interface-ServiceWorker" id="interface-serviceworker">ServiceWorker</dfn> : <a href="http://w3c.github.io/dom/#eventtarget" class="external">EventTarget</a> {
+interface <dfn id="interface-serviceworker" title="interface-ServiceWorker">ServiceWorker</dfn> : <a class="external" href="http://w3c.github.io/dom/#eventtarget">EventTarget</a> {
   void <span title="">postMessage</span>(any <var>message</var>, optional sequence&lt;Transferable&gt; <var>transfer</var>);
-          attribute <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler" class="external">EventHandler</a> <span>onmessage</span>;
+          attribute <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <span>onmessage</span>;
 };
-<span>ServiceWorker</span> implements <a title="abstractworker" href="http://dev.w3.org/html5/workers/#abstractworker" class="external">AbstractWorker</a>;</pre>
+<span>ServiceWorker</span> implements <a class="external" href="http://dev.w3.org/html5/workers/#abstractworker" title="abstractworker">AbstractWorker</a>;</pre>
 
-    <p><code><span>ServiceWorker</span></code> objects act as if they had an implicit <a href="http://dev.w3.org/html5/postmsg/#messageport" class="external">MessagePort</a> associated with them. This port is part of a channel that is set up when the worker is created, but it is not exposed. It represents the <a href="http://dev.w3.org/html5/postmsg/#messageport" class="external">MessagePort</a> for communicating with the service worker. This object must never be garbage collected before the <code><span>ServiceWorker</span></code> object.</p>
+    <p><code><span>ServiceWorker</span></code> objects act as if they had an implicit <a class="external" href="http://dev.w3.org/html5/postmsg/#messageport">MessagePort</a> associated with them. This port is part of a channel that is set up when the worker is registered, but it is not exposed. It represents the <a class="external" href="http://dev.w3.org/html5/postmsg/#messageport">MessagePort</a> for communicating with the service worker. This object must never be garbage collected before the <code><span>ServiceWorker</span></code> object.</p>
 
     <p>All messages received by that port must immediately be retargeted at the <code><span>ServiceWorker</span></code> object.</p>
 
-    <p>The <code>postMessage()</code> method on <code><span>ServiceWorker</span></code> objects must act as if, when invoked, it immediately invoked <a title="dom-messageport-postmessage" href="http://dev.w3.org/html5/postmsg/#dom-messageport-postmessage" class="external">the method of the same name</a> on the port, with the same arguments, and returned the same return value.</p>
+    <p>The <code>postMessage()</code> method on <code><span>ServiceWorker</span></code> objects must act as if, when invoked, it immediately invoked <a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageport-postmessage" title="dom-messageport-postmessage">the method of the same name</a> on the port, with the same arguments, and returned the same return value.</p>
 
-    <p>The following are the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handlers" class="external">event handlers</a> (and their corresponding <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-event-type" class="external">event handler event type</a>s) that must be supported, as <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-idl-attribute" class="external">event handler IDL attribute</a>s, by objects implementing the <code><span>ServiceWorker</span></code> interface:</p>
+    <p>The following are the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handlers">event handlers</a> (and their corresponding <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-event-type">event handler event type</a>s) that must be supported, as <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-idl-attribute">event handler IDL attribute</a>s, by objects implementing the <code><span>ServiceWorker</span></code> interface:</p>
 
     <table>
       <thead>
         <tr>
-          <th><a title="event handlers" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handlers" class="external">event handler</a></th>
-          <th><a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-event-type" class="external">event handler event type</a></th>
+          <th><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handlers" title="event handlers">event handler</a></th>
+          <th><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-event-type">event handler event type</a></th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><dfn title="handler-serviceworker-onmessage" id="handler-serviceworker-onmessage"><code>onmessage</code></dfn></td>
+          <td><dfn id="handler-serviceworker-onmessage" title="handler-serviceworker-onmessage"><code>onmessage</code></dfn></td>
           <td><code title="event-serviceworker-message">message</code></td>
         </tr>
       </tbody>
@@ -349,66 +359,69 @@ interface <dfn title="interface-ServiceWorker" id="interface-serviceworker">Serv
 
     <h3 id="the-serviceworkerglobalscope-interface"><span class="secno">4.3 </span>The <code><a href="#serviceworkerglobalscope">ServiceWorkerGlobalScope</a></code> interface</h3>
     <pre class="idl">[Global]
-interface <dfn id="serviceworkerglobalscope">ServiceWorkerGlobalScope</dfn> : <a href="http://dev.w3.org/html5/workers/#workerglobalscope" class="external">WorkerGlobalScope</a> {
-  getter <a href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#windowproxy" class="external">WindowProxy</a>[] windows();
-  <a href="http://w3c.github.io/dom/#promises" class="external">Promise</a> <span title="">fetch</span>((<a href="#request">Request</a> or <a href="http://url.spec.whatwg.org/#url" class="external">URL</a> or DOMString or any) <var><a href="#request">request</a></var>);
+interface <dfn id="serviceworkerglobalscope">ServiceWorkerGlobalScope</dfn> : <a class="external" href="http://dev.w3.org/html5/workers/#workerglobalscope">WorkerGlobalScope</a> {
+  getter <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#windowproxy">WindowProxy</a>[] windows();
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> <span title="">fetch</span>((<a href="#request">Request</a> or <a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or DOMString or any) <var><a href="#request">request</a></var>);
+  [Unforgeable] readonly attribute DOMString scope;
           attribute <span>CacheList</span> caches;
           attribute any version;
-          attribute <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler" class="external">EventHandler</a> <span>oninstall</span>;
-          attribute <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler" class="external">EventHandler</a> <span>onactivate</span>;
-          attribute <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler" class="external">EventHandler</a> <span>onfetch</span>;
-          attribute <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler" class="external">EventHandler</a> <span>onbeforeevicted</span>;
-          attribute <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler" class="external">EventHandler</a> <span>onevicted</span>;
+          attribute <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <span>oninstall</span>;
+          attribute <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <span>onactivate</span>;
+          attribute <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <span>onfetch</span>;
+          attribute <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <span>onbeforeevicted</span>;
+          attribute <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <span>onevicted</span>;
   // close() method inherited from WorkerGlobalScope is not exposed.
 };</pre>
 
-    <p>The <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> interface must only be <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#exposed-to-javascript" class="external">exposed to JavaScript</a> if the <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#javascript-global-environment" class="external">JavaScript global environment</a> is a <span>service worker environment</span>.</p>
+    <p>The <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> interface must only be <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#exposed-to-javascript">exposed to JavaScript</a> if the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#javascript-global-environment">JavaScript global environment</a> is a <span>service worker environment</span>.</p>
 
-    <p class="note">Todo: the definition of the <span>service worker environment</span> should be placed in the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#processing-model-3" class="external">processing model</a> section of HTML specification.</p>
+    <p class="note">Todo: the definition of the <span>service worker environment</span> should be placed in the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#processing-model-3">processing model</a> section of HTML specification.</p>
 
     <p>Service workers receive message ports through <code><span>install</span></code> events on their <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object for each registration.</p>
 
     <dl class="domintro">
       <dt><code>this.windows</code></dt>
-      <dd>Returns the array of the the <code><a href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#window" class="external">Window</a></code> object's <code><a href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#browsing-context" class="external">browsing context</a></code>'s <code><a href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#windowproxy" class="external">WindowProxy</a></code> object that the <a href="#serviceworkerglobalscope"><code>ServiceWorkerGlobalScope</code></a> is bound to.</dd>
+      <dd>Returns the array of the the <code><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#window">Window</a></code> object's <code><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#browsing-context">browsing context</a></code>'s <code><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#windowproxy">WindowProxy</a></code> object that the <a href="#serviceworkerglobalscope"><code>ServiceWorkerGlobalScope</code></a> is bound to.</dd>
       <dt><code>this.fetch()</code></dt>
-      <dd>Returns the <code>Promise</code> object that represents the <code><a href="#response">Response</a></code> object of the <a href="http://fetch.spec.whatwg.org/#concept-fetch" class="external">fetch</a>ed resource.</dd>
+      <dd>Returns the <code>Promise</code> object that represents the <code><a href="#response">Response</a></code> object of the <a class="external" href="http://fetch.spec.whatwg.org/#concept-fetch">fetch</a>ed resource.</dd>
+      <dt><code>this.scope</code></dt>
+      <dd>Returns the <code>scope</code> string that the worker listens to.</dd>
       <dt><code>this.caches</code></dt>
       <dd>Returns the current <code>CacheList</code> object.</dd>
       <dt><code>this.version</code></dt>
-      <dd>Returns the version that has been set by the worker. It is <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#structured-clone" class="external">structured clone</a>able.</dd>
+      <dd>Returns the version that has been set by the worker. It is <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#structured-clone">structured clone</a>able.</dd>
     </dl>
 
     <p class="note">The <code>version</code> attribute is used to communicate to newer versions what they are replaceing (see the <code>previousVersion</code> attribute of the <code><a href="#installevent">InstallEvent</a></code> interface.)</p>
 
-    <p>The following are the <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handlers" class="external">event handlers</a> (and their corresponding <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-event-type" class="external">event handler event type</a>s) that must be supported, as <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-idl-attribute" class="external">event handler IDL attribute</a>s, by objects implementing the <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> interface:</p>
+    <p>The following are the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handlers">event handlers</a> (and their corresponding <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-event-type">event handler event type</a>s) that must be supported, as <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-idl-attribute">event handler IDL attribute</a>s, by objects implementing the <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> interface:</p>
 
     <table>
       <thead>
         <tr>
-          <th><a title="event handlers" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handlers" class="external">event handler</a></th>
-          <th><a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-event-type" class="external">event handler event type</a></th>
+          <th><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handlers" title="event handlers">event handler</a></th>
+          <th><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-event-type">event handler event type</a></th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><dfn title="handler-serviceworker-oninstall" id="handler-serviceworker-oninstall"><code>oninstall</code></dfn></td>
+          <td><dfn id="handler-serviceworker-oninstall" title="handler-serviceworker-oninstall"><code>oninstall</code></dfn></td>
           <td><code title="event-serviceworker-install">install</code></td>
         </tr>
         <tr>
-          <td><dfn title="handler-serviceworker-onactivate" id="handler-serviceworker-onactivate"><code>onactivate</code></dfn></td>
+          <td><dfn id="handler-serviceworker-onactivate" title="handler-serviceworker-onactivate"><code>onactivate</code></dfn></td>
           <td><code title="event-serviceworker-activate">activate</code></td>
         </tr>
         <tr>
-          <td><dfn title="handler-serviceworker-onfetch" id="handler-serviceworker-onfetch"><code>onfetch</code></dfn></td>
+          <td><dfn id="handler-serviceworker-onfetch" title="handler-serviceworker-onfetch"><code>onfetch</code></dfn></td>
           <td><code title="event-serviceworker-fetch">fetch</code></td>
         </tr>
         <tr>
-          <td><dfn title="handler-serviceworker-onbeforeevicted" id="handler-serviceworker-onbeforeevicted"><code>onbeforeevicted</code></dfn></td>
+          <td><dfn id="handler-serviceworker-onbeforeevicted" title="handler-serviceworker-onbeforeevicted"><code>onbeforeevicted</code></dfn></td>
           <td><code title="event-serviceworker-beforeevicted">beforeevicted</code></td>
         </tr>
         <tr>
-          <td><dfn title="handler-serviceworker-onevicted" id="handler-serviceworker-onevicted"><code>onevicted</code></dfn></td>
+          <td><dfn id="handler-serviceworker-onevicted" title="handler-serviceworker-onevicted"><code>onevicted</code></dfn></td>
           <td><code title="event-serviceworker-evicted">evicted</code></td>
         </tr>
       </tbody>
@@ -417,29 +430,29 @@ interface <dfn id="serviceworkerglobalscope">ServiceWorkerGlobalScope</dfn> : <a
     <h3 id="the-installevent-interface"><span class="secno">4.4 </span>The <code><a href="#installevent">InstallEvent</a></code> interface</h3>
     <pre class="idl">interface <dfn id="installevent">InstallEvent</dfn> : <a href="#installphaseevent">InstallPhaseEvent</a> {
   void <span>replace</span>();
-  <a href="http://w3c.github.io/dom/#promises" class="external">Promise</a> <span>reloadAll</span>();
-          attribute <a href="http://dev.w3.org/html5/postmsg/#messageport" class="external">MessagePort</a> previous;
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> <span>reloadAll</span>();
+          attribute <a class="external" href="http://dev.w3.org/html5/postmsg/#messageport">MessagePort</a> previous;
           attribute DOMString[] services;
 };
 
-interface <dfn id="installphaseevent">InstallPhaseEvent</dfn> : <a href="http://w3c.github.io/dom/#event" class="external">Event</a> {
-  <a href="http://w3c.github.io/dom/#promises" class="external">Promise</a> <span>waitUntil</span>(<a href="http://w3c.github.io/dom/#promises" class="external">Promise</a> <var>f</var>);
+interface <dfn id="installphaseevent">InstallPhaseEvent</dfn> : <a class="external" href="http://w3c.github.io/dom/#event">Event</a> {
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> <span>waitUntil</span>(<a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> <var>f</var>);
           attribute any previousVersion;
 };</pre>
 
     <h3 id="the-reloadpageevent-interface"><span class="secno">4.5 </span>The <code><a href="#reloadpageevent">ReloadPageEvent</a></code> interface</h3>
-    <pre class="idl">interface <dfn id="reloadpageevent">ReloadPageEvent</dfn> : <a href="http://w3c.github.io/dom/#event" class="external">Event</a> {
-  void <span>waitUntil</span>(<a href="http://w3c.github.io/dom/#promises" class="external">Promise</a> f);
+    <pre class="idl">interface <dfn id="reloadpageevent">ReloadPageEvent</dfn> : <a class="external" href="http://w3c.github.io/dom/#event">Event</a> {
+  void <span>waitUntil</span>(<a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> f);
 };</pre>
 
     <h3 id="the-fetchevent-interface"><span class="secno">4.6 </span>The <code><a href="#fetchevent">FetchEvent</a></code> interface</h3>
     <pre class="idl">[Constructor]
-interface <dfn id="fetchevent">FetchEvent</dfn> : <a href="http://w3c.github.io/dom/#event" class="external">Event</a> {
-  void <span>respondWith</span>((<a href="http://w3c.github.io/dom/#promises" class="external">Promise</a> or <a href="#response">Response</a>) <var>r</var>);
-  <a href="http://w3c.github.io/dom/#promises" class="external">Promise</a> <span>forwardTo</span>((<a href="http://url.spec.whatwg.org/#url" class="external">URL</a> or [EnsureUTF16] DOMString) <var>url</var>);
+interface <dfn id="fetchevent">FetchEvent</dfn> : <a class="external" href="http://w3c.github.io/dom/#event">Event</a> {
+  void <span>respondWith</span>((<a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> or <a href="#response">Response</a>) <var>r</var>);
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> <span>forwardTo</span>((<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) <var>url</var>);
   readonly attribute <a href="#request">Request</a> request;
   readonly attribute <a href="#requesttype">RequestType</a> type;
-  readonly attribute <a href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#windowproxy" class="external">WindowProxy</a> window;
+  readonly attribute <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#windowproxy">WindowProxy</a> window;
   readonly attribute boolean isTopLevel;
   readonly attribute boolean isReload;
 };
@@ -454,16 +467,16 @@ enum <dfn id="requesttype">RequestType</dfn> {
 [Constructor(optional <a href="#requestinit">RequestInit</a> init)]
 interface <dfn id="request">Request</dfn> {
   readonly attribute unsigned long timeout;
-  readonly attribute (<a href="http://url.spec.whatwg.org/#url" class="external">URL</a> or [EnsureUTF16] DOMString) url;
+  readonly attribute (<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) url;
   readonly attribute DOMString encoding;
   readonly attribute ByteString method;
-  readonly attribute (<a href="http://url.spec.whatwg.org/#url" class="external">URL</a> or [EnsureUTF16] DOMString) origin;
+  readonly attribute (<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) origin;
   readonly attribute <a href="#mode">Mode</a> mode;
   readonly attribute boolean synchronous;
   readonly attribute unsigned long redirectCount;
   readonly attribute boolean forcePreflight;
   readonly attribute boolean omitCredentials;
-  readonly attribute (<a href="http://url.spec.whatwg.org/#url" class="external">URL</a> or [EnsureUTF16] DOMString) referrer;
+  readonly attribute (<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) referrer;
   ByteString? <span>getHeader</span>(ByteString <var><a href="#header">header</a></var>);
           attribute sequence&lt;<a href="#header">Header</a>&gt; headers;
   readonly attribute any body;
@@ -471,14 +484,14 @@ interface <dfn id="request">Request</dfn> {
 
 dictionary <dfn id="requestinit">RequestInit</dfn> {
   unsigned long timeout;
-  (<a href="http://url.spec.whatwg.org/#url" class="external">URL</a> or [EnsureUTF16] DOMString) url;
+  (<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) url;
   DOMString encoding;
   ByteString method = "GET";
   boolean synchronous = false;
   unsigned long redirectCount = 0;
   boolean forcePreflight = false;
   boolean omitCredentials = false;
-  (<a href="http://url.spec.whatwg.org/#url" class="external">URL</a> or [EnsureUTF16] DOMString) referrer;
+  (<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) referrer;
   sequence&lt;<a href="#header">Header</a>&gt; headers;
   any body = null;
 };
@@ -523,7 +536,7 @@ dictionary <dfn id="sameoriginresponseinit">SameOriginResponseInit</dfn> {
 interface <dfn id="crossoriginresponse">CrossOriginResponse</dfn> : <a href="#response">Response</a> {
 };</pre>
 
-    <p title="About the cache interfaces" class="note">
+    <p class="note" title="About the cache interfaces">
     <code>Cache</code>, <code>CacheList</code> and <code>AsyncMap</code> interfaces will be added.</p>
 
     <h2 id="bootstrap-with-a-serviceworker"><span class="secno">5 </span>Bootstrap with a ServiceWorker</h2>
@@ -575,10 +588,10 @@ this.addEventListener("fetch", function(e) {
     Once the <code>ctrl.js</code> in the example is successfully installed, the "success!"" message will be sent to the console and, crucially, the next time the user visits <code>index.html</code> or any other page located at <code>http://videos.example.com/</code>, <code>ctrl.js</code> will be consulted about what to do and what content to load even if the device has no Internet connection. On pages that are <em>controlled</em> in this way, other resources (like images in the document body) are also requested first from <code>ctrl.js</code> before the normal browser cache is consulted for them.</p>
 
     <h3 id="the-member-serviceworker-of-the-manifest"><span class="secno">5.2 </span>The member <em><code>serviceworker</code></em> of the manifest</h3>
-    <p class="critical">This section remains unspecified as neither the architecture has been clarified nor has it been aligned with the standards track <a href="http://w3c.github.io/manifest/" class="external">manifest</a> specification.</p>
+    <p class="critical">This section remains unspecified as neither the architecture has been clarified nor has it been aligned with the standards track <a class="external" href="http://w3c.github.io/manifest/">manifest</a> specification.</p>
 
     <h3 id="controlled-and-uncontrolled-documents"><span class="secno">5.3 </span><em>Controlled</em> and <em>uncontrolled</em> documents</h3>
-    <p>The first time <code>http://videos.example.com/index.html</code> is loaded, all the resources it requests will come from the network. That means that even if the browser runs the install snippet for <code>ctrl.js</code>, <a href="http://fetch.spec.whatwg.org/#concept-fetch" class="external">fetch</a>es it, and finishes installing it before it begins <a href="http://fetch.spec.whatwg.org/#concept-fetch" class="external">fetch</a>ing logo.png, the new <span>ServiceWorker</span> script would not be consulted about loading logo.png. This is down to the following rule of <span>ServiceWorker</span>s:</p>
+    <p>The first time <code>http://videos.example.com/index.html</code> is loaded, all the resources it requests will come from the network. That means that even if the browser runs the install snippet for <code>ctrl.js</code>, <a class="external" href="http://fetch.spec.whatwg.org/#concept-fetch">fetch</a>es it, and finishes installing it before it begins <a class="external" href="http://fetch.spec.whatwg.org/#concept-fetch">fetch</a>ing logo.png, the new <span>ServiceWorker</span> script would not be consulted about loading logo.png. This is down to the following rule of <span>ServiceWorker</span>s:</p>
     <ul>
       <li>Documents live out their whole lives using the ServiceWorker they start with.</li>
     </ul>
@@ -606,7 +619,7 @@ this.addEventListener("fetch", function(e) {
   &lt;/head&gt;
 &lt;/html&gt;</pre>
     </div>
-    <p>To break what might otherwise be ties when matching URLs, navigations are mapped to <span>ServiceWorker</span>s by longest-prefix-match. Note that the <code>*</code> can only occur at the end of a matching rule, so attempts to register <code>/foo/*/bar</code> or <code>*bar</code> will <a href="http://dev.w3.org/2006/webapi/WebIDL/#dfn-throw" class="external">throw</a> exceptions. Similarly, registering a scope that includes a <code>"?"</code> or <code>"#"</code> will also <a href="http://dev.w3.org/2006/webapi/WebIDL/#dfn-throw" class="external">throw</a>s exceptions.</p>
+    <p>To break what might otherwise be ties when matching URLs, navigations are mapped to <span>ServiceWorker</span>s by longest-prefix-match. Note that the <code>*</code> can only occur at the end of a matching rule, so attempts to register <code>/foo/*/bar</code> or <code>*bar</code> will <a class="external" href="http://dev.w3.org/2006/webapi/WebIDL/#dfn-throw">throw</a> exceptions. Similarly, registering a scope that includes a <code>"?"</code> or <code>"#"</code> will also <a class="external" href="http://dev.w3.org/2006/webapi/WebIDL/#dfn-throw">throw</a>s exceptions.</p>
     <p>In the above example with registrations for <code>/foo*</code> and <code>/foo/bar*</code>, the following matches would be made when navigating to the following URLs under <code>http://www.example.com</code>:</p>
     <table border="1">
       <tr>
@@ -665,7 +678,7 @@ this.addEventListener("fetch", function(e) {
     <p><code>&lt;fallback to native&gt;</code> is the browser's built-in behavior for fetching resources - the thing the Fetch Service defers to when it does not handle a fetch with <code>e.respondWith()</code>.</p>
     <p class="note">If <code>e.respondWith()</code> is not called when handling a connection in <code>/foo/barServiceWorker.js</code>, it does not cascade to <code>/fooServiceWorker.js</code>, it falls back to the browser's built-in network behavior.</p>
 
-    <h3 id="last-registration-wins"><span class="secno">5.5 </span>Last-registration wins</h3>
+    <h3 id="last-registration-wins"><span class="secno">5.5 </span><dfn>Last-registration wins</dfn></h3>
     <p>The registration system is also last-registration-wins. That means if two pages on <code>www.example.com</code> set a registration to control <code>/*</code>, the one a user visits second (assuming the first does not interfere) will be installed and over-write the previous registration.</p>
 
     <p>This makes sense because registration is the same as replacement. That is to say, if you have content that wants to replace the existing <span>ServiceWorker</span> with one at a different URL (perhaps a heavy-handed form of "new version"), registering the new URL is the way that you indicate that the old registration is no longer the preferred one.</p>
@@ -756,7 +769,7 @@ this.addEventListener("install", function(e) {
     <h2 id="offline-first-resource-handling"><span class="secno">8 </span>Offline-first resource handling</h2>
 
     <h3 id="fetchevent-handling"><span class="secno">8.1 </span><code><a href="#fetchevent">FetchEvent</a></code> handling</h3>
-    <p><span>ServiceWorker</span>s, once installed, can choose to handle resource loading. Before going to the network to <a href="http://fetch.spec.whatwg.org/#concept-fetch" class="external">fetch</a> a document that matches the ServiceWorker's scope, the worker is consulted, including when <a href="http://fetch.spec.whatwg.org/#concept-fetch" class="external">fetch</a>ing the document payload itself.
+    <p><span>ServiceWorker</span>s, once installed, can choose to handle resource loading. Before going to the network to <a class="external" href="http://fetch.spec.whatwg.org/#concept-fetch">fetch</a> a document that matches the ServiceWorker's scope, the worker is consulted, including when <a class="external" href="http://fetch.spec.whatwg.org/#concept-fetch">fetch</a>ing the document payload itself.
 
     Here is an example of a <span>ServiceWorker</span> that only handles a single resource (<code>/services/inventory/data.json</code>) but which logs out requests for all resources it is consulted for:</p>
 

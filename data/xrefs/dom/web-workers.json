@@ -8,6 +8,7 @@
     "location": "#dom-workerglobalscope-location",
     "run a worker": "#run-a-worker",
     "set up a worker script settings object": "#set-up-a-worker-script-settings-object",
+    "the-worker-s-documents": "#the-worker-s-documents",
     "the-worker-s-workers": "#the-worker-s-workers"
   },
   "url": "http://dev.w3.org/html5/workers/"
