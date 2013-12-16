@@ -106,13 +106,15 @@
    <li><a href="#extensions-to-the-navigator-object"><span class="secno">4.1 </span>Extensions to the <code>Navigator</code> object</a></li>
    <li><a href="#the-serviceworker-interface"><span class="secno">4.2 </span>The <code>ServiceWorker</code> interface</a></li>
    <li><a href="#the-serviceworkerglobalscope-interface"><span class="secno">4.3 </span>The <code>ServiceWorkerGlobalScope</code> interface</a></li>
-   <li><a href="#the-installevent-interface"><span class="secno">4.4 </span>The <code>InstallEvent</code> interface</a></li>
-   <li><a href="#the-reloadpageevent-interface"><span class="secno">4.5 </span>The <code>ReloadPageEvent</code> interface</a></li>
+   <li><a href="#the-reloadpageevent-interface"><span class="secno">4.4 </span>The <code>ReloadPageEvent</code> interface</a></li>
+   <li><a href="#the-installevent-interface"><span class="secno">4.5 </span>The <code>InstallEvent</code> interface</a></li>
    <li><a href="#the-fetchevent-interface"><span class="secno">4.6 </span>The <code>FetchEvent</code> interface</a></li>
-   <li><a href="#the-request-interface"><span class="secno">4.7 </span>The <code>Request</code> interface</a></li>
-   <li><a href="#the-response-interface"><span class="secno">4.8 </span>The <code>Response</code> interface</a></li>
-   <li><a href="#the-cache-interface"><span class="secno">4.9 </span>The <code>Cache</code> interface</a></li>
-   <li><a href="#events"><span class="secno">4.10 </span>Events summary</a></ol></li>
+   <li><a href="#the-beforecacheevictionevent-interface"><span class="secno">4.7 </span>The <code>BeforeCacheEvictionEvent</code> interface</a></li>
+   <li><a href="#the-cacheevictionevent-interface"><span class="secno">4.8 </span>The <code>CacheEvictionEvent</code> interface</a></li>
+   <li><a href="#the-request-interface"><span class="secno">4.9 </span>The <code>Request</code> interface</a></li>
+   <li><a href="#the-response-interface"><span class="secno">4.10 </span>The <code>Response</code> interface</a></li>
+   <li><a href="#the-cache-interface"><span class="secno">4.11 </span>The <code>Cache</code> interface</a></li>
+   <li><a href="#events"><span class="secno">4.12 </span>Events summary</a></ol></li>
  <li><a href="#bootstrap-with-a-service-worker"><span class="secno">5 </span>Bootstrap with a service worker</a>
   <ol class="toc">
    <li><a href="#the-registerserviceworker()-method"><span class="secno">5.1 </span>The <span title="serviceworker-navigator-registerserviceworker"><code>registerServiceWorker()</code></span> method</a></li>
@@ -327,6 +329,31 @@ dictionary <dfn id="serviceworkerscopeoptions" title="ServiceWorkerScopeOptions"
     </ol>
     <p>The <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#task-source">task source</a> for the tasks mentioned above is the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#dom-manipulation-task-source" title="dom-manipulation-task-source">DOM manipulation task source</a>.</p>
 
+    <p>The following are the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handlers">event handlers</a> (and their corresponding <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-event-type">event handler event type</a>s) that must be supported, as <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-idl-attribute">event handler IDL attribute</a>s, by objects implementing the extended <code><span>Navigator</span></code> interface:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handlers" title="event handlers">event handler</a></th>
+          <th><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#event-handler-event-type">event handler event type</a></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><dfn id="handler-serviceworker-onserviceworkerinstall" title="handler-serviceworker-onserviceworkerinstall"><code>onserviceworkerinstall</code></dfn></td>
+          <td><code title="event-serviceworker-serviceworkerinstall"><a href="#event-serviceworker-serviceworkerinstall">serviceworkerinstall</a></code></td>
+        </tr>
+        <tr>
+          <td><dfn id="handler-serviceworker-onserviceworkerreplaced" title="handler-serviceworker-onserviceworkerreplaced"><code>onserviceworkerreplaced</code></dfn></td>
+          <td><code title="event-serviceworker-serviceworkerreplaced"><a href="#event-serviceworker-serviceworkerreplaced">serviceworkerreplaced</a></code></td>
+        </tr>
+        <tr>
+          <td><dfn id="handler-serviceworker-onserviceworkerreloadpage" title="handler-serviceworker-onserviceworkerreloadpage"><code>onserviceworkerreloadpage</code></dfn></td>
+          <td><code title="event-serviceworker-serviceworkerreloadpage"><a href="#event-serviceworker-serviceworkerreloadpage">serviceworkerreloadpage</a></code></td>
+        </tr>
+      </tbody>
+    </table>
+
     <h3 id="the-serviceworker-interface"><span class="secno">4.2 </span>The <code><a href="#serviceworker-0">ServiceWorker</a></code> interface</h3>
     <pre class="idl">[NoInterfaceObject]
 interface <dfn id="serviceworker-0">ServiceWorker</dfn> : <a class="external" href="http://w3c.github.io/dom/#eventtarget">EventTarget</a> {
@@ -411,24 +438,29 @@ interface <dfn id="serviceworkerglobalscope">ServiceWorkerGlobalScope</dfn> : <a
         </tr>
         <tr>
           <td><dfn id="handler-serviceworker-onactivate" title="handler-serviceworker-onactivate"><code>onactivate</code></dfn></td>
-          <td><code title="event-serviceworker-activate">activate</code></td>
+          <td><code title="event-serviceworker-activate"><a href="#event-serviceworker-activate">activate</a></code></td>
         </tr>
         <tr>
           <td><dfn id="handler-serviceworker-onfetch" title="handler-serviceworker-onfetch"><code>onfetch</code></dfn></td>
-          <td><code title="event-serviceworker-fetch">fetch</code></td>
+          <td><code title="event-serviceworker-fetch"><a href="#event-serviceworker-fetch">fetch</a></code></td>
         </tr>
         <tr>
           <td><dfn id="handler-serviceworker-onbeforeevicted" title="handler-serviceworker-onbeforeevicted"><code>onbeforeevicted</code></dfn></td>
-          <td><code title="event-serviceworker-beforeevicted">beforeevicted</code></td>
+          <td><code title="event-serviceworker-beforeevicted"><a href="#event-serviceworker-beforeevicted">beforeevicted</a></code></td>
         </tr>
         <tr>
           <td><dfn id="handler-serviceworker-onevicted" title="handler-serviceworker-onevicted"><code>onevicted</code></dfn></td>
-          <td><code title="event-serviceworker-evicted">evicted</code></td>
+          <td><code title="event-serviceworker-evicted"><a href="#event-serviceworker-evicted">evicted</a></code></td>
         </tr>
       </tbody>
     </table>
 
-    <h3 id="the-installevent-interface"><span class="secno">4.4 </span>The <code><a href="#installevent">InstallEvent</a></code> interface</h3>
+    <h3 id="the-reloadpageevent-interface"><span class="secno">4.4 </span>The <code><a href="#reloadpageevent">ReloadPageEvent</a></code> interface</h3>
+    <pre class="idl">interface <dfn id="reloadpageevent">ReloadPageEvent</dfn> : <a class="external" href="http://w3c.github.io/dom/#event">Event</a> {
+  void <span>waitUntil</span>(<a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> f);
+};</pre>
+
+    <h3 id="the-installevent-interface"><span class="secno">4.5 </span>The <code><a href="#installevent">InstallEvent</a></code> interface</h3>
     <pre class="idl">interface <dfn id="installevent">InstallEvent</dfn> : <a href="#installphaseevent">InstallPhaseEvent</a> {
   void <span>replace</span>();
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> <span>reloadAll</span>();
@@ -439,11 +471,6 @@ interface <dfn id="serviceworkerglobalscope">ServiceWorkerGlobalScope</dfn> : <a
 interface <dfn id="installphaseevent">InstallPhaseEvent</dfn> : <a class="external" href="http://w3c.github.io/dom/#event">Event</a> {
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> <span>waitUntil</span>(<a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> <var>f</var>);
           attribute any previousVersion;
-};</pre>
-
-    <h3 id="the-reloadpageevent-interface"><span class="secno">4.5 </span>The <code><a href="#reloadpageevent">ReloadPageEvent</a></code> interface</h3>
-    <pre class="idl">interface <dfn id="reloadpageevent">ReloadPageEvent</dfn> : <a class="external" href="http://w3c.github.io/dom/#event">Event</a> {
-  void <span>waitUntil</span>(<a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> f);
 };</pre>
 
     <h3 id="the-fetchevent-interface"><span class="secno">4.6 </span>The <code><a href="#fetchevent">FetchEvent</a></code> interface</h3>
@@ -463,7 +490,17 @@ enum <dfn id="requesttype">RequestType</dfn> {
     "fetch"
 };</pre>
 
-    <h3 id="the-request-interface"><span class="secno">4.7 </span>The <code><a href="#request">Request</a></code> interface</h3>
+    <h3 id="the-beforecacheevictionevent-interface"><span class="secno">4.7 </span>The <code><a href="#beforecacheevictionevent">BeforeCacheEvictionEvent</a></code> interface</h3>
+    <pre class="idl">interface <dfn id="beforecacheevictionevent">BeforeCacheEvictionEvent</dfn> : <a class="external" href="http://w3c.github.io/dom/#event">Event</a> {
+  // To be defined.
+};</pre>
+
+    <h3 id="the-cacheevictionevent-interface"><span class="secno">4.8 </span>The <code><a href="#cacheevictionevent">CacheEvictionEvent</a></code> interface</h3>
+    <pre class="idl">interface <dfn id="cacheevictionevent">CacheEvictionEvent</dfn> : <a class="external" href="http://w3c.github.io/dom/#event">Event</a> {
+  // To be defined.
+};</pre>
+
+    <h3 id="the-request-interface"><span class="secno">4.9 </span>The <code><a href="#request">Request</a></code> interface</h3>
     <pre class="idl">// <a href="#request">request</a>
 [Constructor(optional <a href="#requestinit">RequestInit</a> init)]
 interface <dfn id="request">Request</dfn> {
@@ -508,7 +545,7 @@ dictionary <dfn id="header">Header</dfn> {
   ByteString value;
 };</pre>
 
-    <h3 id="the-response-interface"><span class="secno">4.8 </span>The <code><a href="#response">Response</a></code> interface</h3>
+    <h3 id="the-response-interface"><span class="secno">4.10 </span>The <code><a href="#response">Response</a></code> interface</h3>
     <pre class="idl">[Constructor]
 interface <dfn id="response">Response</dfn> {
 };
@@ -537,7 +574,7 @@ dictionary <dfn id="sameoriginresponseinit">SameOriginResponseInit</dfn> {
 interface <dfn id="crossoriginresponse">CrossOriginResponse</dfn> : <a href="#response">Response</a> {
 };</pre>
 
-    <h3 id="the-cache-interface"><span class="secno">4.9 </span>The <code><a href="#cache">Cache</a></code> interface</h3>
+    <h3 id="the-cache-interface"><span class="secno">4.11 </span>The <code><a href="#cache">Cache</a></code> interface</h3>
     <pre class="idl">[Constructor((URL or [EnsureUTF16] DOMString)... urls)]
 interface <dfn id="cache">Cache</dfn> {
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> match((<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) <var>name</var>);
@@ -561,12 +598,39 @@ interface <dfn id="cachelist">CacheList</dfn> {
   (<a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> or <a href="#response">Response</a>) match(DOMString name, (<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) url);
 };</pre>
 
-    <h3 id="events"><span class="secno">4.10 </span>Events summary</h3>
+    <h3 id="events"><span class="secno">4.12 </span>Events summary</h3>
 
     <p><em>This section is non-normative.</em></p>
 
-    <p>The following events are dispatched on <code><a href="#serviceworkerglobalscope">ServiceWorkerGlobalScope</a></code> object:</p>
+    <p>The following events are dispatched on the extended <code>Navigator</code> object:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Event name</th>
+          <th>Interface</th>
+          <th>Dispatched when…</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><dfn id="event-serviceworker-serviceworkerinstall" title="event-serviceworker-serviceworkerinstall"><code>serviceworkerinstall</code></dfn></td>
+          <td><code>Event</code></td>
+          <td>A new worker becomes in-waiting.</td>
+        </tr>
+        <tr>
+          <td><dfn id="event-serviceworker-serviceworkerreplaced" title="event-serviceworker-serviceworkerreplaced"><code>serviceworkerreplaced</code></dfn></td>
+          <td><code>Event</code></td>
+          <td>A new worker takes over via <code><a href="#installevent">InstallEvent</a></code>'s <span>replace</span>() method.</td>
+        </tr>
+        <tr>
+          <td><dfn id="event-serviceworker-serviceworkerreloadpage" title="event-serviceworker-serviceworkerreloadpage"><code>serviceworkerreloadpage</code></dfn></td>
+          <td><code><a href="#reloadpageevent">ReloadPageEvent</a></code></td>
+          <td>Restarting all <code><span>windows</span></code> with the new worker via <code><a href="#installevent">InstallEvent</a></code>'s <span>reloadAll</span>() method.</td>
+        </tr>
+      </tbody>
+    </table>
 
+    <p>The following events are dispatched on <code><a href="#serviceworkerglobalscope">ServiceWorkerGlobalScope</a></code> object:</p>
     <table>
       <thead>
         <tr>
@@ -580,6 +644,26 @@ interface <dfn id="cachelist">CacheList</dfn> {
           <td><dfn id="event-serviceworker-install" title="event-serviceworker-install"><code>install</code></dfn></td>
           <td><code><a href="#installevent">InstallEvent</a></code></td>
           <td>A worker is downloaded and being setup to handle events (navigations, alerts, etc.)</td>
+        </tr>
+        <tr>
+          <td><dfn id="event-serviceworker-activate" title="event-serviceworker-activate"><code>activate</code></dfn></td>
+          <td><code><a href="#installphaseevent">InstallPhaseEvent</a></code></td>
+          <td>A worker becomes the active event worker for a mapping</td>
+        </tr>
+        <tr>
+          <td><dfn id="event-serviceworker-fetch" title="event-serviceworker-fetch"><code>fetch</code></dfn></td>
+          <td><code><a href="#fetchevent">FetchEvent</a></code></td>
+          <td>This worker is meant to decide the disposition of a request.</td>
+        </tr>
+        <tr>
+          <td><dfn id="event-serviceworker-beforeevicted" title="event-serviceworker-beforeevicted"><code>beforeevicted</code></dfn></td>
+          <td><code><a href="#beforecacheevictionevent">BeforeCacheEvictionEvent</a></code></td>
+          <td>Before cache is about to be evicted.</td>
+        </tr>
+        <tr>
+          <td><dfn id="event-serviceworker-evicted" title="event-serviceworker-evicted"><code>evicted</code></dfn></td>
+          <td><code><a href="#cacheevictionevent">CacheEvictionEvent</a></code></td>
+          <td>Cache is about to be evicted.</td>
         </tr>
       </tbody>
     </table>

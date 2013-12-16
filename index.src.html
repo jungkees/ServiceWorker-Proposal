@@ -326,6 +326,31 @@ dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> 
     </ol>
     <p>The <span data-anolis-spec=html>task source</span> for the tasks mentioned above is the <span data-anolis-spec=html title=dom-manipulation-task-source>DOM manipulation task source</span>.</p>
 
+    <p>The following are the <span data-anolis-spec=html>event handlers</span> (and their corresponding <span data-anolis-spec=html>event handler event type</span>s) that must be supported, as <span data-anolis-spec=html>event handler IDL attribute</span>s, by objects implementing the extended <code><span>Navigator</span></code> interface:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th><span data-anolis-spec=html title="event handlers">event handler</span></th>
+          <th><span data-anolis-spec=html>event handler event type</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><dfn title="handler-serviceworker-onserviceworkerinstall"><code>onserviceworkerinstall</code></dfn></td>
+          <td><code title="event-serviceworker-serviceworkerinstall">serviceworkerinstall</code></td>
+        </tr>
+        <tr>
+          <td><dfn title="handler-serviceworker-onserviceworkerreplaced"><code>onserviceworkerreplaced</code></dfn></td>
+          <td><code title="event-serviceworker-serviceworkerreplaced">serviceworkerreplaced</code></td>
+        </tr>
+        <tr>
+          <td><dfn title="handler-serviceworker-onserviceworkerreloadpage"><code>onserviceworkerreloadpage</code></dfn></td>
+          <td><code title="event-serviceworker-serviceworkerreloadpage">serviceworkerreloadpage</code></td>
+        </tr>
+      </tbody>
+    </table>
+
     <h3>The <code>ServiceWorker</code> interface</h3>
     <pre class="idl">
 [NoInterfaceObject]
@@ -429,6 +454,12 @@ interface <dfn>ServiceWorkerGlobalScope</dfn> : <span data-anolis-spec=web-worke
       </tbody>
     </table>
 
+    <h3>The <code>ReloadPageEvent</code> interface</h3>
+    <pre class="idl">
+interface <dfn>ReloadPageEvent</dfn> : <span data-anolis-spec=dom>Event</span> {
+  void <span>waitUntil</span>(<span data-anolis-spec=dom>Promise</span> f);
+};</pre>
+
     <h3>The <code>InstallEvent</code> interface</h3>
     <pre class="idl">
 interface <dfn>InstallEvent</dfn> : <span>InstallPhaseEvent</span> {
@@ -441,12 +472,6 @@ interface <dfn>InstallEvent</dfn> : <span>InstallPhaseEvent</span> {
 interface <dfn>InstallPhaseEvent</dfn> : <span data-anolis-spec=dom>Event</span> {
   <span data-anolis-spec=dom>Promise</span> <span>waitUntil</span>(<span data-anolis-spec=dom>Promise</span> <var>f</var>);
           attribute any previousVersion;
-};</pre>
-
-    <h3>The <code>ReloadPageEvent</code> interface</h3>
-    <pre class="idl">
-interface <dfn>ReloadPageEvent</dfn> : <span data-anolis-spec=dom>Event</span> {
-  void <span>waitUntil</span>(<span data-anolis-spec=dom>Promise</span> f);
 };</pre>
 
     <h3>The <code>FetchEvent</code> interface</h3>
@@ -465,6 +490,18 @@ interface <dfn>FetchEvent</dfn> : <span data-anolis-spec=dom>Event</span> {
 enum <dfn>RequestType</dfn> {
     "navigate",
     "fetch"
+};</pre>
+
+    <h3>The <code>BeforeCacheEvictionEvent</code> interface</h3>
+    <pre class="idl">
+interface <dfn>BeforeCacheEvictionEvent</dfn> : <span data-anolis-spec=dom>Event</span> {
+  // To be defined.
+};</pre>
+
+    <h3>The <code>CacheEvictionEvent</code> interface</h3>
+    <pre class="idl">
+interface <dfn>CacheEvictionEvent</dfn> : <span data-anolis-spec=dom>Event</span> {
+  // To be defined.
 };</pre>
 
     <h3>The <code>Request</code> interface</h3>
@@ -572,8 +609,35 @@ interface <dfn>CacheList</dfn> {
 
     <p><em>This section is non-normative.</em></p>
 
-    <p>The following events are dispatched on <code>ServiceWorkerGlobalScope</code> object:</p>
+    <p>The following events are dispatched on the extended <code>Navigator</code> object:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Event name</th>
+          <th>Interface</th>
+          <th>Dispatched when&hellip;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><dfn title=event-serviceworker-serviceworkerinstall><code>serviceworkerinstall</code></dfn></td>
+          <td><code>Event</code></td>
+          <td>A new worker becomes in-waiting.</td>
+        </tr>
+        <tr>
+          <td><dfn title=event-serviceworker-serviceworkerreplaced><code>serviceworkerreplaced</code></dfn></td>
+          <td><code>Event</code></td>
+          <td>A new worker takes over via <code>InstallEvent</code>'s <span>replace</span>() method.</td>
+        </tr>
+        <tr>
+          <td><dfn title=event-serviceworker-serviceworkerreloadpage><code>serviceworkerreloadpage</code></dfn></td>
+          <td><code>ReloadPageEvent</code></td>
+          <td>Restarting all <code><span>windows</span></code> with the new worker via <code>InstallEvent</code>'s <span>reloadAll</span>() method.</td>
+        </tr>
+      </tbody>
+    </table>
 
+    <p>The following events are dispatched on <code>ServiceWorkerGlobalScope</code> object:</p>
     <table>
       <thead>
         <tr>
@@ -587,6 +651,26 @@ interface <dfn>CacheList</dfn> {
           <td><dfn title=event-serviceworker-install><code>install</code></dfn></td>
           <td><code>InstallEvent</code></td>
           <td>A worker is downloaded and being setup to handle events (navigations, alerts, etc.)</td>
+        </tr>
+        <tr>
+          <td><dfn title=event-serviceworker-activate><code>activate</code></dfn></td>
+          <td><code>InstallPhaseEvent</code></td>
+          <td>A worker becomes the active event worker for a mapping</td>
+        </tr>
+        <tr>
+          <td><dfn title=event-serviceworker-fetch><code>fetch</code></dfn></td>
+          <td><code>FetchEvent</code></td>
+          <td>This worker is meant to decide the disposition of a request.</td>
+        </tr>
+        <tr>
+          <td><dfn title=event-serviceworker-beforeevicted><code>beforeevicted</code></dfn></td>
+          <td><code>BeforeCacheEvictionEvent</code></td>
+          <td>Before cache is about to be evicted.</td>
+        </tr>
+        <tr>
+          <td><dfn title=event-serviceworker-evicted><code>evicted</code></dfn></td>
+          <td><code>CacheEvictionEvent</code></td>
+          <td>Cache is about to be evicted.</td>
         </tr>
       </tbody>
     </table>
