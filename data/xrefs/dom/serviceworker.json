@@ -1,7 +1,11 @@
 {
   "definitions": {
+    "asyncmap": "asyncmap",
+    "cache": "cache",
+    "cachelist": "cachelist",
     "concept-serviceworker": "concept-serviceworker",
     "crossoriginresponse": "crossoriginresponse",
+    "event-serviceworker-install": "event-serviceworker-install",
     "fetchevent": "fetchevent",
     "handler-serviceworker-onactivate": "handler-serviceworker-onactivate",
     "handler-serviceworker-onbeforeevicted": "handler-serviceworker-onbeforeevicted",

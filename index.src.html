@@ -276,7 +276,7 @@ dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> 
         <ol>
           <li><p>Create a new <span>ServiceWorker</span> object, which will shortly be associated with a <span>ServiceWorkerGlobalScope</span> object. Let this <span>ServiceWorker</span> object be <var>worker</var>.</p></li>
           <li><p>Create a new <span data-anolis-spec=html-postmsg>MessagePort</span> object whose owner is the <span data-anolis-spec=html>incumbent settings object</span>. Let this be the <var>outside port</var>.</p></li>
-          <li><p>Associate the <var>outside port</var> with worker.</p></li>
+          <li><p>Associate the <var>outside port</var> with <var>worker</var>.</p></li>
           <li><p>Let <var>worker global scope</var> be null.</p></li>
           <li><p>If there exists a <code><span>ServiceWorkerGlobalScope</span></code> object whose <span data-anolis-spec=web-workers>closing</span> flag is false, whose <code><span>location</span></code> attribute represents an <span data-anolis-spec=html>absolute URL</span> that is exactly equal to <var>scriptURL</var>, run these substeps:</p>
             <ol>
@@ -543,8 +543,53 @@ dictionary <dfn>SameOriginResponseInit</dfn> {
 interface <dfn>CrossOriginResponse</dfn> : <span>Response</span> {
 };</pre>
 
-    <p class='note' title='About the cache interfaces'>
-    <code>Cache</code>, <code>CacheList</code> and <code>AsyncMap</code> interfaces will be added.</p>
+    <h3>The <code>Cache</code> interface</h3>
+    <pre class="idl">
+[Constructor((URL or [EnsureUTF16] DOMString)... urls)]
+interface <dfn>Cache</dfn> {
+  <span data-anolis-spec=dom>Promise</span> match((<span data-anolis-spec=url>URL</span> or [EnsureUTF16] DOMString) <var>name</var>);
+  <span data-anolis-spec=dom>Promise</span> add((<span data-anolis-spec=url>URL</span> or [EnsureUTF16] DOMString)... <var>responses</var>);
+  <span data-anolis-spec=dom>Promise</span> addResponse((<span data-anolis-spec=url>URL</span> or [EnsureUTF16] DOMString) <var>url</var>, <span>Response</span> <var>response</var>);
+  <span data-anolis-spec=dom>Promise</span> remove((<span data-anolis-spec=url>URL</span> or [EnsureUTF16] DOMString)... <var>responses</var>);
+  <span data-anolis-spec=dom>Promise</span> update((<span data-anolis-spec=url>URL</span> or [EnsureUTF16] DOMString)... <var>urls</var>);
+  <span data-anolis-spec=dom>Promise</span> ready();
+        attribute <span>AsyncMap</span> items;
+};
+
+[<span data-anolis-spec=webidl>MapClass</span>(DOMString, <span data-anolis-spec=dom>Promise</span>)]
+interface <dfn>AsyncMap</dfn> {
+  <span data-anolis-spec=dom>Promise</span> items();
+  <span data-anolis-spec=dom>Promise</span> keys();
+  <span data-anolis-spec=dom>Promise</span> values();
+};
+
+[<span data-anolis-spec=webidl>MapClass</span>(DOMString, <span>Cache</span>)]
+interface <dfn>CacheList</dfn> {
+  (<span data-anolis-spec=dom>Promise</span> or <span>Response</span>) match(DOMString name, (<span data-anolis-spec=url>URL</span> or [EnsureUTF16] DOMString) url);
+};</pre>
+
+    <h3 id="events">Events summary</h3>
+
+    <p><em>This section is non-normative.</em></p>
+
+    <p>The following events are dispatched on <code>ServiceWorkerGlobalScope</code> object:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Event name</th>
+          <th>Interface</th>
+          <th>Dispatched when&hellip;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><dfn title=event-serviceworker-install><code>install</code></dfn></td>
+          <td><code>InstallEvent</code></td>
+          <td>A worker is downloaded and being setup to handle events (navigations, alerts, etc.)</td>
+        </tr>
+      </tbody>
+    </table>
 
     <h2>Bootstrap with a service worker</h2>
     <p>A <span title=concept-serviceworker>service worker</span> MUST be installed either by invoking the <span title=serviceworker-navigator-registerserviceworker><code>registerServiceWorker()</code></span> method within web pages or by setting the member <em>serviceworker</em> of the manifest to be the URL of the <span title=concept-serviceworker>service worker</span>.</p>

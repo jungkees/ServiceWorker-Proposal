@@ -10,7 +10,7 @@
 
       <h1 class="head" id="serviceworker">Service Workers</h1>
       <h2 class="dontpublish no-num no-toc" id="subtitle">Soon-to-be-shipped draft</h2>
-      <h2 class="no-num no-toc" id="w3c-doctype">Editor's Draft 13 December 2013</h2>
+      <h2 class="no-num no-toc" id="w3c-doctype">Editor's Draft 16 December 2013</h2>
 
       <dl>
         <dt>This Version:</dt>
@@ -66,7 +66,7 @@
       with <samp><a href="#serviceworker-0">[ServiceWorker]</a></samp> at the start of the subject line.</p>
 
       <p>The W3C <a href="http://www.w3.org/2008/webapps/">Web Applications Working
-      Group</a> is the W3C working group responsible for this specification's progress along the W3C Recommendation track. This specification is the 13 December 2013 Editor's Draft.</p>
+      Group</a> is the W3C working group responsible for this specification's progress along the W3C Recommendation track. This specification is the 16 December 2013 Editor's Draft.</p>
 
       <p>Publication as an Editor's Draft does not imply endorsement by the W3C
       Membership. This is a draft document and may be updated, replaced or
@@ -110,7 +110,9 @@
    <li><a href="#the-reloadpageevent-interface"><span class="secno">4.5 </span>The <code>ReloadPageEvent</code> interface</a></li>
    <li><a href="#the-fetchevent-interface"><span class="secno">4.6 </span>The <code>FetchEvent</code> interface</a></li>
    <li><a href="#the-request-interface"><span class="secno">4.7 </span>The <code>Request</code> interface</a></li>
-   <li><a href="#the-response-interface"><span class="secno">4.8 </span>The <code>Response</code> interface</a></ol></li>
+   <li><a href="#the-response-interface"><span class="secno">4.8 </span>The <code>Response</code> interface</a></li>
+   <li><a href="#the-cache-interface"><span class="secno">4.9 </span>The <code>Cache</code> interface</a></li>
+   <li><a href="#events"><span class="secno">4.10 </span>Events summary</a></ol></li>
  <li><a href="#bootstrap-with-a-service-worker"><span class="secno">5 </span>Bootstrap with a service worker</a>
   <ol class="toc">
    <li><a href="#the-registerserviceworker()-method"><span class="secno">5.1 </span>The <span title="serviceworker-navigator-registerserviceworker"><code>registerServiceWorker()</code></span> method</a></li>
@@ -275,7 +277,7 @@ dictionary <dfn id="serviceworkerscopeoptions" title="ServiceWorkerScopeOptions"
         <ol>
           <li><p>Create a new <a href="#serviceworker-0">ServiceWorker</a> object, which will shortly be associated with a <a href="#serviceworkerglobalscope">ServiceWorkerGlobalScope</a> object. Let this <a href="#serviceworker-0">ServiceWorker</a> object be <var>worker</var>.</li>
           <li><p>Create a new <a class="external" href="http://dev.w3.org/html5/postmsg/#messageport">MessagePort</a> object whose owner is the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object">incumbent settings object</a>. Let this be the <var>outside port</var>.</li>
-          <li><p>Associate the <var>outside port</var> with worker.</li>
+          <li><p>Associate the <var>outside port</var> with <var>worker</var>.</li>
           <li><p>Let <var>worker global scope</var> be null.</li>
           <li><p>If there exists a <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object whose <a class="external" href="http://dev.w3.org/html5/workers/#dom-workerglobalscope-closing">closing</a> flag is false, whose <code><span>location</span></code> attribute represents an <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#absolute-url">absolute URL</a> that is exactly equal to <var>scriptURL</var>, run these substeps:</p>
             <ol>
@@ -362,7 +364,7 @@ interface <dfn id="serviceworkerglobalscope">ServiceWorkerGlobalScope</dfn> : <a
   getter <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#windowproxy">WindowProxy</a>[] windows();
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> <span title="">fetch</span>((<a href="#request">Request</a> or <a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or DOMString or any) <var><a href="#request">request</a></var>);
   [Unforgeable] readonly attribute DOMString scope;
-          attribute <span>CacheList</span> caches;
+          attribute <a href="#cachelist">CacheList</a> caches;
           attribute any version;
           attribute <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <span>oninstall</span>;
           attribute <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler">EventHandler</a> <span>onactivate</span>;
@@ -386,7 +388,7 @@ interface <dfn id="serviceworkerglobalscope">ServiceWorkerGlobalScope</dfn> : <a
       <dt><code>this.scope</code></dt>
       <dd>Returns the <code>scope</code> string that the worker listens to.</dd>
       <dt><code>this.caches</code></dt>
-      <dd>Returns the current <code>CacheList</code> object.</dd>
+      <dd>Returns the current <code><a href="#cachelist">CacheList</a></code> object.</dd>
       <dt><code>this.version</code></dt>
       <dd>Returns the version that has been set by the worker. It is <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#structured-clone">structured clone</a>able.</dd>
     </dl>
@@ -405,7 +407,7 @@ interface <dfn id="serviceworkerglobalscope">ServiceWorkerGlobalScope</dfn> : <a
       <tbody>
         <tr>
           <td><dfn id="handler-serviceworker-oninstall" title="handler-serviceworker-oninstall"><code>oninstall</code></dfn></td>
-          <td><code title="event-serviceworker-install">install</code></td>
+          <td><code title="event-serviceworker-install"><a href="#event-serviceworker-install">install</a></code></td>
         </tr>
         <tr>
           <td><dfn id="handler-serviceworker-onactivate" title="handler-serviceworker-onactivate"><code>onactivate</code></dfn></td>
@@ -535,8 +537,52 @@ dictionary <dfn id="sameoriginresponseinit">SameOriginResponseInit</dfn> {
 interface <dfn id="crossoriginresponse">CrossOriginResponse</dfn> : <a href="#response">Response</a> {
 };</pre>
 
-    <p class="note" title="About the cache interfaces">
-    <code>Cache</code>, <code>CacheList</code> and <code>AsyncMap</code> interfaces will be added.</p>
+    <h3 id="the-cache-interface"><span class="secno">4.9 </span>The <code><a href="#cache">Cache</a></code> interface</h3>
+    <pre class="idl">[Constructor((URL or [EnsureUTF16] DOMString)... urls)]
+interface <dfn id="cache">Cache</dfn> {
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> match((<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) <var>name</var>);
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> add((<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString)... <var>responses</var>);
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> addResponse((<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) <var>url</var>, <a href="#response">Response</a> <var><a href="#response">response</a></var>);
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> remove((<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString)... <var>responses</var>);
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> update((<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString)... <var>urls</var>);
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> ready();
+        attribute <a href="#asyncmap">AsyncMap</a> items;
+};
+
+[<a class="external" href="http://heycam.github.io/webidl/#MapClass">MapClass</a>(DOMString, <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a>)]
+interface <dfn id="asyncmap">AsyncMap</dfn> {
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> items();
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> keys();
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> values();
+};
+
+[<a class="external" href="http://heycam.github.io/webidl/#MapClass">MapClass</a>(DOMString, <a href="#cache">Cache</a>)]
+interface <dfn id="cachelist">CacheList</dfn> {
+  (<a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> or <a href="#response">Response</a>) match(DOMString name, (<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) url);
+};</pre>
+
+    <h3 id="events"><span class="secno">4.10 </span>Events summary</h3>
+
+    <p><em>This section is non-normative.</em></p>
+
+    <p>The following events are dispatched on <code><a href="#serviceworkerglobalscope">ServiceWorkerGlobalScope</a></code> object:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Event name</th>
+          <th>Interface</th>
+          <th>Dispatched when…</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><dfn id="event-serviceworker-install" title="event-serviceworker-install"><code>install</code></dfn></td>
+          <td><code><a href="#installevent">InstallEvent</a></code></td>
+          <td>A worker is downloaded and being setup to handle events (navigations, alerts, etc.)</td>
+        </tr>
+      </tbody>
+    </table>
 
     <h2 id="bootstrap-with-a-service-worker"><span class="secno">5 </span>Bootstrap with a service worker</h2>
     <p>A <a href="#concept-serviceworker" title="concept-serviceworker">service worker</a> MUST be installed either by invoking the <a href="#serviceworker-navigator-registerserviceworker" title="serviceworker-navigator-registerserviceworker"><code>registerServiceWorker()</code></a> method within web pages or by setting the member <em><a href="#serviceworker-0">serviceworker</a></em> of the manifest to be the URL of the <a href="#concept-serviceworker" title="concept-serviceworker">service worker</a>.</p>
@@ -618,7 +664,7 @@ this.addEventListener("fetch", function(e) {
   &lt;/head&gt;
 &lt;/html&gt;</pre>
     </div>
-    <p>To break what might otherwise be ties when matching URLs, navigations are mapped to <a href="#concept-serviceworker" title="concept-serviceworker">service worker</a>s by longest-prefix-match. Note that the <code>*</code> can only occur at the end of a matching rule, so attempts to register <code>/foo/*/bar</code> or <code>*bar</code> will <a class="external" href="http://dev.w3.org/2006/webapi/WebIDL/#dfn-throw">throw</a> exceptions. Similarly, registering a scope that includes a <code>"?"</code> or <code>"#"</code> will also <a class="external" href="http://dev.w3.org/2006/webapi/WebIDL/#dfn-throw">throw</a>s exceptions.</p>
+    <p>To break what might otherwise be ties when matching URLs, navigations are mapped to <a href="#concept-serviceworker" title="concept-serviceworker">service worker</a>s by longest-prefix-match. Note that the <code>*</code> can only occur at the end of a matching rule, so attempts to register <code>/foo/*/bar</code> or <code>*bar</code> will <a class="external" href="http://heycam.github.io/webidl/#dfn-throw">throw</a> exceptions. Similarly, registering a scope that includes a <code>"?"</code> or <code>"#"</code> will also <a class="external" href="http://heycam.github.io/webidl/#dfn-throw">throw</a>s exceptions.</p>
     <p>In the above example with registrations for <code>/foo*</code> and <code>/foo/bar*</code>, the following matches would be made when navigating to the following URLs under <code>http://www.example.com</code>:</p>
     <table border="1">
       <tr>
@@ -798,7 +844,7 @@ this.addEventListener("fetch", function(e) {
 });</pre>
     </div>
     <p>The contents of all but the inventory will be handled by the normal browser resource fetching system because the onfetch event handler did not call <code>respondWith</code> when invoked with their requests. The first time the app is loaded (before the <a href="#concept-serviceworker" title="concept-serviceworker">service worker</a> is installed), <code>data.json</code> will also be fetched from the network. Thereafter it will be computed by the <a href="#concept-serviceworker" title="concept-serviceworker">service worker</a> instead. The important thing to remember here is that normal resource loading is the fallback behavior for fetch events.</p>
-    <p>When combined with access to IndexedDB and a new form of <code>Cache</code>, the ability to respond with arbitrary content is incredibly powerful. Since installed <a href="#concept-serviceworker" title="concept-serviceworker">service worker</a>s are invoked even when offline, <a href="#concept-serviceworker" title="concept-serviceworker">service worker</a>s enable apps that are "offline by default" once installed.</p>
+    <p>When combined with access to IndexedDB and a new form of <code><a href="#cache">Cache</a></code>, the ability to respond with arbitrary content is incredibly powerful. Since installed <a href="#concept-serviceworker" title="concept-serviceworker">service worker</a>s are invoked even when offline, <a href="#concept-serviceworker" title="concept-serviceworker">service worker</a>s enable apps that are "offline by default" once installed.</p>
 
     <h3 id="navigation-vs-fetch"><span class="secno">8.2 </span>Navigation vs Fetch</h3>
     <p>Description</p>
