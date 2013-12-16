@@ -108,13 +108,17 @@
    <li><a href="#the-serviceworkerglobalscope-interface"><span class="secno">4.3 </span>The <code>ServiceWorkerGlobalScope</code> interface</a></li>
    <li><a href="#the-reloadpageevent-interface"><span class="secno">4.4 </span>The <code>ReloadPageEvent</code> interface</a></li>
    <li><a href="#the-installevent-interface"><span class="secno">4.5 </span>The <code>InstallEvent</code> interface</a></li>
-   <li><a href="#the-fetchevent-interface"><span class="secno">4.6 </span>The <code>FetchEvent</code> interface</a></li>
-   <li><a href="#the-beforecacheevictionevent-interface"><span class="secno">4.7 </span>The <code>BeforeCacheEvictionEvent</code> interface</a></li>
-   <li><a href="#the-cacheevictionevent-interface"><span class="secno">4.8 </span>The <code>CacheEvictionEvent</code> interface</a></li>
-   <li><a href="#the-request-interface"><span class="secno">4.9 </span>The <code>Request</code> interface</a></li>
-   <li><a href="#the-response-interface"><span class="secno">4.10 </span>The <code>Response</code> interface</a></li>
-   <li><a href="#the-cache-interface"><span class="secno">4.11 </span>The <code>Cache</code> interface</a></li>
-   <li><a href="#events"><span class="secno">4.12 </span>Events summary</a></ol></li>
+   <li><a href="#the-installphaseevent-interface"><span class="secno">4.6 </span>The <code>InstallPhaseEvent</code> interface</a></li>
+   <li><a href="#the-fetchevent-interface"><span class="secno">4.7 </span>The <code>FetchEvent</code> interface</a></li>
+   <li><a href="#the-beforecacheevictionevent-interface"><span class="secno">4.8 </span>The <code>BeforeCacheEvictionEvent</code> interface</a></li>
+   <li><a href="#the-cacheevictionevent-interface"><span class="secno">4.9 </span>The <code>CacheEvictionEvent</code> interface</a></li>
+   <li><a href="#the-request-interface"><span class="secno">4.10 </span>The <code>Request</code> interface</a></li>
+   <li><a href="#the-response-interface"><span class="secno">4.11 </span>The <code>Response</code> interface</a></li>
+   <li><a href="#the-sameoriginresponse-interface"><span class="secno">4.12 </span>The <code>SameOriginResponse</code> interface</a></li>
+   <li><a href="#the-crossoriginresponse-interface"><span class="secno">4.13 </span>The <code>CrossOriginResponse</code> interface</a></li>
+   <li><a href="#the-cache-interface"><span class="secno">4.14 </span>The <code>Cache</code> interface</a></li>
+   <li><a href="#the-cachelist-interface"><span class="secno">4.15 </span>The <code>CacheList</code> interface</a></li>
+   <li><a href="#events"><span class="secno">4.16 </span>Events summary</a></ol></li>
  <li><a href="#bootstrap-with-a-service-worker"><span class="secno">5 </span>Bootstrap with a service worker</a>
   <ol class="toc">
    <li><a href="#the-registerserviceworker()-method"><span class="secno">5.1 </span>The <span title="serviceworker-navigator-registerserviceworker"><code>registerServiceWorker()</code></span> method</a></li>
@@ -408,15 +412,15 @@ interface <dfn id="serviceworkerglobalscope">ServiceWorkerGlobalScope</dfn> : <a
     <p>Service workers receive message ports through <code><span>install</span></code> events on their <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object for each registration.</p>
 
     <dl class="domintro">
-      <dt><code>this.windows</code></dt>
+      <dt><code><var>this</var>.windows</code></dt>
       <dd>Returns the array of the the <code><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#window">Window</a></code> object's <code><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#browsing-context">browsing context</a></code>'s <code><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#windowproxy">WindowProxy</a></code> object that the <a href="#serviceworkerglobalscope"><code>ServiceWorkerGlobalScope</code></a> is bound to.</dd>
-      <dt><code>this.fetch()</code></dt>
+      <dt><code><var>this</var>.fetch()</code></dt>
       <dd>Returns the <code>Promise</code> object that represents the <code><a href="#response">Response</a></code> object of the <a class="external" href="http://fetch.spec.whatwg.org/#concept-fetch">fetch</a>ed resource.</dd>
-      <dt><code>this.scope</code></dt>
+      <dt><code><var>this</var>.scope</code></dt>
       <dd>Returns the <code>scope</code> string that the worker listens to.</dd>
-      <dt><code>this.caches</code></dt>
+      <dt><code><var>this</var>.caches</code></dt>
       <dd>Returns the current <code><a href="#cachelist">CacheList</a></code> object.</dd>
-      <dt><code>this.version</code></dt>
+      <dt><code><var>this</var>.version</code></dt>
       <dd>Returns the version that has been set by the worker. It is <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#structured-clone">structured clone</a>able.</dd>
     </dl>
 
@@ -466,14 +470,25 @@ interface <dfn id="serviceworkerglobalscope">ServiceWorkerGlobalScope</dfn> : <a
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> <span>reloadAll</span>();
           attribute <a class="external" href="http://dev.w3.org/html5/postmsg/#messageport">MessagePort</a> previous;
           attribute DOMString[] services;
-};
+};</pre>
 
-interface <dfn id="installphaseevent">InstallPhaseEvent</dfn> : <a class="external" href="http://w3c.github.io/dom/#event">Event</a> {
+    <dl class="domintro">
+      <dt><code><var>event</var>.replace()</code></dt>
+      <dd>Ensures that the worker is used in place of existing workers for the currently controlled set of window instances.</dd>
+    </dl>
+
+    <h3 id="the-installphaseevent-interface"><span class="secno">4.6 </span>The <code><a href="#installphaseevent">InstallPhaseEvent</a></code> interface</h3>
+    <pre class="idl">interface <dfn id="installphaseevent">InstallPhaseEvent</dfn> : <a class="external" href="http://w3c.github.io/dom/#event">Event</a> {
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> <span>waitUntil</span>(<a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> <var>f</var>);
           attribute any previousVersion;
 };</pre>
 
-    <h3 id="the-fetchevent-interface"><span class="secno">4.6 </span>The <code><a href="#fetchevent">FetchEvent</a></code> interface</h3>
+    <dl class="domintro">
+      <dt><code><var>event</var>.waitUntil(<var>f</var>)</code></dt>
+      <dd>Delays treating the installing worker until the argument <var>f</var> resolves successfully. This is primarily used to ensure that a service worker is not active until all of the "core" <code><a href="#cache">Cache</a></code>s it depends on are populated. It returns a newly-created <code><a class="external" href="http://w3c.github.io/dom/#promises">Promise</a></code> object.</dd>
+    </dl>
+
+    <h3 id="the-fetchevent-interface"><span class="secno">4.7 </span>The <code><a href="#fetchevent">FetchEvent</a></code> interface</h3>
     <pre class="idl">[Constructor]
 interface <dfn id="fetchevent">FetchEvent</dfn> : <a class="external" href="http://w3c.github.io/dom/#event">Event</a> {
   void <span>respondWith</span>((<a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> or <a href="#response">Response</a>) <var>r</var>);
@@ -490,17 +505,17 @@ enum <dfn id="requesttype">RequestType</dfn> {
     "fetch"
 };</pre>
 
-    <h3 id="the-beforecacheevictionevent-interface"><span class="secno">4.7 </span>The <code><a href="#beforecacheevictionevent">BeforeCacheEvictionEvent</a></code> interface</h3>
+    <h3 id="the-beforecacheevictionevent-interface"><span class="secno">4.8 </span>The <code><a href="#beforecacheevictionevent">BeforeCacheEvictionEvent</a></code> interface</h3>
     <pre class="idl">interface <dfn id="beforecacheevictionevent">BeforeCacheEvictionEvent</dfn> : <a class="external" href="http://w3c.github.io/dom/#event">Event</a> {
   // To be defined.
 };</pre>
 
-    <h3 id="the-cacheevictionevent-interface"><span class="secno">4.8 </span>The <code><a href="#cacheevictionevent">CacheEvictionEvent</a></code> interface</h3>
+    <h3 id="the-cacheevictionevent-interface"><span class="secno">4.9 </span>The <code><a href="#cacheevictionevent">CacheEvictionEvent</a></code> interface</h3>
     <pre class="idl">interface <dfn id="cacheevictionevent">CacheEvictionEvent</dfn> : <a class="external" href="http://w3c.github.io/dom/#event">Event</a> {
   // To be defined.
 };</pre>
 
-    <h3 id="the-request-interface"><span class="secno">4.9 </span>The <code><a href="#request">Request</a></code> interface</h3>
+    <h3 id="the-request-interface"><span class="secno">4.10 </span>The <code><a href="#request">Request</a></code> interface</h3>
     <pre class="idl">// <a href="#request">request</a>
 [Constructor(optional <a href="#requestinit">RequestInit</a> init)]
 interface <dfn id="request">Request</dfn> {
@@ -545,12 +560,13 @@ dictionary <dfn id="header">Header</dfn> {
   ByteString value;
 };</pre>
 
-    <h3 id="the-response-interface"><span class="secno">4.10 </span>The <code><a href="#response">Response</a></code> interface</h3>
+    <h3 id="the-response-interface"><span class="secno">4.11 </span>The <code><a href="#response">Response</a></code> interface</h3>
     <pre class="idl">[Constructor]
 interface <dfn id="response">Response</dfn> {
-};
+};</pre>
 
-[Constructor(optional <a href="#sameoriginresponseinit">SameOriginResponseInit</a> <var>responseInitDict</var>)]
+    <h3 id="the-sameoriginresponse-interface"><span class="secno">4.12 </span>The <code><a href="#sameoriginresponse">SameOriginResponse</a></code> interface</h3>
+    <pre class="idl">[Constructor(optional <a href="#sameoriginresponseinit">SameOriginResponseInit</a> <var>responseInitDict</var>)]
 interface <dfn id="sameoriginresponse">SameOriginResponse</dfn> : <a href="#response">Response</a> {
   void <span>setHeader</span>(ByteString <var>name</var>, ByteString <var>value</var>);
   ByteString? <span>getHeader</span>(ByteString <var><a href="#header">header</a></var>);
@@ -569,12 +585,13 @@ dictionary <dfn id="sameoriginresponseinit">SameOriginResponseInit</dfn> {
   ByteString method;
   sequence&lt;<a href="#header">Header</a>&gt; headers;
   any body;
-};
-
-interface <dfn id="crossoriginresponse">CrossOriginResponse</dfn> : <a href="#response">Response</a> {
 };</pre>
 
-    <h3 id="the-cache-interface"><span class="secno">4.11 </span>The <code><a href="#cache">Cache</a></code> interface</h3>
+    <h3 id="the-crossoriginresponse-interface"><span class="secno">4.13 </span>The <code><a href="#crossoriginresponse">CrossOriginResponse</a></code> interface</h3>
+    <pre class="idl">interface <dfn id="crossoriginresponse">CrossOriginResponse</dfn> : <a href="#response">Response</a> {
+};</pre>
+
+    <h3 id="the-cache-interface"><span class="secno">4.14 </span>The <code><a href="#cache">Cache</a></code> interface</h3>
     <pre class="idl">[Constructor((URL or [EnsureUTF16] DOMString)... urls)]
 interface <dfn id="cache">Cache</dfn> {
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> match((<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) <var>name</var>);
@@ -591,14 +608,15 @@ interface <dfn id="asyncmap">AsyncMap</dfn> {
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> items();
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> keys();
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> values();
-};
-
-[<a class="external" href="http://heycam.github.io/webidl/#MapClass">MapClass</a>(DOMString, <a href="#cache">Cache</a>)]
-interface <dfn id="cachelist">CacheList</dfn> {
-  (<a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> or <a href="#response">Response</a>) match(DOMString name, (<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) url);
 };</pre>
 
-    <h3 id="events"><span class="secno">4.12 </span>Events summary</h3>
+    <h3 id="the-cachelist-interface"><span class="secno">4.15 </span>The <code><a href="#cachelist">CacheList</a></code> interface</h3>
+    <pre class="idl">[<a class="external" href="http://heycam.github.io/webidl/#MapClass">MapClass</a>(DOMString, <a href="#cache">Cache</a>)]
+interface <dfn id="cachelist">CacheList</dfn> {
+  (<a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> or <a href="#response">Response</a>) match(DOMString <var>name</var>, (<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) <var>url</var>);
+};</pre>
+
+    <h3 id="events"><span class="secno">4.16 </span>Events summary</h3>
 
     <p><em>This section is non-normative.</em></p>
 

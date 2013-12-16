@@ -407,15 +407,15 @@ interface <dfn>ServiceWorkerGlobalScope</dfn> : <span data-anolis-spec=web-worke
     <p>Service workers receive message ports through <code><span>install</span></code> events on their <code><span>ServiceWorkerGlobalScope</span></code> object for each registration.</p>
 
     <dl class=domintro>
-      <dt><code>this.windows</code></dt>
+      <dt><code><var>this</var>.windows</code></dt>
       <dd>Returns the array of the the <code><span data-anolis-spec=html>Window</span></code> object's <code><span data-anolis-spec=html>browsing context</span></code>'s <code><span data-anolis-spec=html>WindowProxy</span></code> object that the <span><code>ServiceWorkerGlobalScope</code></span> is bound to.</dd>
-      <dt><code>this.fetch()</code></dt>
+      <dt><code><var>this</var>.fetch()</code></dt>
       <dd>Returns the <code>Promise</code> object that represents the <code>Response</code> object of the <span data-anolis-spec=fetch>fetch</span>ed resource.</dd>
-      <dt><code>this.scope</code></dt>
+      <dt><code><var>this</var>.scope</code></dt>
       <dd>Returns the <code>scope</code> string that the worker listens to.</dd>
-      <dt><code>this.caches</code></dt>
+      <dt><code><var>this</var>.caches</code></dt>
       <dd>Returns the current <code>CacheList</code> object.</dd>
-      <dt><code>this.version</code></dt>
+      <dt><code><var>this</var>.version</code></dt>
       <dd>Returns the version that has been set by the worker. It is <span data-anolis-spec=html>structured clone</span>able.</dd>
     </dl>
 
@@ -467,12 +467,24 @@ interface <dfn>InstallEvent</dfn> : <span>InstallPhaseEvent</span> {
   <span data-anolis-spec=dom>Promise</span> <span>reloadAll</span>();
           attribute <span data-anolis-spec=html-postmsg>MessagePort</span> previous;
           attribute DOMString[] services;
-};
+};</pre>
 
+    <dl class=domintro>
+      <dt><code><var>event</var>.replace()</code></dt>
+      <dd>Ensures that the worker is used in place of existing workers for the currently controlled set of window instances.</dd>
+    </dl>
+
+    <h3>The <code>InstallPhaseEvent</code> interface</h3>
+    <pre class="idl">
 interface <dfn>InstallPhaseEvent</dfn> : <span data-anolis-spec=dom>Event</span> {
   <span data-anolis-spec=dom>Promise</span> <span>waitUntil</span>(<span data-anolis-spec=dom>Promise</span> <var>f</var>);
           attribute any previousVersion;
 };</pre>
+
+    <dl class=domintro>
+      <dt><code><var>event</var>.waitUntil(<var>f</var>)</code></dt>
+      <dd>Delays treating the installing worker until the argument <var>f</var> resolves successfully. This is primarily used to ensure that a service worker is not active until all of the "core" <code>Cache</code>s it depends on are populated. It returns a newly-created <code><span data-anolis-spec=dom>Promise</span></code> object.</dd>
+    </dl>
 
     <h3>The <code>FetchEvent</code> interface</h3>
     <pre class="idl">
@@ -554,8 +566,10 @@ dictionary <dfn>Header</dfn> {
     <pre class="idl">
 [Constructor]
 interface <dfn>Response</dfn> {
-};
+};</pre>
 
+    <h3>The <code>SameOriginResponse</code> interface</h3>
+    <pre class="idl">
 [Constructor(optional <span>SameOriginResponseInit</span> <var>responseInitDict</var>)]
 interface <dfn>SameOriginResponse</dfn> : <span>Response</span> {
   void <span>setHeader</span>(ByteString <var>name</var>, ByteString <var>value</var>);
@@ -575,8 +589,10 @@ dictionary <dfn>SameOriginResponseInit</dfn> {
   ByteString method;
   sequence&lt;<span>Header</span>&gt; headers;
   any body;
-};
+};</pre>
 
+    <h3>The <code>CrossOriginResponse</code> interface</h3>
+    <pre class="idl">
 interface <dfn>CrossOriginResponse</dfn> : <span>Response</span> {
 };</pre>
 
@@ -598,11 +614,13 @@ interface <dfn>AsyncMap</dfn> {
   <span data-anolis-spec=dom>Promise</span> items();
   <span data-anolis-spec=dom>Promise</span> keys();
   <span data-anolis-spec=dom>Promise</span> values();
-};
+};</pre>
 
+    <h3>The <code>CacheList</code> interface</h3>
+    <pre class="idl">
 [<span data-anolis-spec=webidl>MapClass</span>(DOMString, <span>Cache</span>)]
 interface <dfn>CacheList</dfn> {
-  (<span data-anolis-spec=dom>Promise</span> or <span>Response</span>) match(DOMString name, (<span data-anolis-spec=url>URL</span> or [EnsureUTF16] DOMString) url);
+  (<span data-anolis-spec=dom>Promise</span> or <span>Response</span>) match(DOMString <var>name</var>, (<span data-anolis-spec=url>URL</span> or [EnsureUTF16] DOMString) <var>url</var>);
 };</pre>
 
     <h3 id="events">Events summary</h3>
