@@ -166,8 +166,6 @@ navigator.registerServiceWorker("/assets/v1/serviceworker.js", { scope: "/*" }).
       <p>Listen to fetch event and cache necessary resources from the script:</p>
       <pre title="ServiceWorker script">// Service worker script hosted at: http://videos.example.com/assets/v1/serviceworker.js
 this.addEventListener("install", function(e) {
-  // Tell the system that this service worker can handle fetch events.
-  e.services = ["fetch"];
 });
 
 this.addEventListener("fetch", function(e) {
@@ -298,7 +296,7 @@ dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> 
               <li><p>Let <var>settings object</var> be the <span data-anolis-spec=html>script settings object</span> whose <span data-anolis-spec=html>global object</span> is <var>worker global scope</var>.</p></li>
               <li><p>Create a new <span data-anolis-spec=html-postmsg>MessagePort</span> object whose owner is <var>settings object</var>. Let this be <var>inside port</var>.</p></li>
               <li><p><span data-anolis-spec=html-postmsg>Entangle</span> <var>outside port</var> and <var>inside port</var>.</p></li>
-              <li><p>Create a <span data-anolis-spec=html>trusted event</span> that uses the <code><span data-anolis-spec=html-postmsg>MessageEvent</span></code> interface, with the name <code>install</code>, which does not bubble, is not cancelable, has no default action, has a <code><span>services</span></code> attribute whose value is initialized to an empty array, has a <code><span data-anolis-spec=html-postmsg>data</span></code> attribute whose value is initialized to the empty string, has a <code><span data-anolis-spec=html-postmsg>ports</span></code> attribute whose value is initialized to a <span data-anolis-spec=html>read only</span> array containing only the newly created port, and has a <code><span data-anolis-spec=html-postmsg>source</span></code> attribute whose value is initialized to the newly created port, and <span data-anolis-spec=html>queue a task</span> to <span data-anolis-spec=html>dispatch</span> the event at <var>worker global scope</var>.</p></li>
+              <li><p>Create a <span data-anolis-spec=html>trusted event</span> that uses the <code><span data-anolis-spec=html-postmsg>MessageEvent</span></code> interface, with the name <code>install</code>, which does not bubble, is not cancelable, has no default action, has a <code><span data-anolis-spec=html-postmsg>data</span></code> attribute whose value is initialized to the empty string, has a <code><span data-anolis-spec=html-postmsg>ports</span></code> attribute whose value is initialized to a <span data-anolis-spec=html>read only</span> array containing only the newly created port, and has a <code><span data-anolis-spec=html-postmsg>source</span></code> attribute whose value is initialized to the newly created port, and <span data-anolis-spec=html>queue a task</span> to <span data-anolis-spec=html>dispatch</span> the event at <var>worker global scope</var>.</p></li>
               <li><p><span data-anolis-spec=web-workers title=add-a-document-to-the-worker-s-documents>Add to <var>worker global scope</var>'s list of the worker's <code>Document</code>s</span> the <code><span data-anolis-spec=html>Document</span></code> objects in <var>docs</var>.</p></li>
               <li><p>If the <span data-anolis-spec=html>global object</span> specified by the <span data-anolis-spec=html>incumbent settings object</span> is a <code><span data-anolis-spec=web-workers>WorkerGlobalScope</span></code> object, add <var>worker global scope</var> to the list of <span data-anolis-spec=web-workers title=the-worker-s-workers>the worker's workers</span> of the <code><span data-anolis-spec=web-workers>WorkerGlobalScope</span></code> object that is the <span data-anolis-spec=html>global object</span> specified by the <span data-anolis-spec=html>incumbent settings object</span> .</p></li>
               <li><p>Return <var>worker</var> and abort all these steps.</p></li>
@@ -319,7 +317,7 @@ dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> 
       </li>
       <li><p>Let <var title="">serviceWorker</var> be <var>worker</var>.</p></li>
       <li><p>Resolve <var>promise</var> with <var title="">serviceWorker</var> and perform the remaining steps asynchronously.</p></li>
-      <li><p>Create a <span data-anolis-spec=html>trusted event</span> that uses the <code><span data-anolis-spec=html-postmsg>MessageEvent</span></code> interface, with the name <code>install</code>, which does not bubble, is not cancelable, has no default action, has a <code><span>services</span></code> attribute whose value is initialized to an empty array, has a <code><span data-anolis-spec=html-postmsg>data</span></code> attribute whose value is initialized to the empty string, has a <code><span data-anolis-spec=html-postmsg>ports</span></code> attribute whose value is initialized to a <span data-anolis-spec=html>read only</span> array containing only the newly created port, and has a <code><span data-anolis-spec=html-postmsg>source</span></code> attribute whose value is initialized to the newly created port, and <span data-anolis-spec=html>queue a task</span> to <span data-anolis-spec=html>dispatch</span> the event at <var>worker global scope</var>.</p></li>
+      <li><p>Create a <span data-anolis-spec=html>trusted event</span> that uses the <code><span data-anolis-spec=html-postmsg>MessageEvent</span></code> interface, with the name <code>install</code>, which does not bubble, is not cancelable, has no default action, has a <code><span data-anolis-spec=html-postmsg>data</span></code> attribute whose value is initialized to the empty string, has a <code><span data-anolis-spec=html-postmsg>ports</span></code> attribute whose value is initialized to a <span data-anolis-spec=html>read only</span> array containing only the newly created port, and has a <code><span data-anolis-spec=html-postmsg>source</span></code> attribute whose value is initialized to the newly created port, and <span data-anolis-spec=html>queue a task</span> to <span data-anolis-spec=html>dispatch</span> the event at <var>worker global scope</var>.</p></li>
       <li><p><span data-anolis-spec=web-workers title=add-a-document-to-the-worker-s-documents>Add to <var>worker global scope</var>'s list of the worker's <code>Document</code>s</span> the <code><span data-anolis-spec=html>Document</span></code> objects in <var>docs</var>.</p></li>
       <li><p>If the <span data-anolis-spec=html>global object</span> specified by the <span data-anolis-spec=html>incumbent settings object</span> is a <code><span data-anolis-spec=web-workers>WorkerGlobalScope</span></code> object, add <var>worker global scope</var> to the list of <span data-anolis-spec=web-workers title=the-worker-s-workers>the worker's workers</span> of the <code><span data-anolis-spec=web-workers>WorkerGlobalScope</span></code> object that is the <span data-anolis-spec=html>global object</span> specified by the <span data-anolis-spec=html>incumbent settings object</span> .</p></li>
       <li><p><span data-anolis-spec=web-workers>Run a worker</span> for the script with <span data-anolis-spec=url>URL</span> <var>scriptURL</var> and the <span data-anolis-spec=html>script settings object</span> <var>settings object</var>.</p></li>
@@ -466,7 +464,6 @@ interface <dfn>InstallEvent</dfn> : <span>InstallPhaseEvent</span> {
   void <span>replace</span>();
   <span data-anolis-spec=dom>Promise</span> <span>reloadAll</span>();
           attribute <span data-anolis-spec=html-postmsg>MessagePort</span> previous;
-          attribute DOMString[] services;
 };</pre>
 
     <dl class=domintro>
@@ -722,8 +719,6 @@ var base = "http://videos.example.com";
 var inventory = new URL("/services/inventory/data.json", base);
 
 this.addEventListener("install", function(e) {
-  // Tell the system that this service worker can handle fetch events.
-  e.services = ["fetch"];
 });
 
 this.addEventListener("fetch", function(e) {
@@ -887,7 +882,6 @@ var shellCacheName = "shell-v" + parseInt(this.version);
 var contentCacheName = "content";
 
 this.addEventListener("install", function(e) {
-  e.services = ["fetch"];
 
   // Create a cache of resources. Begins the process of fetching them.
   var shellResources = new Cache(
@@ -941,8 +935,6 @@ var base = "http://videos.example.com";
 var inventory = new URL("/services/inventory/data.json", base);
 
 this.addEventListener("install", function(e) {
-  // Tell the system that this service worker can handle fetch events.
-  e.services = ["fetch"];
 });
 
 this.addEventListener("fetch", function(e) {
@@ -981,7 +973,6 @@ this.version = 1;
 
 var base = "http://videos.example.com";
 this.addEventListener("install", function(e) {
-  e.services = ["fetch"];
 
   // Create a cache of resources. Begins the process of fetching them.
   // URLs are relative to the service worker

@@ -10,7 +10,7 @@
 
       <h1 class="head" id="serviceworker">Service Workers</h1>
       <h2 class="dontpublish no-num no-toc" id="subtitle">Soon-to-be-shipped draft</h2>
-      <h2 class="no-num no-toc" id="w3c-doctype">Editor's Draft 16 December 2013</h2>
+      <h2 class="no-num no-toc" id="w3c-doctype">Editor's Draft 30 December 2013</h2>
 
       <dl>
         <dt>This Version:</dt>
@@ -66,7 +66,7 @@
       with <samp><a href="#serviceworker-0">[ServiceWorker]</a></samp> at the start of the subject line.</p>
 
       <p>The W3C <a href="http://www.w3.org/2008/webapps/">Web Applications Working
-      Group</a> is the W3C working group responsible for this specification's progress along the W3C Recommendation track. This specification is the 16 December 2013 Editor's Draft.</p>
+      Group</a> is the W3C working group responsible for this specification's progress along the W3C Recommendation track. This specification is the 30 December 2013 Editor's Draft.</p>
 
       <p>Publication as an Editor's Draft does not imply endorsement by the W3C
       Membership. This is a draft document and may be updated, replaced or
@@ -173,8 +173,6 @@ navigator.registerServiceWorker("/assets/v1/serviceworker.js", { scope: "/*" }).
       <p>Listen to fetch event and cache necessary resources from the script:</p>
       <pre title="ServiceWorker script">// Service worker script hosted at: http://videos.example.com/assets/v1/serviceworker.js
 this.addEventListener("install", function(e) {
-  // Tell the system that this service worker can handle fetch events.
-  e.services = ["fetch"];
 });
 
 this.addEventListener("fetch", function(e) {
@@ -305,7 +303,7 @@ dictionary <dfn id="serviceworkerscopeoptions" title="ServiceWorkerScopeOptions"
               <li><p>Let <var>settings object</var> be the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#script-settings-object">script settings object</a> whose <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object">global object</a> is <var>worker global scope</var>.</li>
               <li><p>Create a new <a class="external" href="http://dev.w3.org/html5/postmsg/#messageport">MessagePort</a> object whose owner is <var>settings object</var>. Let this be <var>inside port</var>.</li>
               <li><p><a class="external" href="http://dev.w3.org/html5/postmsg/#entangle">Entangle</a> <var>outside port</var> and <var>inside port</var>.</li>
-              <li><p>Create a <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#trusted-event">trusted event</a> that uses the <code><a class="external" href="http://dev.w3.org/html5/postmsg/#messageevent">MessageEvent</a></code> interface, with the name <code>install</code>, which does not bubble, is not cancelable, has no default action, has a <code><span>services</span></code> attribute whose value is initialized to an empty array, has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-data">data</a></code> attribute whose value is initialized to the empty string, has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-ports">ports</a></code> attribute whose value is initialized to a <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#read-only">read only</a> array containing only the newly created port, and has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-source">source</a></code> attribute whose value is initialized to the newly created port, and <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#queue-a-task">queue a task</a> to <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#dispatching">dispatch</a> the event at <var>worker global scope</var>.</li>
+              <li><p>Create a <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#trusted-event">trusted event</a> that uses the <code><a class="external" href="http://dev.w3.org/html5/postmsg/#messageevent">MessageEvent</a></code> interface, with the name <code>install</code>, which does not bubble, is not cancelable, has no default action, has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-data">data</a></code> attribute whose value is initialized to the empty string, has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-ports">ports</a></code> attribute whose value is initialized to a <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#read-only">read only</a> array containing only the newly created port, and has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-source">source</a></code> attribute whose value is initialized to the newly created port, and <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#queue-a-task">queue a task</a> to <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#dispatching">dispatch</a> the event at <var>worker global scope</var>.</li>
               <li><p><a class="external" href="http://dev.w3.org/html5/workers/#add-a-document-to-the-worker-s-documents" title="add-a-document-to-the-worker-s-documents">Add to <var>worker global scope</var>'s list of the worker's <code>Document</code>s</a> the <code><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/dom.html#document">Document</a></code> objects in <var>docs</var>.</li>
               <li><p>If the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object">global object</a> specified by the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object">incumbent settings object</a> is a <code><a class="external" href="http://dev.w3.org/html5/workers/#workerglobalscope">WorkerGlobalScope</a></code> object, add <var>worker global scope</var> to the list of <a class="external" href="http://dev.w3.org/html5/workers/#the-worker-s-workers" title="the-worker-s-workers">the worker's workers</a> of the <code><a class="external" href="http://dev.w3.org/html5/workers/#workerglobalscope">WorkerGlobalScope</a></code> object that is the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object">global object</a> specified by the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object">incumbent settings object</a> .</li>
               <li><p>Return <var>worker</var> and abort all these steps.</li>
@@ -326,7 +324,7 @@ dictionary <dfn id="serviceworkerscopeoptions" title="ServiceWorkerScopeOptions"
       </li>
       <li><p>Let <var title="">serviceWorker</var> be <var>worker</var>.</li>
       <li><p>Resolve <var>promise</var> with <var title="">serviceWorker</var> and perform the remaining steps asynchronously.</li>
-      <li><p>Create a <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#trusted-event">trusted event</a> that uses the <code><a class="external" href="http://dev.w3.org/html5/postmsg/#messageevent">MessageEvent</a></code> interface, with the name <code>install</code>, which does not bubble, is not cancelable, has no default action, has a <code><span>services</span></code> attribute whose value is initialized to an empty array, has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-data">data</a></code> attribute whose value is initialized to the empty string, has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-ports">ports</a></code> attribute whose value is initialized to a <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#read-only">read only</a> array containing only the newly created port, and has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-source">source</a></code> attribute whose value is initialized to the newly created port, and <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#queue-a-task">queue a task</a> to <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#dispatching">dispatch</a> the event at <var>worker global scope</var>.</li>
+      <li><p>Create a <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#trusted-event">trusted event</a> that uses the <code><a class="external" href="http://dev.w3.org/html5/postmsg/#messageevent">MessageEvent</a></code> interface, with the name <code>install</code>, which does not bubble, is not cancelable, has no default action, has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-data">data</a></code> attribute whose value is initialized to the empty string, has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-ports">ports</a></code> attribute whose value is initialized to a <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#read-only">read only</a> array containing only the newly created port, and has a <code><a class="external" href="http://dev.w3.org/html5/postmsg/#dom-messageevent-source">source</a></code> attribute whose value is initialized to the newly created port, and <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#queue-a-task">queue a task</a> to <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#dispatching">dispatch</a> the event at <var>worker global scope</var>.</li>
       <li><p><a class="external" href="http://dev.w3.org/html5/workers/#add-a-document-to-the-worker-s-documents" title="add-a-document-to-the-worker-s-documents">Add to <var>worker global scope</var>'s list of the worker's <code>Document</code>s</a> the <code><a class="external" href="http://www.w3.org/html/wg/drafts/html/master/dom.html#document">Document</a></code> objects in <var>docs</var>.</li>
       <li><p>If the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object">global object</a> specified by the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object">incumbent settings object</a> is a <code><a class="external" href="http://dev.w3.org/html5/workers/#workerglobalscope">WorkerGlobalScope</a></code> object, add <var>worker global scope</var> to the list of <a class="external" href="http://dev.w3.org/html5/workers/#the-worker-s-workers" title="the-worker-s-workers">the worker's workers</a> of the <code><a class="external" href="http://dev.w3.org/html5/workers/#workerglobalscope">WorkerGlobalScope</a></code> object that is the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#global-object">global object</a> specified by the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#incumbent-settings-object">incumbent settings object</a> .</li>
       <li><p><a class="external" href="http://dev.w3.org/html5/workers/#run-a-worker">Run a worker</a> for the script with <a class="external" href="http://url.spec.whatwg.org/#url">URL</a> <var>scriptURL</var> and the <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#script-settings-object">script settings object</a> <var>settings object</var>.</li>
@@ -469,7 +467,6 @@ interface <dfn id="serviceworkerglobalscope">ServiceWorkerGlobalScope</dfn> : <a
   void <span>replace</span>();
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> <span>reloadAll</span>();
           attribute <a class="external" href="http://dev.w3.org/html5/postmsg/#messageport">MessagePort</a> previous;
-          attribute DOMString[] services;
 };</pre>
 
     <dl class="domintro">
@@ -713,8 +710,6 @@ var base = "http://videos.example.com";
 var inventory = new URL("/services/inventory/data.json", base);
 
 this.addEventListener("install", function(e) {
-  // Tell the system that this service worker can handle fetch events.
-  e.services = ["fetch"];
 });
 
 this.addEventListener("fetch", function(e) {
@@ -875,7 +870,6 @@ var shellCacheName = "shell-v" + parseInt(this.version);
 var contentCacheName = "content";
 
 this.addEventListener("install", function(e) {
-  e.services = ["fetch"];
 
   // Create a cache of resources. Begins the process of fetching them.
   var shellResources = new Cache(
@@ -928,8 +922,6 @@ var base = "http://videos.example.com";
 var inventory = new URL("/services/inventory/data.json", base);
 
 this.addEventListener("install", function(e) {
-  // Tell the system that this service worker can handle fetch events.
-  e.services = ["fetch"];
 });
 
 this.addEventListener("fetch", function(e) {
@@ -967,7 +959,6 @@ this.version = 1;
 
 var base = "http://videos.example.com";
 this.addEventListener("install", function(e) {
-  e.services = ["fetch"];
 
   // Create a cache of resources. Begins the process of fetching them.
   // URLs are relative to the service worker
