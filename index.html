@@ -139,7 +139,10 @@
    <li><a href="#fallback-rule"><span class="secno">8.3 </span>Fallback rule</a></li>
    <li><a href="#redirects"><span class="secno">8.4 </span>Redirects</a></li>
    <li><a href="#cross-origin-resources"><span class="secno">8.5 </span>Cross-origin resources</a></ol></li>
- <li><a href="#caching"><span class="secno">9 </span>Caching</a></li>
+ <li><a href="#caching"><span class="secno">9 </span>Caching</a>
+  <ol class="toc">
+   <li><a href="#ready-with-populated-cache-object"><span class="secno">9.1 </span>Ready with populated cache object</a></li>
+   <li><a href="#serving-cached-resources"><span class="secno">9.2 </span>Serving Cached Resources</a></ol></li>
  <li><a href="#future-extension"><span class="secno">10 </span>Future extension</a></li>
  <li><a class="no-num" href="#references">References</a></li>
  <li><a class="no-num" href="#acknowledgments">Acknowledgments</a></ol>
@@ -955,6 +958,10 @@ this.addEventListener("fetch", function(e) {
     <p>Description</p>
 
     <h2 id="caching"><span class="secno">9 </span>Caching</h2>
+
+    <h3 id="ready-with-populated-cache-object"><span class="secno">9.1 </span>Ready with populated cache object</h3>
+    <p>Each service worker has a global <code>caches</code> map which holds instances of <code><a href="#cache">Cache</a></code>. As its name implies, a <code><a href="#cache">Cache</a></code> object is a repository of stored <code><a href="#response">Response</a></code> objects; or in this case, <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a>s which represent <code><a href="#response">Response</a></code>s which may or may not yet be available from the network.</p>
+    <p>Using <code><a href="#cache">Cache</a></code>s is perhaps simpler than talking about them, so here is some tiny example code that implements the <code>oninstall</code> event, starts populating a single <code><a href="#cache">Cache</a></code> object with content, and tells the system that the service worker is ready if-and-only-if all the resources in the cache are downloaded.</p>
     <div class="example">
       <pre title="Cache control in service worker script">// Service worker script hosted at: /assets/v1/caching.js
 this.version = 1;
@@ -978,6 +985,55 @@ this.addEventListener("install", function(e) {
   e.waitUntil(shellResources.ready());
 });</pre>
     </div>
+    <p><code><a href="#cache">Cache</a></code> objects contain an <code>items</code> map which contains <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a>s for each of the resources, keyed by their <a class="external" href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#absolute-url">absolute URL</a>. When all of the resources added to a cache are downloaded successfully, the <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> vended by <code>ready()</code> method settles successfully. Our example wires that up to the resolution to the completion of installation, meaning this service worker will not be "activated" until at least that set of resources is cached and ready.</p>
+
+    <h3 id="serving-cached-resources"><span class="secno">9.2 </span>Serving Cached Resources</h3>
+    <p>Now that we have got some resources in a cache, what can we do with them? Most of the service worker interfaces that can take <code><a href="#response">Response</a></code> instances are designed to also work with <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a>s that wrap <code><a href="#response">Response</a></code>s. Here is an expanded version of <code>caching.js</code> that adds an <code>onfetch</code> handler to serve the URLs in question:</p>
+
+    <div class="example">
+      <pre title="Cache control in service worker script">// Service worker script hosted at: /assets/v1/caching.js
+this.version = 1;
+
+this.addEventListener("install", function(e) {
+  // Create a cache of resources. Begins the process of fetching them.
+  var shellResources = new Cache(
+    "/app.html",
+    "/assets/v1/base.css",
+    "/assets/v1/app.js",
+    "/assets/v1/logo.png",
+    "/assets/v1/intro_video.webm",
+  );
+
+  // Add Cache to the global so it can be used later during onfetch
+  this.caches.set("shell-v1", shellResources);
+
+  // The coast is only clear when all the resources are ready.
+  e.waitUntil(shellResources.ready());
+});
+
+this.addEventListener("fetch", function(e) {
+  // No "onfetch" events are dispatched to the ServiceWorker until it successfully
+  // installs.
+
+  var shellResources = this.caches.get("shell-v1");
+
+  // All operations on caches are async, including matching URLs, so we use
+  // Promises heavily. e.respondWith() even takes Promises to enable this:
+  e.respondWith(shellResources.match(e.request.url));
+});</pre>
+    </div>
+
+    <p>The behavior of <code>respondWith()</code> is conditional: if the cache returns a valid <code><a href="#response">Response</a></code>, that is what is sent back to the requesting document. If the <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> generated by <code>match()</code> returns anything else or rejects with an error, the request is then routed to the browser's HTTP stack (as would happen without the service worker).</p>
+
+    <p>The <code>this.caches.get()/.match()</code> dance is a bit wordy, so to cut this short there is a match convenience method on the global <code>caches</code> object to make our <code>onfetch</code> handler shorter but instead of taking one parameter (the URL), it takes two (the cache name and the URL):</p>
+
+    <div class="example">
+      <pre title="Cache control in service worker script">this.addEventListener("fetch", function(e) {
+  // Abbreviated onfetch handler
+  e.respondWith(this.caches.match("shell-v1", e.request.url));
+});</pre>
+    </div>
+
     <h2 id="future-extension"><span class="secno">10 </span>Future extension</h2>
     <p class="critical">Need to address the requirements from SysApps WG use cases and more. Currently, TaskScheduler and notification would be the scope of this work. Security sensitive features will be considered as V2.</p>
 
