@@ -952,7 +952,7 @@ this.addEventListener("fetch", function(e) {
   }
 });</pre>
     </div>
-    <p>The contents of all but the inventory will be handled by the normal browser resource fetching system because the onfetch event handler did not call <code>respondWith</code> when invoked with their requests. The first time the app is loaded (before the <span title=concept-serviceworker>service worker</span> is installed), <code>data.json</code> will also be fetched from the network. Thereafter it will be computed by the <span title=concept-serviceworker>service worker</span> instead. The important thing to remember here is that normal resource loading is the fallback behavior for fetch events.</p>
+    <p>The contents of all but the inventory will be handled by the normal browser resource fetching system because the onfetch event handler did not call <code>respondWith()</code> when invoked with their requests. The first time the app is loaded (before the <span title=concept-serviceworker>service worker</span> is installed), <code>data.json</code> will also be fetched from the network. Thereafter it will be computed by the <span title=concept-serviceworker>service worker</span> instead. The important thing to remember here is that normal resource loading is the fallback behavior for fetch events.</p>
     <p>When combined with access to IndexedDB and a new form of <code>Cache</code>, the ability to respond with arbitrary content is incredibly powerful. Since installed <span title=concept-serviceworker>service worker</span>s are invoked even when offline, <span title=concept-serviceworker>service worker</span>s enable apps that are "offline by default" once installed.</p>
 
     <h3>Navigation vs Fetch</h3>
