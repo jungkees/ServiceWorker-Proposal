@@ -406,6 +406,8 @@ interface <dfn>ServiceWorkerGlobalScope</dfn> : <span data-anolis-spec=web-worke
 
     <p>Service workers receive message ports through <code><span>install</span></code> events on their <code><span>ServiceWorkerGlobalScope</span></code> object for each registration.</p>
 
+    <p>Each <code><span>ServiceWorkerGlobalScope</span></code> object also has a <dfn>event ready</dfn> flag, which must initially be false, but which can get set to true by the algorithms in the <code><span>InstallPhaseEvent</span></code> interface section below.</p>
+
     <dl class=domintro>
       <dt><code><var>this</var>.windows</code></dt>
       <dd>Returns the array of the the <code><span data-anolis-spec=html>Window</span></code> object's <code><span data-anolis-spec=html>browsing context</span></code>'s <code><span data-anolis-spec=html>WindowProxy</span></code> object that the <span><code>ServiceWorkerGlobalScope</code></span> is bound to.</dd>
@@ -483,7 +485,26 @@ interface <dfn>InstallPhaseEvent</dfn> : <span data-anolis-spec=dom>Event</span>
     <dl class=domintro>
       <dt><code><var>event</var>.waitUntil(<var>f</var>)</code></dt>
       <dd>Delays treating the installing worker until the argument <var>f</var> resolves successfully. This is primarily used to ensure that a service worker is not active until all of the "core" <code>Cache</code>s it depends on are populated. It returns a newly-created <code><span data-anolis-spec=dom>Promise</span></code> object.</dd>
+      <dt><code><var>event</var>.previousVersion</code></dt>
+      <dd>Returns the version that had been set by the last execution of the previous worker. It is <span data-anolis-spec=html>structured clone</span>able. It can be used to set certain criteria of the replacement of the workers. (see the <a href="#replacement">replacement</a> section.)</dd>
     </dl>
+
+    <p>The <code>waitUntil(<var>f</var>)</code> method must run these steps:</p>
+    <ol>
+      <li><p>Let <var>promise</var> be a newly-created <code><span data-anolis-spec=dom>Promise</span></code> object.</p></li>
+      <li><p>Return <var>promise</var> and run the remaining steps asynchronously.</p></li>
+      <li><p>If <var>f</var> is not a thenable, run these substeps and abort these steps:</p>
+        <ol>
+          <li>Let <var>error</var> be a new <span data-anolis-spec=html>DOMException</span> object whose type is "<span data-anolis-spec=html>SyntaxError</span>".</p></li>
+          <li><p>Reject <var>promise</var> with <var>error</var>.</p></li>
+        </ol>
+      </li>
+      <li>
+        <p>If <var>f</var> is fulfilled, set the worker's <span><code>ServiceWorkerGlobalScope</code></span> object's <span>event ready</span> flag to true and transform <var>f</var> with the success callback, if given.</p>
+        <p>Otherwise, transform <var>f</var> with the failure callback, if given.</p>
+        <p class=critical>The <span>event ready</span> flag is to be used in the algorithms defined in the <code>FetchEvent</code> interface and other event interfaces added in the future. If an <code>install</code> event is fired but the <span>event ready</span> flag is unset, the fetch event (more to be added e.g. push, alarm) must not be fired on the worker's <span><code>ServiceWorkerGlobalScope</code></span> object. If this is an error situation and the worker remains idle, the worker may be sweeped by the system.</p>
+      </li>
+    </ol>
 
     <h3>The <code>FetchEvent</code> interface</h3>
     <pre class="idl">
@@ -867,7 +888,7 @@ this.addEventListener("fetch", function(e) {
 
     <p>When v2 does become the active <span title=concept-serviceworker>service worker</span>, another event - <code>onactivate</code> - is sent to v2. This happens before any fetches are dispatched. This is the ideal time to upgrade database schemas and the like, but be careful not to do too much work. Applications will be blocked from loading while <code>onactivate</code> is being serviced (including any extensions asked for via <code>e.waitUntil()</code>, which is also available to <code>onactivate</code> handlers). Treat <code>onactivate</code> as a time to stake your claim as the new version but beware doing more than that lest you make your app unavailable!</p>
 
-    <h3>Replacement</h3>
+    <h3 id="replacement">Replacement</h3>
     <p>An alternative policy is available for the daring: a new <span title=concept-serviceworker>service worker</span> can choose to cut-in and replace an existing one. And before you ask, yes, this does break the first rule. But not much.</p>
 
     <p>To replace an existing <span title=concept-serviceworker>service worker</span>, use the <code>.replace()</code> method of the <code>oninstall</code> event during the event dispatch. In fact, you can even call <code>.replace()</code> on the very first install of a <span title=concept-serviceworker>service worker</span>, which will now make your <span title=concept-serviceworker>service worker</span> the proud owner of all windows/tabs whose URLs match the registration origin and scope including the page that registered it.</p>
@@ -915,7 +936,7 @@ this.addEventListener("install", function(e) {
 
 // ...onfetch, etc...</pre>
     </div>
-    <p>The <code>previousVersion</code> field of the event is filled in using a structured clone of the global version property set by the last execution of the previous <span title=concept-serviceworker>service worker</span>. It is a good idea both to always set a version and, sort of obviously, not to make it something that can't be cloned or which varies.</p>
+    <p>The <code>previousVersion</code> field of the event is filled in using a structured clone of the global version property set by the last execution of the previous <span title=concept-serviceworker>service worker</span>. It is a good idea both to always set a version and, sort of obviously, not to make it something that cannot be cloned or which varies.</p>
 
     <p>What of the old <span title=concept-serviceworker>service worker</span>? What happens to it?</p>
 

@@ -7,6 +7,7 @@
     "cachelist": "cachelist",
     "concept-serviceworker": "concept-serviceworker",
     "crossoriginresponse": "crossoriginresponse",
+    "event ready": "event-ready",
     "event-serviceworker-activate": "event-serviceworker-activate",
     "event-serviceworker-beforeevicted": "event-serviceworker-beforeevicted",
     "event-serviceworker-evicted": "event-serviceworker-evicted",
