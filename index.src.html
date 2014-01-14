@@ -154,7 +154,7 @@
       <p>Some simple code to install a service worker and control the document from within the worker script:</p>
 
       <pre title="Installation from a page">// Document hosted at: http://videos.example.com/index.html
-navigator.registerServiceWorker("/assets/v1/serviceworker.js", { scope: "/*" }).then(
+navigator.registerServiceWorker("/assets/v1/worker.js", { scope: "/*" }).then(
   function(serviceWorker) {
     serviceWorker.postMessage("Howdy from your installing page.");
     // To use the serviceWorker immediately, you might call window.location.reload()
@@ -164,7 +164,7 @@ navigator.registerServiceWorker("/assets/v1/serviceworker.js", { scope: "/*" }).
   });</pre>
 
       <p>Listen to fetch event and cache necessary resources from the script:</p>
-      <pre title="ServiceWorker script">// Service worker script hosted at: http://videos.example.com/assets/v1/serviceworker.js
+      <pre title="ServiceWorker script">// Service worker script hosted at: http://videos.example.com/assets/v1/worker.js
 this.addEventListener("install", function(e) {
 });
 
@@ -721,7 +721,7 @@ interface <dfn>CacheList</dfn> {
     <div class="example">
       <pre title="Installation">
 // Document hosted at: http://videos.example.com/index.html
-navigator.registerServiceWorker("/assets/v1/ctrl.js", { scope: "/*"}).then(
+navigator.registerServiceWorker("/assets/v1/worker.js", { scope: "/*"}).then(
   function(serviceWorker) {
     console.log("success!");
     serviceWorker.postMessage("Howdy from your installing page.");
@@ -732,10 +732,10 @@ navigator.registerServiceWorker("/assets/v1/ctrl.js", { scope: "/*"}).then(
   });</pre>
     </div>
 
-    <p>The example shows the <span title=concept-serviceworker>service worker</span> hosted at <code>/assets/v1/ctrl.js</code> is installed by the web page hosted at <code>http://videos.example.com/index.html</code>.</p>
+    <p>The example shows the <span title=concept-serviceworker>service worker</span> hosted at <code>/assets/v1/worker.js</code> is installed by the web page hosted at <code>http://videos.example.com/index.html</code>.</p>
     <div class="example">
       <pre title="ServiceWorker script serving onfetch event">
-// Service worker script hosted at: /assets/v1/ctrl.js
+// Service worker script hosted at: /assets/v1/worker.js
 this.version = 1;
 
 var base = "http://videos.example.com";
@@ -759,17 +759,17 @@ this.addEventListener("fetch", function(e) {
         </pre>
     </div>
     <p>
-    Once the <code>ctrl.js</code> in the example is successfully installed, the "success!"" message will be sent to the console and, crucially, the next time the user visits <code>index.html</code> or any other page located at <code>http://videos.example.com/</code>, <code>ctrl.js</code> will be consulted about what to do and what content to load even if the device has no Internet connection. On pages that are <em>controlled</em> in this way, other resources (like images in the document body) are also requested first from <code>ctrl.js</code> before the normal browser cache is consulted for them.</p>
+    Once the <code>worker.js</code> in the example is successfully installed, the "success!"" message will be sent to the console and, crucially, the next time the user visits <code>index.html</code> or any other page located at <code>http://videos.example.com/</code>, <code>worker.js</code> will be consulted about what to do and what content to load even if the device has no Internet connection. On pages that are <em>controlled</em> in this way, other resources (like images in the document body) are also requested first from <code>worker.js</code> before the normal browser cache is consulted for them.</p>
 
     <h3>The member <em><code>serviceworker</code></em> of the manifest</h3>
     <p class='critical'>This section remains unspecified as neither the architecture has been clarified nor has it been aligned with the standards track <a class='external' href='http://w3c.github.io/manifest/'>manifest</a> specification.</p>
 
     <h3><em>Controlled</em> and <em>uncontrolled</em> documents</h3>
-    <p>The first time <code>http://videos.example.com/index.html</code> is loaded, all the resources it requests will come from the network. That means that even if the browser runs the install snippet for <code>ctrl.js</code>, <span data-anolis-spec=fetch>fetch</span>es it, and finishes installing it before it begins <span data-anolis-spec=fetch>fetch</span>ing logo.png, the new <span title=concept-serviceworker>service worker</span> script would not be consulted about loading logo.png. This is down to the following rule of <span title=concept-serviceworker>service worker</span>s:</p>
+    <p>The first time <code>http://videos.example.com/index.html</code> is loaded, all the resources it requests will come from the network. That means that even if the browser runs the install snippet for <code>worker.js</code>, <span data-anolis-spec=fetch>fetch</span>es it, and finishes installing it before it begins <span data-anolis-spec=fetch>fetch</span>ing logo.png, the new <span title=concept-serviceworker>service worker</span> script would not be consulted about loading logo.png. This is the first rule of <span title=concept-serviceworker>service worker</span>s:</p>
     <ul>
       <li>Documents live out their whole lives using the service worker they start with.</li>
     </ul>
-    <p>This means that if a document starts life without a <span title=concept-serviceworker>service worker</span>, even if one is installed for a matching bit of URL space, it would not suddenly get a <span title=concept-serviceworker>service worker</span> later in life. Same goes for documents that are loaded with a <span title=concept-serviceworker>service worker</span> which might later call <code>unregisterServiceWorker()</code>. Put another way, <span title=serviceworker-navigator-registerserviceworker><code>registerServiceWorker()</code></span> and <code>unregisterServiceWorker()</code> only affect the next document(s).</p>
+    <p>This means that if a document starts life without a <span title=concept-serviceworker>service worker</span> it would not suddenly get a <span title=concept-serviceworker>service worker</span> later in life, even if one is installed for a matching bit of URL space during the doucment's lifetime. This means documents that are loaded with a <span title=concept-serviceworker>service worker</span> which might later call <code>unregisterServiceWorker()</code> do not become controlled by that worker. Put another way, <span title=serviceworker-navigator-registerserviceworker><code>registerServiceWorker()</code></span> and <code>unregisterServiceWorker()</code> only affect subsequent navigations.</p>
 
 
     <h3>Longest-prefix matching</h3>
@@ -780,7 +780,7 @@ this.addEventListener("fetch", function(e) {
 &lt;html&gt;
   &lt;head&gt;
     &lt;script&gt;
-      navigator.registerServiceWorker("/fooServiceWorker.js", { scope: "/foo*"});
+      navigator.registerServiceWorker("/foo_worker.js", { scope: "/foo*"});
     &lt;/script&gt;
   &lt;/head&gt;
 &lt;/html&gt;</pre>
@@ -790,7 +790,7 @@ this.addEventListener("fetch", function(e) {
 &lt;html&gt;
   &lt;head&gt;
     &lt;script&gt;
-      navigator.registerServiceWorker("/foo/barServiceWorker.js", { scope: "/foo/bar*" });
+      navigator.registerServiceWorker("/foo/bar_worker.js", { scope: "/foo/bar*" });
     &lt;/script&gt;
   &lt;/head&gt;
 &lt;/html&gt;</pre>
@@ -804,43 +804,43 @@ this.addEventListener("fetch", function(e) {
       </tr>
       <tr>
         <td><code>/foo</code></td>
-        <td><code>/fooServiceWorker.js</code></td>
+        <td><code>/foo_worker.js</code></td>
       </tr>
       <tr>
         <td><code>/foo?blarg</code></td>
-        <td><code>/fooServiceWorker.js</code></td>
+        <td><code>/foo_worker.js</code></td>
       </tr>
       <tr>
         <td><code>/foo/</code></td>
-        <td><code>/fooServiceWorker.js</code></td>
+        <td><code>/foo_worker.js</code></td>
       </tr>
       <tr>
         <td><code>/foo/thinger.html</code></td>
-        <td><code>/fooServiceWorker.js</code></td>
+        <td><code>/foo_worker.js</code></td>
       </tr>
       <tr>
         <td><code>/foobar.html</code></td>
-        <td><code>/fooServiceWorker.js</code></td>
+        <td><code>/foo_worker.js</code></td>
       </tr>
       <tr>
         <td><code>/foo/other/thinger.html</code></td>
-        <td><code>/fooServiceWorker.js</code></td>
+        <td><code>/foo_worker.js</code></td>
       </tr>
       <tr>
         <td><code>/foo/bar</code></td>
-        <td><code>/foo/barServiceWorker.js</code></td>
+        <td><code>/foo/bar_worker.js</code></td>
       </tr>
       <tr>
         <td><code>/foo/bar/</code></td>
-        <td><code>/foo/barServiceWorker.js</code></td>
+        <td><code>/foo/bar_worker.js</code></td>
       </tr>
       <tr>
         <td><code>/foo/bar/thinger.html</code></td>
-        <td><code>/foo/barServiceWorker.js</code></td>
+        <td><code>/foo/bar_worker.js</code></td>
       </tr>
       <tr>
         <td><code>/foo/bar/baz/thinger.html</code></td>
-        <td><code>/foo/barServiceWorker.js</code></td>
+        <td><code>/foo/bar_worker.js</code></td>
       </tr>
       <tr>
         <td><code>/index.html</code></td>
@@ -852,7 +852,7 @@ this.addEventListener("fetch", function(e) {
       </tr>
     </table>
     <p><code>&lt;fallback to native&gt;</code> is the browser's built-in behavior for fetching resources - the thing the Fetch Service defers to when it does not handle a fetch with <code>e.respondWith()</code>.</p>
-    <p class='note'>If <code>e.respondWith()</code> is not called when handling a connection in <code>/foo/barServiceWorker.js</code>, it does not cascade to <code>/fooServiceWorker.js</code>, it falls back to the browser's built-in network behavior.</p>
+    <p class='note'>If <code>e.respondWith()</code> is not called when handling a connection in <code>/foo/bar_worker.js</code>, it does not cascade to <code>/foo_worker.js</code>, it falls back to the browser's built-in network behavior.</p>
 
     <h3><dfn>Last-registration wins</dfn></h3>
     <p>The registration system is also last-registration-wins. That means if two pages on <code>www.example.com</code> set a registration to control <code>/*</code>, the one a user visits second (assuming the first does not interfere) will be installed and over-write the previous registration.</p>
@@ -866,7 +866,7 @@ this.addEventListener("fetch", function(e) {
 
     <h2>Lifecycle of a service worker</h2>
     <p>The browser might unceremoniously kill your <span title=concept-serviceworker>service worker</span> if it is idle, or even stop it mid-work and re-issue the request to a different instance of the worker. There are no guarantees about how long a <span title=concept-serviceworker>service worker</span> will run. <span title=concept-serviceworker>service worker</span>s should be written to avoid holding global state. This cannot be stressed enough: write your workers as though they will die after every request.</p>
-    <p>Also remember that <span title=concept-serviceworker>service worker</span>s are shared resources. A single worker might be servicing requests from multiple tabs or documents. Never assume that only one document is talking to a given <span title=concept-serviceworker>service worker</span>. If you care about where a request is coming from or going to, use the <code>.window</code> property of the <code>onfetch</code> event; but do not create state that you care about without serializing it somewhere like IndexedDB.</p>
+    <p><span title=concept-serviceworker>Service worker</span>s are shared resources. A single worker might be servicing requests from multiple tabs or documents. Never assume that only one document is talking to a given <span title=concept-serviceworker>service worker</span>. If you care about where a request is coming from or going to, use the <code>.window</code> property of the <code>onfetch</code> event; but do not create state that you care about without serializing it somewhere like IndexedDB.</p>
 
 
     <h2>Upgrade with a new version</h2>
@@ -945,13 +945,13 @@ this.addEventListener("install", function(e) {
     <h2>Offline-first resource handling</h2>
 
     <h3><code>FetchEvent</code> handling</h3>
-    <p><span title=concept-serviceworker>service worker</span>s, once installed, can choose to handle resource loading. Before going to the network to <span data-anolis-spec=fetch>fetch</span> a document that matches the service worker's scope, the worker is consulted, including when <span data-anolis-spec=fetch>fetch</span>ing the document payload itself.
+    <p>Once installed, <span title=concept-serviceworker>service worker</span>s can choose to handle resource requests. A navigation that matches the <span title=concept-serviceworker>service worker</span>'s origin and scope</p>
 
-    Here is an example of a <span title=concept-serviceworker>service worker</span> that only handles a single resource (<code>/services/inventory/data.json</code>) but which logs out requests for all resources it is consulted for:</p>
+    <p>Here is an example of a <span title=concept-serviceworker>service worker</span> that only handles a single resource (<code>/services/inventory/data.json</code>) but which logs out requests for all resources it is consulted for:</p>
 
     <div class="example">
       <pre title="onfetch handling in a service worker">
-// hosted at: /assets/v1/ctrl.js
+// hosted at: /assets/v1/worker.js
 this.version = 1;
 
 var base = "http://videos.example.com";
