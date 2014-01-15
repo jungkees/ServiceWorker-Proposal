@@ -154,7 +154,7 @@
       <p>Some simple code to install a service worker and control the document from within the worker script:</p>
 
       <pre title="Installation from a page">// Document hosted at: http://videos.example.com/index.html
-navigator.registerServiceWorker("/assets/v1/worker.js", { scope: "/*" }).then(
+navigator.registerServiceWorker("/*", "/assets/v1/worker.js").then(
   function(serviceWorker) {
     serviceWorker.postMessage("Howdy from your installing page.");
     // To use the serviceWorker immediately, you might call window.location.reload()
@@ -232,15 +232,11 @@ this.addEventListener("fetch", function(e) {
 
     <h3>Extensions to the <code>Navigator</code> object</h3>
     <pre class="idl">partial interface <span data-anolis-spec=html>Navigator</span> {
-  <span data-anolis-spec=dom>Promise</span> <span title=serviceworker-navigator-registerserviceworker>registerServiceWorker</span>(DOMString <var>scriptURL</var>, optional <span>ServiceWorkerScopeOptions</span> <var>options</var>);
+  <span data-anolis-spec=dom>Promise</span> <span title=serviceworker-navigator-registerserviceworker>registerServiceWorker</span>(DOMString <var>scope</var>, DOMString <var>scriptURL</var>);
   <span data-anolis-spec=dom>Promise</span> <span title="">unregisterServiceWorker</span>(<span>ServiceWorker</span> <var>serviceWorker</var>);
           attribute <span data-anolis-spec=html>EventHandler</span> <span>onserviceworkerinstall</span>;
           attribute <span data-anolis-spec=html>EventHandler</span> <span>onserviceworkerreplaced</span>;
           attribute <span data-anolis-spec=html>EventHandler</span> <span>onserviceworkerreloadpage</span>;
-};
-
-dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> {
-  DOMString <span title="">scope</span> = "/*";
 };</pre>
 
     <p>When the <dfn title=serviceworker-navigator-registerserviceworker><code>registerServiceWorker(scriptURL, options)</code></dfn> method is invoked, the user agent must run the following steps:</p>
@@ -278,8 +274,7 @@ dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> 
           <li><p>Let <var>worker global scope</var> be null.</p></li>
           <li><p>If there exists a <code><span>ServiceWorkerGlobalScope</span></code> object whose <span data-anolis-spec=web-workers>closing</span> flag is false, whose <code><span>location</span></code> attribute represents an <span data-anolis-spec=html>absolute URL</span> that is exactly equal to <var>scriptURL</var>, run these substeps:</p>
             <ol>
-              <li><p>If <var>options</var> is not null and the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute is not exactly equal to <var>scope</var> of <var>options</var>, set the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute to <var>scope</var> of <var>options</var>.</p></li>
-              <li><p>If <var>options</var> is null and the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute is not the default scope, "<code>/*</code>", set the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute to "<code>/*</code>".</p></li>
+              <li><p>If the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute is not exactly equal to <var>scope</var>, set the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute to <var>scope</var>.</p></li>
               <li><p>Let <var>worker global scope</var> be that <code><span>ServiceWorkerGlobalScope</span></code> object.</p></li>
             </ol>
           </li>
@@ -309,10 +304,7 @@ dictionary <dfn title=ServiceWorkerScopeOptions>ServiceWorkerScopeOptions</dfn> 
           </li>
           <li><p><span data-anolis-spec=web-workers>Set up a worker script settings object</span> with <var>worker global scope</var> and <var>scriptURL</var>, and let <var>settings object</var> be the result.</p></li>
           <li><p>Associate <var>worker</var> with <var>worker global scope</var>.</p></li>
-
-
-
-          <li><p>If <var>options</var> is not null, set the <code><span>scope</span></code> attribute of <var>worker global scope</var> to <var>scope</var> of <var>options</var>; Otherwise, set the <code><span>scope</span></code> attribute of <var>worker global scope</var> to the default scope, "<code>/*</code>".</p></li>
+          <li><p>Set the <code><span>scope</span></code> attribute of <var>worker global scope</var> to <var>scope</var>.</p></li>
           <li><p>Create a new <code><span data-anolis-spec=html-postmsg>MessagePort</span></code> object whose <span data-anolis-spec=html-postmsg>owner</span> is <var>settings object</var>. Let <var>inside port</var> be this new object.</p></li>
           <li><p><span data-anolis-spec=html-postmsg>Entangle</span> <var>outside port</var> and <var>inside port</var>.</p></li>
         </ol>
@@ -721,7 +713,7 @@ interface <dfn>CacheList</dfn> {
     <div class="example">
       <pre title="Installation">
 // Document hosted at: http://videos.example.com/index.html
-navigator.registerServiceWorker("/assets/v1/worker.js", { scope: "/*"}).then(
+navigator.registerServiceWorker("/*", "/assets/v1/worker.js").then(
   function(serviceWorker) {
     console.log("success!");
     serviceWorker.postMessage("Howdy from your installing page.");
@@ -780,7 +772,7 @@ this.addEventListener("fetch", function(e) {
 &lt;html&gt;
   &lt;head&gt;
     &lt;script&gt;
-      navigator.registerServiceWorker("/foo_worker.js", { scope: "/foo*"});
+      navigator.registerServiceWorker("/foo*", "/foo_worker.js");
     &lt;/script&gt;
   &lt;/head&gt;
 &lt;/html&gt;</pre>
@@ -790,7 +782,7 @@ this.addEventListener("fetch", function(e) {
 &lt;html&gt;
   &lt;head&gt;
     &lt;script&gt;
-      navigator.registerServiceWorker("/foo/bar_worker.js", { scope: "/foo/bar*" });
+      navigator.registerServiceWorker("/foo/bar*", "/foo/bar_worker.js");
     &lt;/script&gt;
   &lt;/head&gt;
 &lt;/html&gt;</pre>

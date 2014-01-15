@@ -40,8 +40,7 @@
     "sameoriginresponseinit": "sameoriginresponseinit",
     "serviceworker": "serviceworker-0",
     "serviceworker-navigator-registerserviceworker": "serviceworker-navigator-registerserviceworker",
-    "serviceworkerglobalscope": "serviceworkerglobalscope",
-    "serviceworkerscopeoptions": "serviceworkerscopeoptions"
+    "serviceworkerglobalscope": "serviceworkerglobalscope"
   },
   "url": "http://w3c.github.io/serviceworker/"
 }
