@@ -274,7 +274,7 @@ this.addEventListener("fetch", function(e) {
           <li><p>Let <var>worker global scope</var> be null.</p></li>
           <li><p>If there exists a <code><span>ServiceWorkerGlobalScope</span></code> object whose <span data-anolis-spec=web-workers>closing</span> flag is false, whose <code><span>location</span></code> attribute represents an <span data-anolis-spec=html>absolute URL</span> that is exactly equal to <var>scriptURL</var>, run these substeps:</p>
             <ol>
-              <li><p>If the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute is not exactly equal to <var>scope</var>, set the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>scope</span></code> attribute to <var>scope</var>.</p></li>
+              <li><p>If the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>registration</span></code> attribute is not exactly equal to <var>scope</var>, set the <code><span>ServiceWorkerGlobalScope</span></code> object's <code><span>registration</span></code> attribute to <var>scope</var>.</p></li>
               <li><p>Let <var>worker global scope</var> be that <code><span>ServiceWorkerGlobalScope</span></code> object.</p></li>
             </ol>
           </li>
@@ -304,7 +304,7 @@ this.addEventListener("fetch", function(e) {
           </li>
           <li><p><span data-anolis-spec=web-workers>Set up a worker script settings object</span> with <var>worker global scope</var> and <var>scriptURL</var>, and let <var>settings object</var> be the result.</p></li>
           <li><p>Associate <var>worker</var> with <var>worker global scope</var>.</p></li>
-          <li><p>Set the <code><span>scope</span></code> attribute of <var>worker global scope</var> to <var>scope</var>.</p></li>
+          <li><p>Set the <code><span>registration</span></code> attribute of <var>worker global scope</var> to <var>scope</var>.</p></li>
           <li><p>Create a new <code><span data-anolis-spec=html-postmsg>MessagePort</span></code> object whose <span data-anolis-spec=html-postmsg>owner</span> is <var>settings object</var>. Let <var>inside port</var> be this new object.</p></li>
           <li><p><span data-anolis-spec=html-postmsg>Entangle</span> <var>outside port</var> and <var>inside port</var>.</p></li>
         </ol>
@@ -381,7 +381,7 @@ interface <dfn>ServiceWorker</dfn> : <span data-anolis-spec=dom>EventTarget</spa
 interface <dfn>ServiceWorkerGlobalScope</dfn> : <span data-anolis-spec=web-workers>WorkerGlobalScope</span> {
   getter <span data-anolis-spec=html>WindowProxy</span>[] windows();
   <span data-anolis-spec=dom>Promise</span> <span title="">fetch</span>((<span>Request</span> or <span data-anolis-spec=url>URL</span> or DOMString or any) <var>request</var>);
-  [Unforgeable] readonly attribute DOMString scope;
+  [Unforgeable] readonly attribute DOMString registration;
           attribute <span>CacheList</span> caches;
           attribute any version;
           attribute <span data-anolis-spec=html>EventHandler</span> <span>oninstall</span>;
@@ -405,8 +405,8 @@ interface <dfn>ServiceWorkerGlobalScope</dfn> : <span data-anolis-spec=web-worke
       <dd>Returns the array of the the <code><span data-anolis-spec=html>Window</span></code> object's <code><span data-anolis-spec=html>browsing context</span></code>'s <code><span data-anolis-spec=html>WindowProxy</span></code> object that the <span><code>ServiceWorkerGlobalScope</code></span> is bound to.</dd>
       <dt><code><var>this</var>.fetch()</code></dt>
       <dd>Returns the <code>Promise</code> object that represents the <code>Response</code> object of the <span data-anolis-spec=fetch>fetch</span>ed resource.</dd>
-      <dt><code><var>this</var>.scope</code></dt>
-      <dd>Returns the <code>scope</code> string that the worker listens to.</dd>
+      <dt><code><var>this</var>.registration</code></dt>
+      <dd>Returns the registration pattern that matched this service worker instance.</dd>
       <dt><code><var>this</var>.caches</code></dt>
       <dd>Returns the current <code>CacheList</code> object.</dd>
       <dt><code><var>this</var>.version</code></dt>

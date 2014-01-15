@@ -284,7 +284,7 @@ this.addEventListener("fetch", function(e) {
           <li><p>Let <var>worker global scope</var> be null.</li>
           <li><p>If there exists a <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object whose <a href="http://dev.w3.org/html5/workers/#dom-workerglobalscope-closing" class="external">closing</a> flag is false, whose <code><span>location</span></code> attribute represents an <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#absolute-url" class="external">absolute URL</a> that is exactly equal to <var>scriptURL</var>, run these substeps:</p>
             <ol>
-              <li><p>If the <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object's <code><span>scope</span></code> attribute is not exactly equal to <var>scope</var>, set the <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object's <code><span>scope</span></code> attribute to <var>scope</var>.</li>
+              <li><p>If the <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object's <code><span>registration</span></code> attribute is not exactly equal to <var>scope</var>, set the <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object's <code><span>registration</span></code> attribute to <var>scope</var>.</li>
               <li><p>Let <var>worker global scope</var> be that <code><a href="#serviceworkerglobalscope"><span>ServiceWorkerGlobalScope</span></a></code> object.</li>
             </ol>
           </li>
@@ -314,7 +314,7 @@ this.addEventListener("fetch", function(e) {
           </li>
           <li><p><a href="http://dev.w3.org/html5/workers/#set-up-a-worker-script-settings-object" class="external">Set up a worker script settings object</a> with <var>worker global scope</var> and <var>scriptURL</var>, and let <var>settings object</var> be the result.</li>
           <li><p>Associate <var>worker</var> with <var>worker global scope</var>.</li>
-          <li><p>Set the <code><span>scope</span></code> attribute of <var>worker global scope</var> to <var>scope</var>.</li>
+          <li><p>Set the <code><span>registration</span></code> attribute of <var>worker global scope</var> to <var>scope</var>.</li>
           <li><p>Create a new <code><a href="http://dev.w3.org/html5/postmsg/#messageport" class="external">MessagePort</a></code> object whose <a href="http://dev.w3.org/html5/postmsg/#concept-port-owner" class="external">owner</a> is <var>settings object</var>. Let <var>inside port</var> be this new object.</li>
           <li><p><a href="http://dev.w3.org/html5/postmsg/#entangle" class="external">Entangle</a> <var>outside port</var> and <var>inside port</var>.</li>
         </ol>
@@ -389,7 +389,7 @@ interface <dfn id="serviceworker-0">ServiceWorker</dfn> : <a href="http://w3c.gi
 interface <dfn id="serviceworkerglobalscope">ServiceWorkerGlobalScope</dfn> : <a href="http://dev.w3.org/html5/workers/#workerglobalscope" class="external">WorkerGlobalScope</a> {
   getter <a href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#windowproxy" class="external">WindowProxy</a>[] windows();
   <a href="http://w3c.github.io/dom/#promises" class="external">Promise</a> <span title="">fetch</span>((<a href="#request">Request</a> or <a href="http://url.spec.whatwg.org/#url" class="external">URL</a> or DOMString or any) <var><a href="#request">request</a></var>);
-  [Unforgeable] readonly attribute DOMString scope;
+  [Unforgeable] readonly attribute DOMString registration;
           attribute <a href="#cachelist">CacheList</a> caches;
           attribute any version;
           attribute <a href="http://www.w3.org/html/wg/drafts/html/master/webappapis.html#eventhandler" class="external">EventHandler</a> <span>oninstall</span>;
@@ -413,8 +413,8 @@ interface <dfn id="serviceworkerglobalscope">ServiceWorkerGlobalScope</dfn> : <a
       <dd>Returns the array of the the <code><a href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#window" class="external">Window</a></code> object's <code><a href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#browsing-context" class="external">browsing context</a></code>'s <code><a href="http://www.w3.org/html/wg/drafts/html/master/browsers.html#windowproxy" class="external">WindowProxy</a></code> object that the <a href="#serviceworkerglobalscope"><code>ServiceWorkerGlobalScope</code></a> is bound to.</dd>
       <dt><code><var>this</var>.fetch()</code></dt>
       <dd>Returns the <code>Promise</code> object that represents the <code><a href="#response">Response</a></code> object of the <a href="http://fetch.spec.whatwg.org/#concept-fetch" class="external">fetch</a>ed resource.</dd>
-      <dt><code><var>this</var>.scope</code></dt>
-      <dd>Returns the <code>scope</code> string that the worker listens to.</dd>
+      <dt><code><var>this</var>.registration</code></dt>
+      <dd>Returns the registration pattern that matched this service worker instance.</dd>
       <dt><code><var>this</var>.caches</code></dt>
       <dd>Returns the current <code><a href="#cachelist">CacheList</a></code> object.</dd>
       <dt><code><var>this</var>.version</code></dt>
