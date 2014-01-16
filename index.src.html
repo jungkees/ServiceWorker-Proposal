@@ -353,6 +353,7 @@ interface <dfn>ServiceWorker</dfn> : <span data-anolis-spec=dom>EventTarget</spa
 interface <dfn>ServiceWorkerGlobalScope</dfn> : <span data-anolis-spec=web-workers>WorkerGlobalScope</span> {
   getter <span data-anolis-spec=html>WindowProxy</span>[] windows();
   <span data-anolis-spec=dom>Promise</span> <span title="">fetch</span>((<span>Request</span> or <span data-anolis-spec=url>URL</span> or DOMString or any) <var>request</var>);
+  void <span title="">postMessage</span>(any <var>message</var>, optional sequence&lt;Transferable&gt; <var>transfer</var>);
   [Unforgeable] readonly attribute DOMString registration;
           attribute <span>CacheList</span> caches;
           attribute any version;
@@ -361,6 +362,7 @@ interface <dfn>ServiceWorkerGlobalScope</dfn> : <span data-anolis-spec=web-worke
           attribute <span data-anolis-spec=html>EventHandler</span> <span>onfetch</span>;
           attribute <span data-anolis-spec=html>EventHandler</span> <span>onbeforeevicted</span>;
           attribute <span data-anolis-spec=html>EventHandler</span> <span>onevicted</span>;
+          attribute <span data-anolis-spec=html>EventHandler</span> <span>onmessage</span>;
   // close() method inherited from WorkerGlobalScope is not exposed.
 };</pre>
 
@@ -368,7 +370,9 @@ interface <dfn>ServiceWorkerGlobalScope</dfn> : <span data-anolis-spec=web-worke
 
     <p class="note">Todo: the definition of the <span>service worker environment</span> should be placed in the <span data-anolis-spec=html>processing model</span> section of HTML specification.</p>
 
-    <p>Service workers receive message ports through <code><span>install</span></code> events on their <code><span>ServiceWorkerGlobalScope</span></code> object for each registration.</p>
+    <p><code><span>ServiceWorkerGlobalScope</span></code> objects act as if they had an implicit <span data-anolis-spec=html-postmsg>MessagePort</span> associated with them. This port is part of a channel that is set up when the worker is created, but it is not exposed. This object must never be garbage collected before the <code><span>ServiceWorkerGlobalScope</span></code> object.</p>
+
+    <p>All messages received by that port must immediately be retargeted at the <code><span>ServiceWorkerGlobalScope</span></code> object.</p>
 
     <p>Each <code><span>ServiceWorkerGlobalScope</span></code> object also has a <dfn>event ready</dfn> flag, which must initially be false, but which can get set to true by the algorithms in the <code><span>InstallPhaseEvent</span></code> interface section below.</p>
 
