@@ -454,7 +454,7 @@
     "multipart/form-data boundary string": "forms.html#multipart/form-data-boundary-string",
     "multipart/form-data encoding algorithm": "forms.html#multipart/form-data-encoding-algorithm",
     "nav": "sections.html#the-nav-element",
-    "navigate": "history.html#navigate",
+    "navigated": "browsers.html#navigated",
     "navigator": "webappapis.html#navigator-0",
     "nested browsing context": "browsers.html#nested-browsing-context",
     "noframes": "obsolete.html#noframes",
