@@ -492,6 +492,9 @@ enum <dfn>RequestType</dfn> {
     "fetch"
 };</pre>
 
+    <p>When a request is generated from a controlled document, user agent creates a <span data-anolis-spec=html>trusted event</span> that uses the <code><span>FetchEvent</span></code> interface, with the name <code>fetch</code>, which does not bubble, is not cancelable, has no default action, has a <code><span>request</span></code> attribute whose value is initialized to the <code><span>Request</span></code> interface's instance object representing this request, has a <code><span>type</span></code> attribute whose value is initialized to a read only enum value "navigate" if the request is a navigation or "fetch" otherwise, has a <code><span>window</span></code> attribute whose value is initialized to the document's <code><span data-anolis-spec=html>browsing context</span></code>'s <code><span data-anolis-spec=html>WindowProxy</span></code> object, has a <code><span>isTopLevel</span></code> attribute whose value is initialized to true if the document's <code><span data-anolis-spec=html>browsing context</span></code> is a <code><span data-anolis-spec=html>top-level browsing context</span></code> or false otherwise, and has a <code><span>isReload</span></code> attribute whose value is initialized to true if the request comes from a document that has been soft reloaded or false otherwise, and queue a task to <code><span data-anolis-spec=html>dispatch</span></code> the event at worker global scope.</p>
+    <p class="note">The soft reloaded of a document is the reload of the document by reload button in the URL bar or the back/forward buttons in browser chrome. If isReload attribute is set to true, some apps may choose not to work so hard to get "fresh" content to display.</p>
+
     <h3>The <code>BeforeCacheEvictionEvent</code> interface</h3>
     <pre class="idl">
 interface <dfn>BeforeCacheEvictionEvent</dfn> : <span data-anolis-spec=dom>Event</span> {
