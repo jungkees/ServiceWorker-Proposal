@@ -604,7 +604,7 @@ interface <dfn>Cache</dfn> {
 interface <dfn>AsyncMap</dfn> {
   <span data-anolis-spec=dom>Promise</span> get(DOMString <var>key</var>);
   <span data-anolis-spec=dom>Promise</span> has(DOMString <var>key</var>);
-  <span data-anolis-spec=dom>Promise</span> set(DOMString <var>key</var>, Promise <var>val</var>);
+  <span data-anolis-spec=dom>Promise</span> set(DOMString <var>key</var>, <span>Response</span> <var>val</var>);
   <span data-anolis-spec=dom>Promise</span> clear();
   <span data-anolis-spec=dom>Promise</span> delete(DOMString <var>key</var>);
   <span data-anolis-spec=dom>Promise</span> items();
@@ -621,7 +621,7 @@ interface <dfn>CacheList</dfn> {
   (<span data-anolis-spec=dom>Promise</span> or <span>Response</span>) match(DOMString <var>name</var>, (<span data-anolis-spec=url>URL</span> or [EnsureUTF16] DOMString) <var>url</var>);
   <span data-anolis-spec=dom>Promise</span> get(DOMString <var>key</var>);
   <span data-anolis-spec=dom>Promise</span> has(DOMString <var>key</var>);
-  <span data-anolis-spec=dom>Promise</span> set(DOMString <var>key</var>, Promise <var>val</var>);
+  <span data-anolis-spec=dom>Promise</span> set(DOMString <var>key</var>, <span>Cache</span> <var>val</var>);
   <span data-anolis-spec=dom>Promise</span> clear();
   <span data-anolis-spec=dom>Promise</span> delete(DOMString <var>key</var>);
   <span data-anolis-spec=dom>Promise</span> items();

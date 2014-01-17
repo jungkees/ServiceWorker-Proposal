@@ -601,7 +601,7 @@ interface <dfn id="cache">Cache</dfn> {
 interface <dfn id="asyncmap">AsyncMap</dfn> {
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> get(DOMString <var>key</var>);
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> has(DOMString <var>key</var>);
-  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> set(DOMString <var>key</var>, Promise <var>val</var>);
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> set(DOMString <var>key</var>, <a href="#response">Response</a> <var>val</var>);
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> clear();
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> delete(DOMString <var>key</var>);
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> items();
@@ -617,7 +617,7 @@ interface <dfn id="cachelist">CacheList</dfn> {
   (<a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> or <a href="#response">Response</a>) match(DOMString <var>name</var>, (<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) <var>url</var>);
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> get(DOMString <var>key</var>);
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> has(DOMString <var>key</var>);
-  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> set(DOMString <var>key</var>, Promise <var>val</var>);
+  <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> set(DOMString <var>key</var>, <a href="#cache">Cache</a> <var>val</var>);
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> clear();
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> delete(DOMString <var>key</var>);
   <a class="external" href="http://w3c.github.io/dom/#promises">Promise</a> items();
