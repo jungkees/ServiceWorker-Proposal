@@ -513,16 +513,16 @@ interface <dfn>CacheEvictionEvent</dfn> : <span data-anolis-spec=dom>Event</span
 [Constructor(optional <span>RequestInit</span> init)]
 interface <dfn>Request</dfn> {
   readonly attribute unsigned long timeout;
-  readonly attribute (<span data-anolis-spec=url>URL</span> or [EnsureUTF16] DOMString) url;
+  readonly attribute DOMString url;
   readonly attribute DOMString encoding;
   readonly attribute ByteString method;
-  readonly attribute (<span data-anolis-spec=url>URL</span> or [EnsureUTF16] DOMString) origin;
+  readonly attribute DOMString origin;
   readonly attribute <span>Mode</span> mode;
   readonly attribute boolean synchronous;
   readonly attribute unsigned long redirectCount;
   readonly attribute boolean forcePreflight;
   readonly attribute boolean omitCredentials;
-  readonly attribute (<span data-anolis-spec=url>URL</span> or [EnsureUTF16] DOMString) referrer;
+  readonly attribute <span data-anolis-spec=url>URL</span> referrer;
   ByteString? <span>getHeader</span>(ByteString <var>header</var>);
           attribute sequence&lt;<span>Header</span>&gt; headers;
   readonly attribute any body;
@@ -530,14 +530,14 @@ interface <dfn>Request</dfn> {
 
 dictionary <dfn>RequestInit</dfn> {
   unsigned long timeout;
-  (<span data-anolis-spec=url>URL</span> or [EnsureUTF16] DOMString) url;
+  DOMString url;
   DOMString encoding;
   ByteString method = "GET";
   boolean synchronous = false;
   unsigned long redirectCount = 0;
   boolean forcePreflight = false;
   boolean omitCredentials = false;
-  (<span data-anolis-spec=url>URL</span> or [EnsureUTF16] DOMString) referrer;
+  <span data-anolis-spec=url>URL</span> referrer;
   sequence&lt;<span>Header</span>&gt; headers;
   any body = null;
 };

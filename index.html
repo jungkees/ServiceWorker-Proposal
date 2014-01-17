@@ -10,7 +10,7 @@
 
       <h1 class="head" id="serviceworker">Service Workers</h1>
       <h2 class="dontpublish no-num no-toc" id="subtitle">Soon-to-be-shipped draft</h2>
-      <h2 class="no-num no-toc" id="w3c-doctype">Editor's Draft 16 January 2014</h2>
+      <h2 class="no-num no-toc" id="w3c-doctype">Editor's Draft 17 January 2014</h2>
 
       <dl>
         <dt>This Version:</dt>
@@ -66,7 +66,7 @@
       with <samp><a href="#serviceworker-0">[ServiceWorker]</a></samp> at the start of the subject line.</p>
 
       <p>The W3C <a href="http://www.w3.org/2008/webapps/">Web Applications Working
-      Group</a> is the W3C working group responsible for this specification's progress along the W3C Recommendation track. This specification is the 16 January 2014 Editor's Draft.</p>
+      Group</a> is the W3C working group responsible for this specification's progress along the W3C Recommendation track. This specification is the 17 January 2014 Editor's Draft.</p>
 
       <p>Publication as an Editor's Draft does not imply endorsement by the W3C
       Membership. This is a draft document and may be updated, replaced or
@@ -514,16 +514,16 @@ enum <dfn id="requesttype">RequestType</dfn> {
 [Constructor(optional <a href="#requestinit">RequestInit</a> init)]
 interface <dfn id="request">Request</dfn> {
   readonly attribute unsigned long timeout;
-  readonly attribute (<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) url;
+  readonly attribute DOMString url;
   readonly attribute DOMString encoding;
   readonly attribute ByteString method;
-  readonly attribute (<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) origin;
+  readonly attribute DOMString origin;
   readonly attribute <a href="#mode">Mode</a> mode;
   readonly attribute boolean synchronous;
   readonly attribute unsigned long redirectCount;
   readonly attribute boolean forcePreflight;
   readonly attribute boolean omitCredentials;
-  readonly attribute (<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) referrer;
+  readonly attribute <a class="external" href="http://url.spec.whatwg.org/#url">URL</a> referrer;
   ByteString? <span>getHeader</span>(ByteString <var><a href="#header">header</a></var>);
           attribute sequence&lt;<a href="#header">Header</a>&gt; headers;
   readonly attribute any body;
@@ -531,14 +531,14 @@ interface <dfn id="request">Request</dfn> {
 
 dictionary <dfn id="requestinit">RequestInit</dfn> {
   unsigned long timeout;
-  (<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) url;
+  DOMString url;
   DOMString encoding;
   ByteString method = "GET";
   boolean synchronous = false;
   unsigned long redirectCount = 0;
   boolean forcePreflight = false;
   boolean omitCredentials = false;
-  (<a class="external" href="http://url.spec.whatwg.org/#url">URL</a> or [EnsureUTF16] DOMString) referrer;
+  <a class="external" href="http://url.spec.whatwg.org/#url">URL</a> referrer;
   sequence&lt;<a href="#header">Header</a>&gt; headers;
   any body = null;
 };
