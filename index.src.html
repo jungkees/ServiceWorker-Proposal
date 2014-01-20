@@ -727,7 +727,7 @@ navigator.registerServiceWorker("/*", "/assets/v1/worker.js").then(
 this.version = 1;
 
 var base = "http://videos.example.com";
-var inventory = new URL("/services/inventory/data.json", base);
+var inventory = new URL("/services/inventory/data.json", base) + "";
 
 this.addEventListener("install", function(e) {
 });
@@ -735,7 +735,7 @@ this.addEventListener("install", function(e) {
 this.addEventListener("fetch", function(e) {
   var url = e.request.url;
   console.log(url);
-  if (url.toString() == inventory.toString()) {
+  if (url == inventory) {
     e.respondWith(new SameOriginResponse({
       statusCode: 200,
       body: JSON.stringify({
@@ -943,7 +943,7 @@ this.addEventListener("install", function(e) {
 this.version = 1;
 
 var base = "http://videos.example.com";
-var inventory = new URL("/services/inventory/data.json", base);
+var inventory = new URL("/services/inventory/data.json", base) + "";
 
 this.addEventListener("install", function(e) {
 });
@@ -951,7 +951,7 @@ this.addEventListener("install", function(e) {
 this.addEventListener("fetch", function(e) {
   var url = e.request.url;
   console.log(url);
-  if (url.toString() == inventory.toString()) {
+  if (url == inventory) {
     e.respondWith(new SameOriginResponse({
       statusCode: 200,
       body: JSON.stringify({
