@@ -1,4 +1,4 @@
 ServiceWorker-Proposal
 ======================
 
-Service Workers soon-to-be-shipped draft
+The draft documents in this repository is not maintained any more. Check [here](https://github.com/slightlyoff/ServiceWorker/tree/master/spec/) for the active spec work instead.
